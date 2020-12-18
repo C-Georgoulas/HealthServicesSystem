@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 // importing the main container
+import Nav from './Nav'
 import Container from '@material-ui/core/Container';
 // main card import that holds patient details and the action buttons
 // ------------------------
@@ -162,6 +163,9 @@ const onEditedPrescriptionSubmit = (e) => {
 const classes = useStyles();
 
 return (
+  <div>
+        <Nav/>
+        <br></br>
     <Container maxWidth="md">
         <form className={classes.root} noValidate autoComplete="off" onSubmit={onEditedPrescriptionSubmit}>
     <Card className={classes.root} variant="outlined">
@@ -263,6 +267,7 @@ return (
 </Card>
 </form>
     </Container>
+    </div>
 )
   
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect }from 'react'
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import Nav from './Nav'
 import { TransitionGroup } from 'react-transition-group';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
@@ -130,6 +131,9 @@ const useStyles = makeStyles((theme) => ({
   
 
     return (
+      <div>
+        <Nav/>
+        <br></br>
       <Container maxWidth="md">
           {/* <div style={{display: 'inline-flex'}}>
           <Button startIcon={<LocalHospitalIcon />} color="primary" variant="outlined" className={classes.button}>Add</Button>
@@ -244,6 +248,7 @@ const useStyles = makeStyles((theme) => ({
       </TabPanel>
       </SwipeableViews>
       </Container>
+      </div>
     );
   }
 

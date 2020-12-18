@@ -14,8 +14,6 @@ function App() {
   return (
     <Router>
     <div className="App">
-      <h1>Hello</h1>
-      <Nav/>
       <Switch>
       <Route path="/" exact component={Dashboard}></Route>
       <Route path="/Tasks" component={Tasks}></Route>

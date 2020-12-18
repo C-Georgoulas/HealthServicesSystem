@@ -18,6 +18,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
+import Nav from './Nav'
+
 
 const drawerWidth = 240;
 
@@ -125,6 +127,7 @@ function ResponsiveDrawer(props) {
           </Typography>
         </Toolbar>
       </AppBar>
+      <Toolbar/>
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">

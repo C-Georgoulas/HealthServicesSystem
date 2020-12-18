@@ -1,4 +1,5 @@
 import React, { useState, useEffect }from 'react'
+import Nav from './Nav'
 // importing the main container
 import Container from '@material-ui/core/Container';
 // main card import that holds patient details and the action buttons
@@ -231,6 +232,9 @@ const useStyles = makeStyles({
   const classes = useStyles();
 
     return (
+      <div>
+        <Nav/>
+        <br></br>
         <Container maxWidth="md">
             {/* MAIN DETAILS */}
             <Card className={classes.root} variant="outlined">
@@ -481,5 +485,6 @@ const useStyles = makeStyles({
 
 
 </Container>
+</div>
     )
 }

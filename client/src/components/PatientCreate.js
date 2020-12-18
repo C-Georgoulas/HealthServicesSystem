@@ -1,4 +1,6 @@
 import React, { useState, useEffect }from 'react'
+import Nav from './Nav'
+import Toolbar from '@material-ui/core/Toolbar';
 // importing the main container
 import Container from '@material-ui/core/Container';
 // main card import that holds patient details and the action buttons
@@ -108,6 +110,9 @@ const conditions = [
 ];
 
     return (
+      <div>
+       <Nav/>
+       <br></br>
         <Container maxWidth="md">
           <form className={classes.root} noValidate autoComplete="off" onSubmit={onSubmit}>
         <Card className={classes.root} variant="outlined">
@@ -196,6 +201,7 @@ const conditions = [
     </Card>
     </form>
         </Container>
+        </div>
     )
 
 }
