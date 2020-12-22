@@ -24,6 +24,8 @@
     "express": "^4.17.1",
     "form-data": "^3.0.0",
     "mongoose": "^5.10.10",
+    "react-hook-form": "^6.13.1",
+    "react-material-ui-form-validator": "^2.1.1",
     "react-router-dom": "^5.2.0",
     "semantic-ui-react": "^2.0.1",
     "use-state-if-mounted": "^1.0.4"

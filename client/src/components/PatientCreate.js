@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useRef }from 'react'
 import Nav from './Nav'
 import Toolbar from '@material-ui/core/Toolbar';
 // importing the main container
@@ -28,7 +28,7 @@ import {
   } from '@material-ui/pickers';
 // Dropdown
 import MenuItem from '@material-ui/core/MenuItem';
-
+import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator'
 
 
 
@@ -48,6 +48,7 @@ const [patient, setPatient] = useState (
  // Post request to add a patient
 
  const onSubmit = (e) => {
+   console.log('hello?')
   e.preventDefault()
   fetch(`/api/patients`, {
     method: 'POST',
@@ -109,12 +110,19 @@ const conditions = [
   },
 ];
 
+const form = useRef();
+
+
     return (
       <div>
        <Nav/>
        <br></br>
         <Container maxWidth="md">
-          <form className={classes.root} noValidate autoComplete="off" onSubmit={onSubmit}>
+          <ValidatorForm
+            ref={form}
+            onSubmit={onSubmit}
+            onError={errors => console.log(errors)}>
+          {/* // <form className={classes.root} noValidate autoComplete="off" onSubmit={onSubmit}> */}
         <Card className={classes.root} variant="outlined">
       <CardContent>
       <Typography variant="h6" component="h2">
@@ -122,21 +130,27 @@ const conditions = [
       </Typography>
       <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator
         id="standard-basic" 
         label="NAME"
         name="patient[fullName]"
+        value={patient.fullName}
         onChange={e => setPatient({...patient, fullName: e.target.value})}
+        validators={['required']}
+        errorMessages={['Please add the name of the patient!']}
         />
         </Typography>
         <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator
         id="standard-basic" 
         label="AGE" 
         type="number"
         name="patient[age]"
         onChange={e => setPatient({...patient, age: e.target.value})}
+        value={patient.age}
+        validators={['required']}
+        errorMessages={['Please add the age of the patient!']}
         />
         </Typography>
         <Divider />
@@ -159,37 +173,45 @@ const conditions = [
         </MuiPickersUtilsProvider>
         </Typography>
         <Typography variant="body2" component="p">
-        <TextField
+        <TextValidator
           id="standard-select-condition"
           select
           label="CONDITION"
           value={condition}
           name="patient[condition]"
           onChange={handleChange}
-          helperText="Please select current patient condition"
+          helperText="Current patient condition."
+          validators={['required']}
+          errorMessages={['Please select the condition of the patient!']}
         >
           {conditions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.value}
             </MenuItem>
           ))}
-        </TextField>
+        </TextValidator>
         </Typography>
         <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator
         id="standard-basic" 
         label="DIAGNOSIS"
         name="patient[diagnosis]"
         onChange={e => setPatient({...patient, diagnosis: e.target.value})}
+        value={patient.diagnosis}
+        validators={['required']}
+        errorMessages={['Please add the diagnosis of the patient!']}
          />
         </Typography>
         <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator
         id="standard-basic" 
         label="SUPERVISOR"
         name="patient[supervisor]"
+        value={patient.supervisor}
+        validators={['required']}
+        errorMessages={['Please add the supervisor of the patient!']}
         onChange={e => setPatient({...patient, supervisor: e.target.value})} 
         />
         </Typography>
@@ -199,7 +221,7 @@ const conditions = [
       <Button type="submit" size="small" color="primary" variant="outlined">ADMIT</Button>
       </CardActions>
     </Card>
-    </form>
+    </ValidatorForm>
         </Container>
         </div>
     )

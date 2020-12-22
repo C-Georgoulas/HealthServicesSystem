@@ -144,6 +144,8 @@ const useStyles = makeStyles((theme) => ({
         <Tabs value={value} onChange={handleTabsChange} aria-label="simple tabs example">
           <Tab label="Active Patients" {...a11yProps(0)} />
           <Tab label="Inactive Patients" {...a11yProps(1)} />
+          <Tab label="My Patients" {...a11yProps(2)} />
+          <Tab label="Department Patients" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -245,6 +247,12 @@ const useStyles = makeStyles((theme) => ({
         </TableBody>
       </Table>
     </TableContainer>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        hello from my patients only
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        hello from department only patients
       </TabPanel>
       </SwipeableViews>
       </Container>
