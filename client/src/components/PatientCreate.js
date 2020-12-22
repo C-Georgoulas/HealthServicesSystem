@@ -211,7 +211,7 @@ const form = useRef();
         name="patient[supervisor]"
         value={patient.supervisor}
         validators={['required']}
-        errorMessages={['Please add the supervisor of the patient!']}
+        errorMessages={['Please add the supervising doctor of the patient!']}
         onChange={e => setPatient({...patient, supervisor: e.target.value})} 
         />
         </Typography>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 // importing the main container
 import Nav from './Nav'
 import Container from '@material-ui/core/Container';
@@ -24,6 +24,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText'
+import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator'
 // importing history
 import {useLocation, useHistory} from 'react-router';
 // date picker for admission
@@ -115,12 +116,19 @@ const renderValue = (value) => {
     return value;
   }
 
+  const form = useRef();
+
+
     return (
       <div>
         <Nav/>
         <br></br>
         <Container maxWidth="md">
-          <form className={classes.root} noValidate autoComplete="off" onSubmit={onEditedPatientSubmit}>
+        <ValidatorForm
+            ref={form}
+            onSubmit={onEditedPatientSubmit}
+            onError={errors => console.log(errors)}>
+          {/* <form className={classes.root} noValidate autoComplete="off" onSubmit={onEditedPatientSubmit}> */}
         <Card className={classes.root} variant="outlined">
       <CardContent>
       <Typography variant="h6" component="h2">
@@ -128,18 +136,20 @@ const renderValue = (value) => {
       </Typography>
       <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator
         InputLabelProps={{shrink: true}}
         id="standard-basic" 
         label="NAME"
         value={editPatient.fullName}
         name="editPatient[fullName]"
         onChange={e => setEditPatient({...editPatient, fullName: e.target.value})}
+        validators={['required']}
+        errorMessages={['Please add the name of the patient!']}
         />
         </Typography>
         <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator 
         InputLabelProps={{shrink: true}}
         id="standard-basic" 
         label="AGE" 
@@ -147,6 +157,8 @@ const renderValue = (value) => {
         value={editPatient.age}
         name="editPatient[age]"
         onChange={e => setEditPatient({...editPatient, age: e.target.value})}
+        validators={['required']}
+        errorMessages={['Please add the age of the patient!']}
         />
         </Typography>
         <Divider />
@@ -169,7 +181,7 @@ const renderValue = (value) => {
         </MuiPickersUtilsProvider>
         </Typography>
         <Typography variant="body2" component="p">
-        <TextField
+        <TextValidator
           id="standard-select-condition"
           select
           label="CONDITION"
@@ -178,33 +190,39 @@ const renderValue = (value) => {
           name="editPatient[condition]"
           onChange={handleChange}
           helperText="Please select current patient condition"
+          validators={['required']}
+        errorMessages={['Please select the condition of the patient!']}
         >
           {conditions.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.value}
             </MenuItem>
           ))}
-        </TextField>
+        </TextValidator>
         </Typography>
         <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator
         InputLabelProps={{shrink: true}}
         id="standard-basic" 
         label="DIAGNOSIS"
         value={editPatient.diagnosis}
         name="editPatient[diagnosis]"
         onChange={e => setEditPatient({...editPatient, diagnosis: e.target.value})}
+        validators={['required']}
+        errorMessages={['Please add the diagnosis of the patient!']}
          />
         </Typography>
         <Divider />
         <Typography variant="body2" component="p">
-        <TextField 
+        <TextValidator 
         InputLabelProps={{shrink: true}}
         id="standard-basic" 
         label="SUPERVISOR"
         value={editPatient.supervisor}
         name="editPatient[supervisor]"
+        validators={['required']}
+        errorMessages={['Please add the supervising doctor of the patient!']}
         onChange={e => setEditPatient({...editPatient, supervisor: e.target.value})} 
         />
         </Typography>
@@ -214,7 +232,8 @@ const renderValue = (value) => {
       <Button type="submit" size="small" color="primary" variant="outlined">SAVE</Button>
       </CardActions>
     </Card>
-    </form>
+    </ValidatorForm>
+    {/* </form> */}
         </Container>
         </div>
     )
