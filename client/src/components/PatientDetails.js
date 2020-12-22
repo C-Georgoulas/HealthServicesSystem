@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useRef }from 'react'
 import Nav from './Nav'
 // importing the main container
 import Container from '@material-ui/core/Container';
@@ -53,6 +53,8 @@ import TextField from '@material-ui/core/TextField';
 //---------
 import {Link} from 'react-router-dom';
 import {useLocation, useHistory} from 'react-router';
+import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator'
+
 
 
 
@@ -122,7 +124,11 @@ const onEditedNoteSubmit = (e) => {
     body: JSON.stringify({editNote}),
   })
   .then(res => res.json())
-  .then(json => setNote(json.editNote))
+  // .then(json => setEditNote({
+  //   title: "",
+  //   text: ""
+  // }))
+  .then(setOpenEditNote(false));
 }
 
  // Post request to add a note to patient
@@ -137,7 +143,11 @@ const onEditedNoteSubmit = (e) => {
       body: JSON.stringify({note}),
     })
     .then(res => res.json())
-    .then(json => setNote(json.note))
+    .then(json => setNote({
+      title: "",
+      text: ""
+    }))
+    .then(setOpen(false));
   }
 
   // BUGS 12 NOVEMBER 2020: BACKEND CRASHES AFTER DELETING TOO MANY NOTES/PRESCRIPTIONS?
@@ -230,6 +240,11 @@ const useStyles = makeStyles({
   });
 
   const classes = useStyles();
+  // for form validation in notes
+  const form = useRef();
+  const form2 = useRef();
+
+
 
     return (
       <div>
@@ -394,28 +409,38 @@ const useStyles = makeStyles({
 {/* ADD A NOTE DIALOG */}
 
 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-<form className={classes.root} noValidate autoComplete="off" onSubmit={onNoteSubmit}>
+{/* <form className={classes.root} noValidate autoComplete="off" onSubmit={onNoteSubmit}> */}
+<ValidatorForm
+            ref={form}
+            onSubmit={onNoteSubmit}
+            onError={errors => console.log(errors)}>
         <DialogTitle id="form-dialog-title">NOTE</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To add a medical note to {patient.fullName}, please fill out the form below.
           </DialogContentText>
-          <TextField
+          <TextValidator
             autoFocus
             margin="dense"
             id="title"
             name="note[title]"
             onChange={e => setNote({...note, title: e.target.value})}
+            value={note.title}
+            validators={['required']}
+            errorMessages={['Please add a title to your note!']}
             label="Title"
             type="text"
             fullWidth
           />
-           <TextField
+           <TextValidator
             autoFocus
             margin="dense"
             id="description"
             name="note[text]"
             onChange={e => setNote({...note, text: e.target.value})}
+            value={note.text}
+            validators={['required']}
+            errorMessages={['Please add text to your note!']}
             label="Description"
             type="text"
             fullWidth
@@ -428,40 +453,48 @@ const useStyles = makeStyles({
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button type="submit" onClick={handleClose} color="primary">
+          <Button type="submit" color="primary">
             Add
           </Button>
         </DialogActions>
-        </form>
+        </ValidatorForm>
+        {/* </form> */}
       </Dialog>
 
       {/* EDIT NOTE */}
 
       <Dialog open={openEditNote} onClose={handleCloseEditNote} aria-labelledby="form-dialog-title">
-<form className={classes.root} noValidate autoComplete="off" onSubmit={onEditedNoteSubmit}>
+      <ValidatorForm
+            ref={form2}
+            onSubmit={onEditedNoteSubmit}
+            onError={errors => console.log(errors)}>
         <DialogTitle id="form-dialog-title">EDIT NOTE</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To edit the medical note for {patient.fullName}, please fill out the form below.
           </DialogContentText>
-          <TextField
+          <TextValidator
             autoFocus
             margin="dense"
             value={editNote.title}
             id="title"
             name="note[title]"
             onChange={e => setEditNote({...editNote, title: e.target.value})}
+            validators={['required']}
+            errorMessages={['Please add a title to your note!']}
             label="Title"
             type="text"
             fullWidth
           />
-           <TextField
+           <TextValidator
             autoFocus
             margin="dense"
             id="description"
             name="note[text]"
             value={editNote.text}
             onChange={e => setEditNote({...editNote, text: e.target.value})}
+            validators={['required']}
+            errorMessages={['Please add a text to your note!']}
             label="Description"
             type="text"
             fullWidth
@@ -474,11 +507,11 @@ const useStyles = makeStyles({
           <Button onClick={handleCloseEditNote} color="primary">
             Cancel
           </Button>
-          <Button type="submit" onClick={handleCloseEditNote} color="primary">
+          <Button type="submit" color="primary">
             Save
           </Button>
         </DialogActions>
-        </form>
+          </ValidatorForm>
       </Dialog>
 
 
