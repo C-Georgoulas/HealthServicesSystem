@@ -39,6 +39,8 @@ router.post('/', (req, res) => {
     const newPatient = new Patient({
         fullName: req.body.fullName,
         exitDate: req.body.exitDate,
+        sex: req.body.sex,
+        weight: req.body.weight,
         age: req.body.age,
         notes: req.body.notes,
         condition: req.body.condition,

@@ -273,6 +273,20 @@ const useStyles = makeStyles({
         </Typography>
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>
+          SEX
+        </Typography>
+        <Typography variant="body2" component="p">
+          {patient.sex}
+        </Typography>
+        <Divider />
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          WEIGHT
+        </Typography>
+        <Typography variant="body2" component="p">
+          {patient.weight}
+        </Typography>
+        <Divider />
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
           ADMISSION DATE
         </Typography>
         <Typography variant="body2" component="p">

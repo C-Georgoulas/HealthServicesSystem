@@ -79,6 +79,9 @@ const useStyles = makeStyles({
         pos: {
           marginBottom: 12,
         },
+        sex: {
+          minWidth: 192,
+        },
       });
 
 const classes = useStyles();
@@ -107,6 +110,22 @@ const conditions = [
   },
   {
     value: 'Unstable',
+  },
+];
+
+const [sex, setSex] = React.useState();
+
+  const handleChangeSex = (event) => {
+    setSex(event.target.value);
+    setPatient({...patient, sex: event.target.value});
+  };
+
+const sexSelect = [
+  {
+    value: 'Male',
+  },
+  {
+    value: 'Female',
   },
 ];
 
@@ -151,6 +170,39 @@ const form = useRef();
         value={patient.age}
         validators={['required']}
         errorMessages={['Please add the age of the patient!']}
+        />
+        </Typography>
+        <Divider />
+        <Typography variant="body2" component="p">
+        <TextValidator
+          id="standard-select-sex"
+          className={classes.sex}
+          select
+          label="SEX"
+          value={sex}
+          name="patient[sex]"
+          onChange={handleChangeSex}
+          validators={['required']}
+          errorMessages={['Please select the sex of the patient!']}
+        >
+          {sexSelect.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.value}
+            </MenuItem>
+          ))}
+        </TextValidator>
+        </Typography>
+        <Divider />
+        <Typography variant="body2" component="p">
+        <TextValidator
+        id="standard-basic" 
+        label="WEIGHT" 
+        type="number"
+        name="patient[weight]"
+        onChange={e => setPatient({...patient, weight: e.target.value})}
+        value={patient.weight}
+        validators={['required']}
+        errorMessages={['Please add the weight of the patient!']}
         />
         </Typography>
         <Divider />
