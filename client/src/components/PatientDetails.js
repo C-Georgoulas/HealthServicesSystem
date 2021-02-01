@@ -283,7 +283,7 @@ const useStyles = makeStyles({
           WEIGHT
         </Typography>
         <Typography variant="body2" component="p">
-          {patient.weight}
+          {patient.weight}kg
         </Typography>
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>

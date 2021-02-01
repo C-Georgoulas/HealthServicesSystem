@@ -24,6 +24,9 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText'
+// importing checkbox
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 // importing history
 import {useLocation, useHistory} from 'react-router';
 
@@ -76,7 +79,11 @@ const [categories, setCategories] = React.useState([
 // fixed the issue with the renderValue method and by value={prescription.drug || ''} this covers both cases where the state is not defined!
 // this function receives the entire object of "drug" from the API so I can add to the state here to dynamically present the CLASS and DOSAGE
 // should probably calculate dosage based on adult/pediatric/under 10 years old in here 
+
+const [manualDose, setManualDose] = useState ({})
+
 const handleClick = (drug) => {
+  if (checked === false) {
   if (patient.age >= 18) {
     setPrescription({...prescription, 
       drug: drug.name, 
@@ -94,7 +101,25 @@ const handleClick = (drug) => {
       diagnosis: patient.diagnosis,
       doctor: "DummyName"});
   }
-
+  } else if (checked === true) {
+    if (patient.age >= 18) {
+      setPrescription({...prescription, 
+        drug: drug.name, 
+        class: drug.class, 
+        dose: manualDose, 
+        name: patient.fullName, 
+        diagnosis: patient.diagnosis,
+        doctor: "DummyName"});
+    } else if (patient.age < 18) {
+      setPrescription({...prescription, 
+        drug: drug.name, 
+        class: drug.class, 
+        dose: manualDose, 
+        name: patient.fullName, 
+        diagnosis: patient.diagnosis,
+        doctor: "DummyName"});
+    }
+  }
 }
 
 const renderValue = (value) => {
@@ -116,6 +141,15 @@ const onSubmit = (e) => {
   // history.push(`/patients/${match.params.id}`);
   history.goBack();
 }
+
+// checkbox logic
+
+const [checked, setChecked] = React.useState(false);
+
+  const handleCheckbox = (event) => {
+    console.log(checked);
+    setChecked(event.target.checked);
+  };
 
   const useStyles = makeStyles((theme) => ({
         root: {
@@ -224,6 +258,33 @@ const classes = useStyles();
       </FormControl>
       <Divider />
       </Typography>
+      { prescription.drug != undefined &&
+      <FormControlLabel
+      className={classes.checkbox}
+      control={
+      <Checkbox
+        checked={checked}
+        onChange={handleCheckbox}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />
+      }
+      label="Manually calculate dosage"
+      />}
+      { prescription.drug == undefined &&
+      <FormControlLabel
+      className={classes.checkbox}
+      control={
+      <Checkbox
+        disabled 
+        inputProps={{ 'aria-label': 'disabled checkbox' }}
+        onChange={handleCheckbox}
+      />
+      }
+      label="Manually calculate dosage"
+      />}
+
+      <Divider/>
+      {checked === false &&
       <Typography variant="body2" component="p">
       <FormControl className={classes.formControl}>
         <TextField 
@@ -237,6 +298,22 @@ const classes = useStyles();
         <FormHelperText>Suggested dosage based on dosage criteria.</FormHelperText>
       </FormControl>
       </Typography>
+}
+{checked === true &&
+      <Typography variant="body2" component="p">
+      <FormControl className={classes.formControl}>
+        <TextField 
+        InputLabelProps={{shrink: true}}
+        id="standard-disabled" 
+        label="TREATMENT DOSAGE"
+        value={prescription.dose || ''}
+        onChange={e => setPrescription({...prescription, dose: e.target.value})}
+        name="prescription[dose]"
+         />
+        <FormHelperText>Suggested dosage based on dosage criteria.</FormHelperText>
+      </FormControl>
+      </Typography>
+}
       <Divider />
       </CardContent>
       <CardActions>

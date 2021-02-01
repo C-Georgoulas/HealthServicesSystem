@@ -81,6 +81,9 @@ const useStyles = makeStyles({
     pos: {
       marginBottom: 12,
     },
+    sex: {
+      minWidth: 200,
+    },
   });
 
 const classes = useStyles();

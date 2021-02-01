@@ -24,6 +24,9 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText'
+// importing checkbox
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 // importing history
 import {useLocation, useHistory} from 'react-router';
 
@@ -78,24 +81,46 @@ useEffect(() => {
     
     }, [drugs])
 
+const [manualDose, setManualDose] = useState ({})
+
 const handleClick = (drug) => {
-  if (patient.age >= 18) {
-    setEditPrescription({...editPrescription, 
-      drug: drug.name, 
-      class: drug.class, 
-      dose: drug.suggestedDoseAdult, 
-      name: patient.fullName, 
-      diagnosis: patient.diagnosis,
-      doctor: "Passport.js"});
-  } else if (patient.age < 18) {
-    setEditPrescription({...editPrescription, 
-      drug: drug.name, 
-      class: drug.class, 
-      dose: drug.suggestedDosePediatric, 
-      name: patient.fullName, 
-      diagnosis: patient.diagnosis,
-      doctor: "Passport.js"});
-  }
+  if (checked === false) {
+    if (patient.age >= 18) {
+      setEditPrescription({...editPrescription, 
+        drug: drug.name, 
+        class: drug.class, 
+        dose: drug.suggestedDoseAdult, 
+        name: patient.fullName, 
+        diagnosis: patient.diagnosis,
+        doctor: "DummyName"});
+    } else if (patient.age < 18) {
+      setEditPrescription({...editPrescription, 
+        drug: drug.name, 
+        class: drug.class, 
+        dose: drug.suggestedDosePediatric, 
+        name: patient.fullName, 
+        diagnosis: patient.diagnosis,
+        doctor: "DummyName"});
+    }
+    } else if (checked === true) {
+      if (patient.age >= 18) {
+        setEditPrescription({...editPrescription, 
+          drug: drug.name, 
+          class: drug.class, 
+          dose: manualDose, 
+          name: patient.fullName, 
+          diagnosis: patient.diagnosis,
+          doctor: "DummyName"});
+      } else if (patient.age < 18) {
+        setEditPrescription({...editPrescription, 
+          drug: drug.name, 
+          class: drug.class, 
+          dose: manualDose, 
+          name: patient.fullName, 
+          diagnosis: patient.diagnosis,
+          doctor: "DummyName"});
+      }
+    }
 
   }
   
@@ -119,6 +144,15 @@ const onEditedPrescriptionSubmit = (e) => {
     history.goBack();
   }
 
+
+// checkbox logic
+
+const [checked, setChecked] = React.useState(false);
+
+const handleCheckbox = (event) => {
+  console.log(checked);
+  setChecked(event.target.checked);
+};
 
   const [categories, setCategories] = React.useState([
     {
@@ -246,19 +280,62 @@ return (
   </FormControl>
   <Divider />
   </Typography>
-  <Typography variant="body2" component="p">
-  <FormControl className={classes.formControl}>
-    <TextField 
-    disabled
-    InputLabelProps={{shrink: true}}
-    id="standard-disabled" 
-    label="TREATMENT DOSAGE"
-    value={editPrescription.dose || ''}
-    name="editPrescription[dose]"
-     />
-    <FormHelperText>Suggested dosage based on dosage criteria.</FormHelperText>
-  </FormControl>
-  </Typography>
+  { editPrescription.drug != undefined &&
+      <FormControlLabel
+      className={classes.checkbox}
+      control={
+      <Checkbox
+        checked={checked}
+        onChange={handleCheckbox}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />
+      }
+      label="Manually calculate dosage"
+      />}
+      { editPrescription.drug == undefined &&
+      <FormControlLabel
+      className={classes.checkbox}
+      control={
+      <Checkbox
+        disabled 
+        inputProps={{ 'aria-label': 'disabled checkbox' }}
+        onChange={handleCheckbox}
+      />
+      }
+      label="Manually calculate dosage"
+      />}
+
+      <Divider/>
+      {checked === false &&
+      <Typography variant="body2" component="p">
+      <FormControl className={classes.formControl}>
+        <TextField 
+        disabled
+        InputLabelProps={{shrink: true}}
+        id="standard-disabled" 
+        label="TREATMENT DOSAGE"
+        value={editPrescription.dose || ''}
+        name="editPrescription[dose]"
+         />
+      <FormHelperText>Suggested dosage based on dosage criteria.</FormHelperText>
+      </FormControl>
+      </Typography>
+      }
+      {checked === true &&
+      <Typography variant="body2" component="p">
+      <FormControl className={classes.formControl}>
+        <TextField 
+        InputLabelProps={{shrink: true}}
+        id="standard-disabled" 
+        label="TREATMENT DOSAGE"
+        value={editPrescription.dose || ''}
+        onChange={e => setEditPrescription({...editPrescription, dose: e.target.value})}
+        name="editPrescription[dose]"
+         />
+        <FormHelperText>Suggested dosage based on dosage criteria.</FormHelperText>
+      </FormControl>
+      </Typography>
+}
   <Divider />
   </CardContent>
   <CardActions>
