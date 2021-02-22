@@ -290,7 +290,7 @@ const useStyles = makeStyles({
           ADMISSION DATE
         </Typography>
         <Typography variant="body2" component="p">
-          {patient.admissionDate}
+        {new Date(patient.admissionDate).toDateString()}
         </Typography>
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>
