@@ -20,15 +20,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/prescriptions', (req, res) => {
-    let final = [];
-    Patient.find({ prescriptions: { $exists: true, $not: { $size: 0 } }})
-        .populate('prescriptions')
-        .then(patients => patients.forEach(function (patient, index) {
-            final.push(patient.prescriptions);
-            if (index == (patients.length - 1)) {
-                res.json(final.flat());
-            }
-        }))
+    Prescription.find()
+    .then(prescriptions => res.json(prescriptions))
 });
 
 // put everything above this shitty /:id route because it bugs out for some reason
