@@ -19,6 +19,21 @@ router.get('/', (req, res) => {
         .then(patients => res.json(patients))
 });
 
+router.get('/prescriptions', (req, res) => {
+    let final = [];
+    Patient.find({ prescriptions: { $exists: true, $not: { $size: 0 } }})
+        .populate('prescriptions')
+        .then(patients => patients.forEach(function (patient, index) {
+            final.push(patient.prescriptions);
+            if (index == (patients.length - 1)) {
+                res.json(final.flat());
+            }
+        }))
+});
+
+// put everything above this shitty /:id route because it bugs out for some reason
+// REMEMBER THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 // @ route GET api/patients/:id
 // @desc Get specific patient
 // @access Staff
