@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
       minWidth: 650,
     },
     appBar: {
+      maxWidth: 400,
+      marginLeft: "auto",
+      marginRight: "auto",
       backgroundColor: "black",
     },
 }))
@@ -132,12 +135,18 @@ const useStyles = makeStyles((theme) => ({
       </span>
       </div> */}
       <AppBar position="static" className={classes.appBar}>
+      <Tabs value={value} onChange={handleTabsChange} aria-label="simple tabs example">
+          <Tab label="All Prescriptions" {...a11yProps(0)} />
+          <Tab label="My Prescriptions" {...a11yProps(1)} />
+        </Tabs>
       </AppBar>
+      <br></br>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
         onChangeIndex={handleChangeIndex}
       >
+      <TabPanel value={value} index={0}>
       {/* overflow hides the scrollbar at the table on patient GET/POST/UPDATE/DELETE */}
       <TableContainer component={Paper} style={{overflow: "hidden"}}>
       <Table className={classes.table} aria-label="simple table">
@@ -173,6 +182,10 @@ const useStyles = makeStyles((theme) => ({
         </TableBody>
       </Table>
     </TableContainer>
+    </TabPanel>
+    <TabPanel value={value} index={1}>
+      my prescriptions here
+    </TabPanel>
       </SwipeableViews>
       </Container>
       </div>
