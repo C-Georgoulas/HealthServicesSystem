@@ -9,6 +9,7 @@ import PatientCreate from './components/PatientCreate'
 import PrescriptionCreate from './components/PrescriptionCreate'
 import PrescriptionEdit from './components/PrescriptionEdit'
 import Prescriptions from './components/Prescriptions'
+import PrescriptionDetails from './components/PrescriptionDetails'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Route path="/Tasks" component={Tasks}></Route>
       <Route path="/patients" exact component={Patients}/>
       <Route path="/prescriptions" exact component={Prescriptions}/>
+      <Route path="/prescriptions/:id" exact component={PrescriptionDetails}/>
       <Route path="/patients/create" exact component={PatientCreate}/>
       <Route path="/patients/:id" exact component={PatientDetails}/>
       <Route path="/patients/:id/edit" exact component={PatientDetailsEdit}/>

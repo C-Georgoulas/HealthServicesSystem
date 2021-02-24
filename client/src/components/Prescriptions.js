@@ -26,7 +26,7 @@ import SwipeableViews from 'react-swipeable-views';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 import {Link} from 'react-router-dom';
-
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 
 
 
@@ -162,15 +162,10 @@ const useStyles = makeStyles((theme) => ({
               <TableCell align="right">{prescription.drug}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">
-                        {/* <IconButton aria-label="details" component={Link} to={`/patients/${patient._id}`}> */}
-                            <PersonPinIcon />
-                         {/* </IconButton> */}
+                        <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
                         </Tooltip> 
-                        <Tooltip title="Delete">
-                          {/* <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}> */}
-                            <DeleteIcon />
-                          {/* </IconButton> */}
-                         </Tooltip> 
               </TableCell>
             </TableRow>
             </Slide>

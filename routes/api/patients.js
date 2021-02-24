@@ -19,10 +19,23 @@ router.get('/', (req, res) => {
         .then(patients => res.json(patients))
 });
 
+// @ route GET api/patients/prescriptions
+// @desc Get all Prescriptions that have been made in the system, collects all of them from all patients
+// access Doctors?
+
 router.get('/prescriptions', (req, res) => {
     Prescription.find()
     .then(prescriptions => res.json(prescriptions))
 });
+
+// @ route GET api/patients/prescriptions/:id
+// @desc Get a specific Prescriptions that have been made in the system, collects all of them from all patients
+// access Doctors?
+
+router.get('/prescriptions/:id', async (req, res) => {
+   Prescription.findById(req.params.id)
+    .then(prescription => res.json(prescription))
+})
 
 // put everything above this shitty /:id route because it bugs out for some reason
 // REMEMBER THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -146,9 +159,6 @@ router.get('/:id/notes/:noteId/edit', async (req, res) => {
     const {noteId} = req.params
     Note.findById(noteId)
     .then(note => res.json(note));
-    // await Patient.findByIdAndUpdate(id, {$pull: {notes: noteId}});
-    // await Note.findByIdAndRemove(noteId);
-    // res.status(200).send({});
 })
 
 
@@ -201,6 +211,7 @@ router.put('/:id/prescriptions/:prescriptionId', (req, res) => {
         }
     })
 })
+
 
 
 module.exports = router;
