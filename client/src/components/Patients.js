@@ -26,6 +26,7 @@ import SwipeableViews from 'react-swipeable-views';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 import {Link} from 'react-router-dom';
+import SearchBar from 'material-ui-search-bar'
 
 
 
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
         .then(response => response.json())
         .then(json => setPatients(json))
 
-    }, [patients])
+    }, [])
 
 // DELETE patient on click event on line 177
 
@@ -119,6 +120,31 @@ const useStyles = makeStyles((theme) => ({
 
   const handleChangeIndex = (index) => {
     setValue(index);
+  };
+
+  const [searched, setSearched] = React.useState("")
+
+  const [previousState, setPreviousState] = React.useState([])
+
+  const requestSearch = (searchedVal) => {
+    const filteredPatients = patients.filter((patient) => {
+      return patient.fullName.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+    
+    setPatients((prevState) => {
+      if (previousState.length == 0) {
+        setPreviousState(prevState)
+      }
+    return filteredPatients 
+});
+console.log(previousState);
+  };
+
+
+  const cancelSearch = () => {
+    setSearched("");
+    setPatients(previousState);
+    // requestSearch(searched);
   };
 
   
@@ -148,6 +174,12 @@ const useStyles = makeStyles((theme) => ({
           <Tab label="Department Patients" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
+      <SearchBar
+    value={searched}
+    cancelOnEscape={true}
+    onChange={(searchVal) => requestSearch(searchVal)}
+    onCancelSearch={() => cancelSearch()}
+  />
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
