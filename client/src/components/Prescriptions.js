@@ -27,7 +27,10 @@ import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 import {Link} from 'react-router-dom';
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
-
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select'
+import SearchBar from 'material-ui-search-bar'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,6 +46,18 @@ const useStyles = makeStyles((theme) => ({
       marginRight: "auto",
       backgroundColor: "black",
     },
+    searchBar: {
+      width: "70%",
+    },
+    filterBar: {
+      backgroundColor: "white",
+      width: "30%",
+      marginLeft: "1%",
+    },
+    searchContainer: {
+      display: "flex",
+      width: "100%",
+      }
 }))
 
 
@@ -98,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
         .then(response => response.json())
         .then(json => setPrescriptions(json))
 
-    }, [prescriptions])
+    }, [])
 
 // DELETE patient on click event on line 177
 
@@ -124,6 +139,53 @@ const useStyles = makeStyles((theme) => ({
     setValue(index);
   };
 
+  const [searching, setSearching] = React.useState('Patients');
+
+  const handleChange = (event) => {
+    setSearching(event.target.value);
+    console.log(searching);
+  };
+
+  const [searched, setSearched] = React.useState("")
+
+  const [previousState, setPreviousState] = React.useState([])
+
+  const requestSearch = (searchedVal) => {
+    if (searching === "Patients") {
+    const filteredPatients = prescriptions.filter((prescription) => {
+      return prescription.name.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+
+    setPrescriptions((prevState) => {
+      if (previousState.length == 0) {
+        setPreviousState(prevState)
+      }
+    return filteredPatients 
+});
+  } else if (searching === "Doctors") {
+    const filteredPatients = prescriptions.filter((prescription) => {
+      return prescription.doctor.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+
+    setPrescriptions((prevState) => {
+      if (previousState.length == 0) {
+        setPreviousState(prevState)
+      }
+    return filteredPatients 
+});
+  } else {
+      console.log("something went wrong");
+  }
+    
+  };
+
+
+  const cancelSearch = () => {
+    setSearched("");
+    setPrescriptions(previousState);
+    // requestSearch(searched);
+  };
+
     return (
       <div>
         <Nav/>
@@ -141,6 +203,27 @@ const useStyles = makeStyles((theme) => ({
         </Tabs>
       </AppBar>
       <br></br>
+      <div className={classes.searchContainer}>
+      <SearchBar className={classes.searchBar}
+    value={searched}
+    cancelOnEscape={true}
+    onChange={(searchVal) => requestSearch(searchVal)}
+    onCancelSearch={() => cancelSearch()}
+  />
+  <FormControl variant="outlined" className={classes.filterBar}>
+        {/* <InputLabel id="demo-simple-select-outlined-label">Search Filter</InputLabel> */}
+        <Select style={{ height: 49 }}
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={searching}
+          onChange={handleChange}
+        >
+          <MenuItem value={"Patients"}>Patients</MenuItem>
+          <MenuItem value={"Doctors"}>Doctors</MenuItem>
+        </Select>
+      </FormControl>
+      </div>
+  <br></br>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}

@@ -27,6 +27,11 @@ import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 import {Link} from 'react-router-dom';
 import SearchBar from 'material-ui-search-bar'
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select'
 
 
 
@@ -36,11 +41,23 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     table: {
-      minWidth: 650,
+      width: "100%",
     },
     appBar: {
       backgroundColor: "black",
     },
+    searchBar: {
+      width: "70%",
+    },
+    filterBar: {
+      backgroundColor: "white",
+      width: "30%",
+      marginLeft: "1%",
+    },
+    searchContainer: {
+      display: "flex",
+      width: "100%",
+      }
 }))
 
 
@@ -117,6 +134,13 @@ const useStyles = makeStyles((theme) => ({
     setValue(newValue);
   };
 
+  const [searching, setSearching] = React.useState('Patients');
+
+  const handleChange = (event) => {
+    setSearching(event.target.value);
+    console.log(searching);
+  };
+
 
   const handleChangeIndex = (index) => {
     setValue(index);
@@ -127,17 +151,32 @@ const useStyles = makeStyles((theme) => ({
   const [previousState, setPreviousState] = React.useState([])
 
   const requestSearch = (searchedVal) => {
+    if (searching === "Patients") {
     const filteredPatients = patients.filter((patient) => {
       return patient.fullName.toLowerCase().includes(searchedVal.toLowerCase());
     });
-    
+
     setPatients((prevState) => {
       if (previousState.length == 0) {
         setPreviousState(prevState)
       }
     return filteredPatients 
 });
-console.log(previousState);
+  } else if (searching === "Doctors") {
+    const filteredPatients = patients.filter((patient) => {
+      return patient.supervisor.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+
+    setPatients((prevState) => {
+      if (previousState.length == 0) {
+        setPreviousState(prevState)
+      }
+    return filteredPatients 
+});
+  } else {
+      console.log("something went wrong");
+  }
+    
   };
 
 
@@ -174,12 +213,28 @@ console.log(previousState);
           <Tab label="Department Patients" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      <SearchBar
+      <br></br>
+      <div className={classes.searchContainer}>
+      <SearchBar className={classes.searchBar}
     value={searched}
     cancelOnEscape={true}
     onChange={(searchVal) => requestSearch(searchVal)}
     onCancelSearch={() => cancelSearch()}
   />
+  <FormControl variant="outlined" className={classes.filterBar}>
+        {/* <InputLabel id="demo-simple-select-outlined-label">Search Filter</InputLabel> */}
+        <Select style={{ height: 49 }}
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={searching}
+          onChange={handleChange}
+        >
+          <MenuItem value={"Patients"}>Patients</MenuItem>
+          <MenuItem value={"Doctors"}>Doctors</MenuItem>
+        </Select>
+      </FormControl>
+      </div>
+  <br></br>
       <SwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={value}
@@ -187,8 +242,8 @@ console.log(previousState);
       >
       <TabPanel value={value} index={0}>
       {/* overflow hides the scrollbar at the table on patient GET/POST/UPDATE/DELETE */}
-      <TableContainer component={Paper} style={{overflow: "hidden"}}>
-      <Table className={classes.table} aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflow: "hidden"}}>
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
