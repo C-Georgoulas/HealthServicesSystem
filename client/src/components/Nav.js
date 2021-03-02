@@ -92,8 +92,8 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
         {/* {['Actions', 'Prescriptions', 'Administration'].map((text, index) => ( */}
-          <ListItem button key="Actions" component={Link} to="/actions">
-            <ListItemText primary="Actions" />
+          <ListItem button key="Pharmaceutical" component={Link} to="/drugs">
+            <ListItemText primary="Medications" />
           </ListItem>
           <ListItem button key="Trainees" component={Link} to="/trainees">
             <ListItemText primary="Trainees" />

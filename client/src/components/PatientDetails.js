@@ -54,6 +54,7 @@ import TextField from '@material-ui/core/TextField';
 import {Link} from 'react-router-dom';
 import {useLocation, useHistory} from 'react-router';
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator'
+import NoteAddIcon from '@material-ui/icons/NoteAdd';
 
 
 
@@ -357,6 +358,11 @@ const useStyles = makeStyles({
               <TableCell align="right">{prescription.doctor}</TableCell>
               <TableCell align="center">{prescription.diagnosis}</TableCell>
               <TableCell align="center">
+              <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
+                        </Tooltip> 
                   <Tooltip title="Modify">
                         <IconButton aria-label="modify" component={Link} to=
                         {

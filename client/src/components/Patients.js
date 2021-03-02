@@ -146,9 +146,19 @@ const useStyles = makeStyles((theme) => ({
     setValue(index);
   };
 
+  // declaring state for searched value to be passed to requestSearch from the SearchBar component
+
   const [searched, setSearched] = React.useState("")
 
+  // declaring state in order to keep state that was there prior to searching
+  // that way we return to the original state without having to refresh, when we are done searching
+
   const [previousState, setPreviousState] = React.useState([])
+
+  // request search function that filters the search based on "searching" value (doctors/patients)
+  // basic .includes function that returns the filtered patients on real time
+  // we also set the previous state to the original patients state before searching, if the previousState.length equals to 0, which means
+  // that we havent searched for anything yet
 
   const requestSearch = (searchedVal) => {
     if (searching === "Patients") {
@@ -179,6 +189,8 @@ const useStyles = makeStyles((theme) => ({
     
   };
 
+  // we cancel the search and set the patients to the original state through previousState
+
 
   const cancelSearch = () => {
     setSearched("");
@@ -186,15 +198,7 @@ const useStyles = makeStyles((theme) => ({
     // requestSearch(searched);
   };
 
-  
-// TASKS:
-
-// 1. Add the "Add" button functionality - DONE
-// 2. Work on the toggle switch between active and inactive patients
-// 3. Add sort to the table, edit, delete and so on
-
-  
-
+    
     return (
       <div>
         <Nav/>
