@@ -31,7 +31,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
 import SearchBar from 'material-ui-search-bar'
-
+import Collapse from '@material-ui/core/Collapse';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -186,6 +188,9 @@ const useStyles = makeStyles((theme) => ({
 //     // requestSearch(searched);
 //   };
 
+const [open, setOpen] = React.useState(false);
+
+
     return (
       <div>
         <Nav/>
@@ -235,6 +240,7 @@ const useStyles = makeStyles((theme) => ({
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell />
             <TableCell><strong>Pharmaceutical Drug</strong></TableCell>
             <TableCell align="right"><strong>Drug Class</strong></TableCell>
             <TableCell align="right"><strong>Adult Dosage</strong></TableCell>
@@ -246,12 +252,28 @@ const useStyles = makeStyles((theme) => ({
           {drugs.map((drug) => (
         <Slide direction="up" in={drugs} mountOnEnter unmountOnExit>
         <TableRow key={drug._id}>
+            <TableCell>
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
               <TableCell>{drug.name}</TableCell>
               <TableCell align="right">{drug.class}</TableCell>
               <TableCell align="right">{drug.suggestedDoseAdult}</TableCell>
               <TableCell align="right">{drug.suggestedDosePediatric}</TableCell>
               <TableCell align="right">{drug.administered}</TableCell>
             </TableRow>
+            {/* <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box margin={1}>
+              <Typography variant="h6" gutterBottom component="div">
+                {drug.description}
+              </Typography>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow> */}
             </Slide>
           ))}
         </TableBody>
