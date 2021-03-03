@@ -188,8 +188,15 @@ const useStyles = makeStyles((theme) => ({
 //     // requestSearch(searched);
 //   };
 
-const [open, setOpen] = React.useState(false);
+const [open, setOpen] = React.useState(null);
 
+const handleSelect = (id) => {
+  setOpen(currentId => {
+    // if it's already opened then unselect it
+    if (currentId === id) return null
+    return id
+  })
+}
 
     return (
       <div>
@@ -250,12 +257,12 @@ const [open, setOpen] = React.useState(false);
         </TableHead>
         <TableBody>
           {drugs.map((drug) => (
-        <Slide direction="up" in={drugs} mountOnEnter unmountOnExit>
+            <>
         <TableRow key={drug._id}>
             <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+            <IconButton aria-label="expand row" size="small" onClick={() => handleSelect(drug._id)}>
+  {open === drug._id ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+</IconButton>
         </TableCell>
               <TableCell>{drug.name}</TableCell>
               <TableCell align="right">{drug.class}</TableCell>
@@ -263,18 +270,18 @@ const [open, setOpen] = React.useState(false);
               <TableCell align="right">{drug.suggestedDosePediatric}</TableCell>
               <TableCell align="right">{drug.administered}</TableCell>
             </TableRow>
-            {/* <TableRow>
+            <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={open === drug._id } timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography variant="h7" gutterBottom component="div">
                 {drug.description}
               </Typography>
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow> */}
-            </Slide>
+      </TableRow>
+      </>
           ))}
         </TableBody>
       </Table>
