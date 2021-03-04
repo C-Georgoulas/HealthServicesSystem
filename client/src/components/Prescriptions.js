@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
       minWidth: 650,
     },
     appBar: {
-      maxWidth: 400,
       marginLeft: "auto",
       marginRight: "auto",
       backgroundColor: "black",
@@ -186,6 +185,22 @@ const useStyles = makeStyles((theme) => ({
     // requestSearch(searched);
   };
 
+
+  const datePrescription = (prescriptionDate, prescriptionExpirationDate) => {
+    let prescriptionIssueDate = new Date(prescriptionDate)
+    // add the days the prescription is meant to be active of to the original prescription date
+    prescriptionIssueDate.setDate(prescriptionIssueDate.getDate() + prescriptionExpirationDate);
+    // get current time
+    let currentDate = new Date()
+
+ // compare current date with expiration to determine if the prescription has expired
+    if (currentDate > prescriptionIssueDate) {
+      return "Expired"
+    } else {
+      return "Active"
+    }
+  }
+
     return (
       <div>
         <Nav/>
@@ -198,8 +213,10 @@ const useStyles = makeStyles((theme) => ({
       </div> */}
       <AppBar position="static" className={classes.appBar}>
       <Tabs value={value} onChange={handleTabsChange} aria-label="simple tabs example">
-          <Tab label="All Prescriptions" {...a11yProps(0)} />
-          <Tab label="My Prescriptions" {...a11yProps(1)} />
+          <Tab label="Active Prescriptions" {...a11yProps(0)} />
+          <Tab label="All Prescriptions" {...a11yProps(1)} />
+          <Tab label="My Prescriptions" {...a11yProps(2)} />
+          <Tab label="Expired Prescriptions" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <br></br>
@@ -230,6 +247,50 @@ const useStyles = makeStyles((theme) => ({
         onChangeIndex={handleChangeIndex}
       >
       <TabPanel value={value} index={0}>
+      <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Patient</strong></TableCell>
+            <TableCell align="right"><strong>Patient Diagnosis</strong></TableCell>
+            <TableCell align="right"><strong>Issuing Date</strong></TableCell>
+            <TableCell align="right"><strong>Issuing Doctor</strong></TableCell>
+            <TableCell align="right"><strong>Pharmaceutical Drug</strong></TableCell>
+            <TableCell align="center"><strong>Action</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {
+    prescriptions
+        .filter((prescription) => {
+            return datePrescription(
+                prescription.prescriptionDate,
+                prescription.prescriptionExpirationDate
+            ) === 'Active';
+        })
+        .map((prescription) => (
+        <Slide direction="up" in={prescriptions} mountOnEnter unmountOnExit>
+        <TableRow key={prescription._id}>
+              <TableCell>{prescription.name}</TableCell>
+              <TableCell align="right">{prescription.diagnosis}</TableCell>
+              <TableCell align="right">{new Date(prescription.prescriptionDate).toDateString()}</TableCell>
+              <TableCell align="right">{prescription.doctor}</TableCell>
+              <TableCell align="right">{prescription.drug}</TableCell>
+              <TableCell align="center">
+                  <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
+                        </Tooltip> 
+              </TableCell>
+            </TableRow>
+            </Slide>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+    </TabPanel>
+      <TabPanel value={value} index={1}>
       {/* overflow hides the scrollbar at the table on patient GET/POST/UPDATE/DELETE */}
       <TableContainer component={Paper} style={{overflow: "hidden"}}>
       <Table className={classes.table} aria-label="simple table">
@@ -266,8 +327,52 @@ const useStyles = makeStyles((theme) => ({
       </Table>
     </TableContainer>
     </TabPanel>
-    <TabPanel value={value} index={1}>
+    <TabPanel value={value} index={2}>
       my prescriptions here
+    </TabPanel>
+    <TabPanel value={value} index={3}>
+    <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Patient</strong></TableCell>
+            <TableCell align="right"><strong>Patient Diagnosis</strong></TableCell>
+            <TableCell align="right"><strong>Issuing Date</strong></TableCell>
+            <TableCell align="right"><strong>Issuing Doctor</strong></TableCell>
+            <TableCell align="right"><strong>Pharmaceutical Drug</strong></TableCell>
+            <TableCell align="center"><strong>Action</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {
+    prescriptions
+        .filter((prescription) => {
+            return datePrescription(
+                prescription.prescriptionDate,
+                prescription.prescriptionExpirationDate
+            ) === 'Expired';
+        })
+        .map((prescription) => (
+        <Slide direction="up" in={prescriptions} mountOnEnter unmountOnExit>
+        <TableRow key={prescription._id}>
+              <TableCell>{prescription.name}</TableCell>
+              <TableCell align="right">{prescription.diagnosis}</TableCell>
+              <TableCell align="right">{new Date(prescription.prescriptionDate).toDateString()}</TableCell>
+              <TableCell align="right">{prescription.doctor}</TableCell>
+              <TableCell align="right">{prescription.drug}</TableCell>
+              <TableCell align="center">
+                  <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
+                        </Tooltip> 
+              </TableCell>
+            </TableRow>
+            </Slide>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </TabPanel>
       </SwipeableViews>
       </Container>

@@ -103,9 +103,12 @@ const useStyles = makeStyles({
   // for form validation in notes
   const form = useRef();
   const form2 = useRef();
-
-
-
+  
+  const expirationCalculation = (prescriptionDate) => {
+    let expirationDate = new Date (prescriptionDate)
+    expirationDate.setDate(expirationDate.getDate() + prescription.prescriptionExpirationDate);
+    return expirationDate;
+  }
     return (
       <div>
         <Nav/>
@@ -133,11 +136,27 @@ const useStyles = makeStyles({
         </Typography>
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>
+          DOSAGE PLAN
+        </Typography>
+        <Typography variant="body2" component="p">
+          {prescription.prescriptionExpirationDate + " " + "days"}
+        </Typography>
+        <Divider />
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
           ISSUING DATE
         </Typography>
         <Typography variant="body2" component="p">
         {new Date(prescription.prescriptionDate).toDateString()}
         </Typography>
+        <Divider />
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          EXPIRATION DATE
+        </Typography>
+        {prescription.prescriptionDate != undefined &&
+        <Typography variant="body2" component="p">
+        {expirationCalculation(prescription.prescriptionDate).toDateString()}
+       </Typography>
+        }
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           ISSUING DOCTOR

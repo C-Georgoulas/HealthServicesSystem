@@ -30,6 +30,9 @@ const PrescriptionSchema = new Schema({
     prescriptionDate: {
         type: Date,
         default: Date.now
+    },
+    prescriptionExpirationDate: {
+        type: Number,
     }
 });
 

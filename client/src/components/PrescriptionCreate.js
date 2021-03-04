@@ -82,6 +82,13 @@ const [categories, setCategories] = React.useState([
 
 const [manualDose, setManualDose] = useState ({})
 
+const [prescriptionPlan, setPrescriptionPlan] = React.useState(0);
+
+  const handlePrescriptionPlan = (event) => {
+    setPrescription({...prescription, prescriptionExpirationDate: event.target.value});
+    console.log(prescription.prescriptionExpirationDate);
+  };
+
 const handleClick = (drug) => {
   if (checked === false) {
   if (patient.age >= 18) {
@@ -174,6 +181,7 @@ const [checked, setChecked] = React.useState(false);
 
 const classes = useStyles();
 
+
     return (
       <div>
         <Nav/>
@@ -238,11 +246,23 @@ const classes = useStyles();
           {categories.map(category => 
        (<span>
             <ListSubheader key={category.id}>{category.name}</ListSubheader>
-            {drugs.map(drug => drug.class===category.name ? <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem> : null)}
+            {drugs.map(drug => drug.class===category.name ? 
+            <>
+            { patient.age <= 12 && drug.suggestedDosePediatric != "Restricted" &&
+            <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
+            }
+             { patient.age > 12 &&
+            <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
+            }
+            </>
+             : null)}
        </span>)
     )}
         </Select>
         <FormHelperText>Select a Pharmaceutical Drug to prescribe.</FormHelperText>
+        {  patient.age <= 12 &&
+         <FormHelperText>Some Pharmaceutical Drugs have been restricted due to the patient's age.</FormHelperText>
+        }
       </FormControl>
       <Divider />
       <Typography variant="body2" component="p">
@@ -314,6 +334,30 @@ const classes = useStyles();
       </FormControl>
       </Typography>
 }
+      <Divider />
+      <Typography variant="body2" component="p">
+      <FormControl className={classes.formControl}>
+        {/* <TextField 
+        InputLabelProps={{shrink: true}}
+        id="standard-disabled" 
+        label="PRESCRIPTION PLAN"
+        value={prescription.prescriptionExpirationDate || ''}
+        name="prescription[prescriptionExpirationDate]"
+         /> */}
+        <InputLabel htmlFor="demo-simple-select-label">Prescription Plan</InputLabel>
+         <Select
+          InputLabelProps={{shrink: true}}
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="PRESCRIPTION PLAN"
+          value={prescription.prescriptionExpirationDate || ''}
+          onChange={handlePrescriptionPlan}
+        >
+          <MenuItem value={7}>7 Days</MenuItem>
+          <MenuItem value={14}>14 Days</MenuItem>
+        </Select>
+      </FormControl>
+      </Typography>
       <Divider />
       </CardContent>
       <CardActions>
