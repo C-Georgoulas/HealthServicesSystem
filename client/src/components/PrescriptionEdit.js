@@ -54,6 +54,13 @@ let data = useLocation();
 const [editPrescription, setEditPrescription] = useState({
 })
 
+const [editPrescriptionPlan, setEditPrescriptionPlan] = React.useState(0);
+
+  const handlePrescriptionPlan = (event) => {
+    setEditPrescription({...editPrescription, prescriptionExpirationDate: event.target.value});
+    console.log(editPrescription.prescriptionExpirationDate);
+  };
+
 // giving [] empty array as dependency means the hook runs only once
 // therefore it doesnt update the state constantly with what the prescription already is
 // works for now!
@@ -259,12 +266,24 @@ return (
     <Select id="grouped-select" value={editPrescription.drug || ''} renderValue={ () => renderValue(editPrescription.drug)}>
       {categories.map(category => 
    (<span>
-        <ListSubheader key={category.id}>{category.name}</ListSubheader>
-        {drugs.map(drug => drug.class===category.name ? <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem> : null)}
-   </span>)
+    <ListSubheader key={category.id}>{category.name}</ListSubheader>
+    {drugs.map(drug => drug.class===category.name ? 
+    <>
+    { patient.age <= 12 && drug.suggestedDosePediatric != "Restricted" &&
+    <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
+    }
+     { patient.age > 12 &&
+    <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
+    }
+    </>
+     : null)}
+</span>)
 )}
     </Select>
     <FormHelperText>Select a Pharmaceutical Drug to prescribe.</FormHelperText>
+        {  patient.age <= 12 &&
+         <FormHelperText>Some Pharmaceutical Drugs have been restricted due to the patient's age.</FormHelperText>
+        }
   </FormControl>
   <Divider />
   <Typography variant="body2" component="p">
@@ -337,6 +356,30 @@ return (
       </Typography>
 }
   <Divider />
+  <Typography variant="body2" component="p">
+      <FormControl className={classes.formControl}>
+        {/* <TextField 
+        InputLabelProps={{shrink: true}}
+        id="standard-disabled" 
+        label="PRESCRIPTION PLAN"
+        value={prescription.prescriptionExpirationDate || ''}
+        name="prescription[prescriptionExpirationDate]"
+         /> */}
+        <InputLabel htmlFor="demo-simple-select-label">Prescription Plan</InputLabel>
+         <Select
+          InputLabelProps={{shrink: true}}
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="PRESCRIPTION PLAN"
+          value={editPrescription.prescriptionExpirationDate || ''}
+          onChange={handlePrescriptionPlan}
+        >
+          <MenuItem value={7}>7 Days</MenuItem>
+          <MenuItem value={14}>14 Days</MenuItem>
+        </Select>
+      </FormControl>
+      </Typography>
+      <Divider />
   </CardContent>
   <CardActions>
   <Button type="submit" size="small" color="primary" variant="outlined">SAVE</Button>
