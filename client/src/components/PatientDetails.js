@@ -349,6 +349,8 @@ const useStyles = makeStyles({
             <TableCell align="center"><strong>Actions</strong></TableCell>
           </TableRow>
         </TableHead>
+        {patient.prescriptions && patient.prescriptions.length > 0 &&
+        <>
         <TableBody>
         {patient.prescriptions && patient.prescriptions.map((prescription) => (
         <TableRow key={prescription._id}>
@@ -383,10 +385,27 @@ const useStyles = makeStyles({
             </TableRow>
             ))}
         </TableBody>
+        </>
+      }
+        {patient.prescriptions && patient.prescriptions.length == 0 &&
+         <TableBody>
+            <TableRow>
+              There's no prescriptions on {patient.fullName}.
+            </TableRow>
+         </TableBody>
+          }
       </Table>
     </TableContainer>
-
+    <br></br>
     {/* COMMENTS / NOTES BY OTHER DOCTORS/STAFF */}
+    <Card className={classes.root} variant="outlined">
+      <CardContent>
+      <Typography variant="h6" component="h2">
+         PATIENT NOTES
+      </Typography>
+      <Divider/>
+      {patient.notes &&  patient.notes.length > 0 &&
+      <>
     {patient.notes && patient.notes.map((note) => (
     <List className={classes.root} key={note._id}>
       <ListItem alignItems="flex-start">
@@ -425,6 +444,15 @@ const useStyles = makeStyles({
       <Divider/>
     </List>
     ))}
+    </>
+  }
+      {patient.notes &&  patient.notes.length == 0 &&
+        <Typography>
+        There's no medical notes on {patient.fullName} yet!
+     </Typography>
+        }
+    </CardContent>
+    </Card>
 
 {/* ADD A NOTE DIALOG */}
 
