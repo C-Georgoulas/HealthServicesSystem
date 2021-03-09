@@ -55,7 +55,10 @@ import {Link} from 'react-router-dom';
 import {useLocation, useHistory} from 'react-router';
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator'
 import NoteAddIcon from '@material-ui/icons/NoteAdd';
-
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
 
 
 
@@ -113,10 +116,6 @@ const handleCloseEditNote = () => {
 
 // Put request to edit the specific note of the patient
 
-// BUGS: works properly with backend and updating but once you hit submit on the modal
-// you get an error of cannot read property of title of undefined
-// Fixed ^
-
 const onEditedNoteSubmit = (e) => {
   e.preventDefault()
   fetch(`/api/patients/${match.params.id}/notes/${editNote._id}`, {
@@ -150,12 +149,6 @@ const onEditedNoteSubmit = (e) => {
     }))
     .then(setOpen(false));
   }
-
-  // BUGS 12 NOVEMBER 2020: BACKEND CRASHES AFTER DELETING TOO MANY NOTES/PRESCRIPTIONS?
-  // Doesnt happen on Patient.js though when deleting too many though?
-  // Must be a problem with the backend
-
-  // 15th NOVEMBER: problem seemed to be that I wasnt sending status 200 to server from patient.js
 
   // Delete request to remove a note from a patient
 
@@ -220,9 +213,62 @@ fetch(`/api/patients/${patient._id}`, {
 
 //---------
 
-const useStyles = makeStyles({
+//------- surgery functionality
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `vertical-tab-${index}`,
+    'aria-controls': `vertical-tabpanel-${index}`,
+  };
+}
+
+
+const [value, setValue] = React.useState(0);
+
+const handleChange = (event, newValue) => {
+  setValue(newValue);
+};
+
+//---------
+
+const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: 150,
+    },
+    rootTab: {
+      flexGrow: 1,
+      backgroundColor: theme.palette.background.paper,
+      display: 'flex',
+      height: 224,
+    },
+    tabs: {
+      borderRight: `1px solid ${theme.palette.divider}`,
     },
     bullet: {
       display: 'inline-block',
@@ -238,7 +284,7 @@ const useStyles = makeStyles({
     noteActionPos: {
       top: '30%'
     }
-  });
+  }));
 
   const classes = useStyles();
   // for form validation in notes
@@ -396,6 +442,34 @@ const useStyles = makeStyles({
           }
       </Table>
     </TableContainer>
+    <br></br>
+    <Card className={classes.root} variant="outlined">
+      <CardContent>
+      <Typography variant="h6" component="h2">
+         PATIENT SURGERIES
+      </Typography>
+      <Divider/>
+    <div className={classes.rootTab}>
+      <Tabs
+        orientation="vertical"
+        variant="scrollable"
+        value={value}
+        onChange={handleChange}
+        aria-label="Vertical tabs example"
+        className={classes.tabs}
+      >
+        <Tab label="Scheduled Surgeries" {...a11yProps(0)} />
+        <Tab label="Concluded Surgeries" {...a11yProps(1)} />
+      </Tabs>
+      <TabPanel value={value} index={0}>
+        Scheduled Surgery Here
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Concluded Surgery Here
+      </TabPanel>
+    </div>
+    </CardContent>
+    </Card>
     <br></br>
     {/* COMMENTS / NOTES BY OTHER DOCTORS/STAFF */}
     <Card className={classes.root} variant="outlined">
