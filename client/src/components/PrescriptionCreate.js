@@ -246,7 +246,7 @@ const classes = useStyles();
           {categories.map(category => 
        (<span>
             <ListSubheader key={category.id}>{category.name}</ListSubheader>
-            {drugs.map(drug => drug.class===category.name ? 
+            {drugs.map(drug => drug.class.toLowerCase()===category.name.toLowerCase() ? 
             <>
             { patient.age <= 12 && drug.suggestedDosePediatric != "Restricted" &&
             <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
