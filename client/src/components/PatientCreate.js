@@ -57,8 +57,9 @@ const [patient, setPatient] = useState (
   })
   .then(res => res.json())
   .then(json => setPatient(json.patient))
+  .then(props.history.push('/patients'))
+  .then(props.history.go(0));
 // redirects to patients table
-  props.history.push('/patients');
 }
 
 

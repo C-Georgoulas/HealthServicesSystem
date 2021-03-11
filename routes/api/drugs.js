@@ -29,4 +29,13 @@ router.get('/', (req, res) => {
 });
 
 
+// Deleting object from the database based on ID
+router.delete('/:id', async (req, res) => {
+    await Drug.findByIdAndDelete(req.params.id)
+    res.status(200).send({});
+
+})
+
+
+
 module.exports = router;

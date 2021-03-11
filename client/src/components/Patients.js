@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
     };
   }
   
-  export default function DataTable() {
+  export default function DataTable(props) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
@@ -122,6 +122,7 @@ const useStyles = makeStyles((theme) => ({
         method: 'DELETE',
       })
       .then(response => response.json())
+      .then(props.history.go(0))
       console.log(patientID + "HELLO!!!")
   };
 

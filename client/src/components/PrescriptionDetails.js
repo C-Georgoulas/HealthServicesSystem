@@ -103,6 +103,10 @@ const useStyles = makeStyles({
   // for form validation in notes
   const form = useRef();
   const form2 = useRef();
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   
   const expirationCalculation = (prescriptionDate) => {
     let expirationDate = new Date (prescriptionDate)
@@ -176,7 +180,9 @@ const useStyles = makeStyles({
         Pharmaceutical Drug Class
         </Typography>
         <Typography variant="body2" component="p">
-        {prescription.class}
+          { prescription.class != undefined &&
+        capitalizeFirstLetter(prescription.class)
+          }
         </Typography>
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>

@@ -286,6 +286,10 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  
   const classes = useStyles();
   // for form validation in notes
   const form = useRef();
@@ -401,7 +405,7 @@ const useStyles = makeStyles((theme) => ({
         {patient.prescriptions && patient.prescriptions.map((prescription) => (
         <TableRow key={prescription._id}>
               <TableCell>{prescription.drug}</TableCell>
-              <TableCell align="right">{prescription.class}</TableCell>
+              <TableCell align="right">{capitalizeFirstLetter(prescription.class)}</TableCell>
               <TableCell align="right">{prescription.dose}</TableCell>
               <TableCell align="right">{prescription.doctor}</TableCell>
               <TableCell align="center">{prescription.diagnosis}</TableCell>

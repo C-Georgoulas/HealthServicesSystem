@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
     };
   }
   
-  export default function DataTable() {
+  export default function DataTable(props) {
     const classes = useStyles();
 
     const [state, setState] = React.useState({
@@ -198,6 +198,19 @@ const handleSelect = (id) => {
   })
 }
 
+const deleteDrug = (drugID) => {
+  fetch('api/drugs/' + drugID, {
+    method: 'DELETE',
+  })
+  .then(response => response.json())
+  .then(props.history.go(0))
+  console.log(drugID + "HELLO!!!")
+};
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
     return (
       <div>
         <Nav/>
@@ -253,6 +266,7 @@ const handleSelect = (id) => {
             <TableCell align="right"><strong>Adult Dosage</strong></TableCell>
             <TableCell align="right"><strong>Pediatric Dosage</strong></TableCell>
             <TableCell align="right"><strong>Administration</strong></TableCell>
+            <TableCell align="right"><strong>Actions</strong></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -265,10 +279,17 @@ const handleSelect = (id) => {
 </IconButton>
         </TableCell>
               <TableCell>{drug.name}</TableCell>
-              <TableCell align="right">{drug.class}</TableCell>
+              <TableCell align="right">{capitalizeFirstLetter(drug.class)}</TableCell>
               <TableCell align="right">{drug.suggestedDoseAdult}</TableCell>
               <TableCell align="right">{drug.suggestedDosePediatric}</TableCell>
               <TableCell align="right">{drug.administered}</TableCell>
+              <TableCell align="right">
+              <Tooltip title="Delete">
+                          <IconButton aria-label="delete" onClick={()=>deleteDrug(drug._id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                         </Tooltip> 
+              </TableCell>
             </TableRow>
             <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
