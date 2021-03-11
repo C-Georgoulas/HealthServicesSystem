@@ -58,8 +58,9 @@ const [drug, setDrug] = useState({})
   })
   .then(res => res.json())
   .then(json => setDrug(json.drug))
+  .then(props.history.push('/drugs'))
+  .then(props.history.go(0));
 // redirects to patients table
-  props.history.push('/drugs');
 }
 
 // checkbox logic
