@@ -38,6 +38,17 @@ export default function PrescriptionCreate({match}, props) {
       name: patient.fullName,
       diagnosis: patient.diagnosis
     })
+
+    // assuming the following helper
+function groupBy(iterable, keyFn) {
+  const groups = new Map();
+  for (const item of iterable) {
+    const key = keyFn(item);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  }
+  return groups;
+}
     
     useEffect(() => {
         fetch(`/api/patients/${match.params.id}`)
@@ -56,6 +67,12 @@ export default function PrescriptionCreate({match}, props) {
     .then(json => setDrugs(json))
 
 }, [drugs])
+
+// this ensures that 1 category is made for all drugs that exist in the category
+// if a category has no drugs in it, then it is not rendered
+
+const drugsByCategoryName = groupBy(drugs, drug => drug.class.toLowerCase());
+
 
 const [categories, setCategories] = React.useState([
   {id: 1, name: '5-alpha-reductase inhibitors' },
@@ -708,21 +725,16 @@ const classes = useStyles();
        <FormControl className={classes.formControl}>
         <InputLabel htmlFor="grouped-select">Pharmaceutical Drugs</InputLabel>
         <Select id="grouped-select" value={prescription.drug || ''} renderValue={ () => renderValue(prescription.drug)}>
-        {categories.map(category => 
-   (<span>
-        {/* <ListSubheader key={category.id}>{category.name}</ListSubheader> */}
-        {drugs.filter(drug => drug.class.toLowerCase() === category.name.toLowerCase()).map(drug => drug.class.toLowerCase()===category.name.toLowerCase() ? 
-        <>
-        { patient.age <= 12 && drug.suggestedDosePediatric != "Restricted" &&
-        <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
-        }
-         { patient.age > 12 &&
-        <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>{drug.name}</MenuItem>
-        }
-        </>
-         : null)}
-   </span>)
-)}
+        {Array.from(drugsByCategoryName, ([categoryName, drugs]) => (
+  <span>
+    <ListSubheader>{categoryName}</ListSubheader>
+    {drugs.map((drug) => (
+      <MenuItem key={drug._id} onClick={()=>handleClick(drug)} value={drug.value}>
+        {drug.name}
+      </MenuItem>
+    ))}
+  </span>
+))}
         </Select>
         <FormHelperText>Select a Pharmaceutical Drug to prescribe.</FormHelperText>
         {  patient.age <= 12 &&
