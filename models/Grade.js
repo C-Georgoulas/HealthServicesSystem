@@ -29,4 +29,4 @@ const GradeSchema = new Schema({
     //     username: String
     // }
 
-module.exports = mongoose.model('Grade', NoteSchema);
+module.exports = mongoose.model('Grade', GradeSchema);

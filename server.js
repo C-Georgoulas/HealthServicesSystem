@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const patients = require('./routes/api/patients');
 const drugs = require('./routes/api/drugs');
+const trainees = require('./routes/api/trainees')
 
 const app = express();
 
@@ -27,6 +28,7 @@ mongoose
 
 app.use('/api/patients', patients);
 app.use('/api/drugs', drugs);
+app.use('/api/trainees', trainees)
 app.use(cors())
 
 // CORS

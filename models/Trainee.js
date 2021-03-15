@@ -42,7 +42,7 @@ const TraineeSchema = new Schema({
 // This middleware deletes all grades associated with a specific Trainee
 // the trainee in routes needs to be deleted by findByIdAndDelete otherwise it wont work
 
-PatientSchema.post('findOneAndDelete', async (doc) => {
+TraineeSchema.post('findOneAndDelete', async (doc) => {
     if (doc) {
         await Grade.deleteMany({
             _id: {

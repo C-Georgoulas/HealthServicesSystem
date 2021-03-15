@@ -54,7 +54,7 @@ router.get('/:id', (req, res) => {
 
 // Constructing an object to insert to the database
 router.post('/', (req, res) => {
-    const newPatient = new Patient({
+    const newTrainee = new Trainee({
         fullName: req.body.fullName,
         endDate: req.body.endDate,
         sex: req.body.sex,

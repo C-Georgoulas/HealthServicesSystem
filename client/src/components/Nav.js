@@ -98,6 +98,7 @@ function ResponsiveDrawer(props) {
           <ListItem button key="Trainees" component={Link} to="/trainees">
             <ListItemText primary="Trainees" />
           </ListItem>
+          <Divider />
           <ListItem button key="Administration" component={Link} to="/administration">
             <ListItemText primary="Administration" />
           </ListItem>

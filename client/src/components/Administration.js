@@ -77,6 +77,11 @@ export default function Album() {
                   </Button>
                 </Grid>
                 <Grid item>
+                  <Button variant="contained" color="primary" component={Link} to="/trainees/create">
+                    MANAGE TRAINEES
+                  </Button>
+                </Grid>
+                <Grid item>
                   <Button variant="outlined" color="primary" component={Link} to="/drugs/create">
                     MANAGE PHARMACEUTICALS
                   </Button>
