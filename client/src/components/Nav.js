@@ -14,6 +14,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
+import {useLocation, useHistory} from 'react-router';
+import AuthService from "../services/auth.service";
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -109,6 +112,14 @@ function ResponsiveDrawer(props) {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
+  const history = useHistory();
+
+  const logout = () => {
+    AuthService.logout();
+    history.push("/login")
+  };
+
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -126,6 +137,7 @@ function ResponsiveDrawer(props) {
           <Typography variant="h6" noWrap>
             HPMWS
           </Typography>
+          <Button color="inherit" onClick={logout}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
       <Toolbar/>

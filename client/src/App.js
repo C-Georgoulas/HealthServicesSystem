@@ -1,6 +1,7 @@
 import './App.css';
 import Nav from './components/Nav'
 import Tasks from './components/Tasks'
+import Login from './components/Login'
 import Patients from './components/Patients'
 import Dashboard from './components/Dashboard'
 import PatientDetails from './components/PatientDetails'
@@ -16,14 +17,33 @@ import Administration from './components/Administration'
 import Trainees from './components/Trainees'
 import TraineeCreate from './components/TraineeCreate'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import AuthService from "./services/auth.service";
+import React, { useState, useEffect }from 'react'
 
 function App() {
+
+  const [currentUser, setCurrentUser] = useState({
+
+  });
+
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+      console.log(user);
+    if (user) {
+      setCurrentUser(user);
+      console.log(currentUser);
+    } else {
+      console.log("user not logged");
+    }
+  }, []);
+
   return (
     <Router>
     <div className="App">
       <Switch>
       <Route path="/" exact component={Dashboard}></Route>
       <Route path="/Tasks" component={Tasks}></Route>
+      <Route path="/Login" exact component={Login}></Route>
       <Route path="/patients" exact component={Patients}/>
       <Route path="/trainees" exact component={Trainees}/>
       <Route path="/trainees/create" exact component={TraineeCreate}/>
