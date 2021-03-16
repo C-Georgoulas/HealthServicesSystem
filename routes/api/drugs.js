@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
     newDrug.save().then(drug => res.json(drug));
 });
 
-router.get('/', AccessMiddleware.hasAccess, (req, res) => {
+router.get('/', (req, res) => {
     Drug.find()
         .then(drugs => res.json(drugs))
 });

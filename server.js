@@ -5,12 +5,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 const passport = require('passport')
 
-const patients = require('./routes/api/patients');
-const auth = require('./routes/api/auth');
-const drugs = require('./routes/api/drugs');
-const trainees = require('./routes/api/trainees')
-const ROLES = require('./client/src/common/roles')
-
 // passport
 
 const cookieParser = require('cookie-parser')
@@ -44,11 +38,11 @@ app.use(function(req, res, next) {
     next();
   });
 
-const secret = process.env.APP_SECRET
+const secret = 'asdf33g4w4hghjkuil8saef345'
 const env = process.env.NODE_ENV || 'development'
 const isLocal = env === 'development'
 /* Session Setup */
-app.use(cookieParser()) // read cookies (needed for auth)
+app.use(cookieParser('asdf33g4w4hghjkuil8saef345')) // read cookies (needed for auth)
 if (!isLocal) {
   app.set('trust proxy', 1)
 }
@@ -57,34 +51,26 @@ app.use(
     httpOnly: false,
     name: COOKIE_NAME,
     keys: [secret],
-    secure: !isLocal,
+    secure: false,
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   })
 )
 
 /* Session management with Passport */
-require('./passport')(passport)
 app.use(passport.initialize())
 app.use(passport.session())
-
-// when i comment this out, it shows me unauthorized everywhere i go
-// when i dont comment this out, it just console logs "do nothing" and the request never ends
-
-// Default app route
-// app.get('/*', function (req, res) {
-//   // Force redirect to HTTPS because cookie is set to secure: true
-//   if (!isLocal && req.header('x-forwarded-proto') !== 'https') {
-//     res.redirect(`https://${req.header('host')}${req.url}`)
-//   } else {
-//     console.log("do nothing");
-//   }
-// })
+require('./passport')(passport)
 
 // Register Schema
 require('./models/User')
 
 // Insert some default users
 // require('./config/_insertDefaultUsers')
+
+const patients = require('./routes/api/patients');
+const auth = require('./routes/api/auth');
+const drugs = require('./routes/api/drugs');
+const trainees = require('./routes/api/trainees')
 
 // Use Routes
 

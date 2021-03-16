@@ -1,21 +1,22 @@
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
 const UserService = require('./service/user-service')
+var User = require('./models/User');
 
 module.exports = function (passport) {
-  // used to serialize the user for the session
-  passport.serializeUser(function (user, done) {
-    done(null, user._id)
-  })
+  // Passport needs to be able to serialize and deserialize users to support persistent login sessions
+  passport.serializeUser(function(user, done) {
+    console.log('serializing user: ');
+    console.log(user);
+    done(null, user._id);
+  });
 
-  // used to deserialize the user
-  passport.deserializeUser(async function (id, done) {
-    await UserService.getById(id)
-      .then((res) => {
-        done(null, res)
-      })
-      .catch((err) => done(err, null))
-  })
+  passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+      console.log('deserializing user:', user);
+      done(err, user);
+    });
+  });
 
   passport.use(
     new LocalStrategy(
@@ -43,6 +44,8 @@ module.exports = function (passport) {
         }
 
         // All is well, return successful user
+        console.log("passport.js file returns user")
+        console.log(user);
         return done(null, user)
       }
     )

@@ -25,6 +25,7 @@
     "cors": "^2.8.5",
     "date-fns": "^2.0.0-beta.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "form-data": "^3.0.0",
     "material-table": "^1.69.2",
     "material-ui-search-bar": "^1.0.0",

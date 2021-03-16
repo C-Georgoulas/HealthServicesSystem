@@ -31,12 +31,16 @@ router.post('/login', (req, res, next) => {
     if (err) {
       return errorResponse(res, 'Invalid credentials')
     }
-
     // When using passport with callback, we have to manually call req.login to set the Cookie
     req.login(user, async () => {
       res.json({ success: true, user })
     })
   })(req, res, next)
+})
+
+router.get('/logout', (req, res, next) => {
+  req.logout()
+  res.status(200).send({});
 })
 
 module.exports = router
