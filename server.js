@@ -6,6 +6,7 @@ const cors = require('cors')
 const passport = require('passport')
 
 const patients = require('./routes/api/patients');
+const auth = require('./routes/api/auth');
 const drugs = require('./routes/api/drugs');
 const trainees = require('./routes/api/trainees')
 const ROLES = require('./client/src/common/roles')
@@ -33,12 +34,7 @@ mongoose
     .then(() => console.log('Mongo DB Connected...'))
     .catch(err => console.log(err));
 
-// Use Routes
 
-app.use('/api/patients', patients);
-app.use('/api/drugs', drugs);
-app.use('/api/trainees', trainees)
-app.use(cors())
 
 // CORS
 
@@ -67,25 +63,36 @@ app.use(
 )
 
 /* Session management with Passport */
+require('./passport')(passport)
 app.use(passport.initialize())
 app.use(passport.session())
-require('./passport')(passport)
+
+// when i comment this out, it shows me unauthorized everywhere i go
+// when i dont comment this out, it just console logs "do nothing" and the request never ends
 
 // Default app route
-app.get('/*', function (req, res) {
-  // Force redirect to HTTPS because cookie is set to secure: true
-  if (!isLocal && req.header('x-forwarded-proto') !== 'https') {
-    res.redirect(`https://${req.header('host')}${req.url}`)
-  } else {
-    console.log("do nothing");
-  }
-})
+// app.get('/*', function (req, res) {
+//   // Force redirect to HTTPS because cookie is set to secure: true
+//   if (!isLocal && req.header('x-forwarded-proto') !== 'https') {
+//     res.redirect(`https://${req.header('host')}${req.url}`)
+//   } else {
+//     console.log("do nothing");
+//   }
+// })
 
 // Register Schema
 require('./models/User')
 
 // Insert some default users
-require('./config/_insertDefaultUsers')
+// require('./config/_insertDefaultUsers')
+
+// Use Routes
+
+app.use('/api/patients', patients);
+app.use('/api/drugs', drugs);
+app.use('/api/trainees', trainees)
+app.use('/api/auth', auth);
+app.use(cors())
 
 // Connect to deployment port or localhost
 

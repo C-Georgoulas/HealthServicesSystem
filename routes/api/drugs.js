@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const AccessMiddleware = require('../../config/access')
 
 // Drug Model
 const Drug = require('../../models/Drug');
@@ -23,7 +24,7 @@ router.post('/', (req, res) => {
     newDrug.save().then(drug => res.json(drug));
 });
 
-router.get('/', (req, res) => {
+router.get('/', AccessMiddleware.hasAccess, (req, res) => {
     Drug.find()
         .then(drugs => res.json(drugs))
 });
