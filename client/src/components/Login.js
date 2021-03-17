@@ -65,7 +65,7 @@ export default function SignIn(props) {
     AuthService.login(email, password).then(
         () => {
           props.history.push("/");
-        //   window.location.reload();
+          window.location.reload();
         },
         (error) => {
           const resMessage =

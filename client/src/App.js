@@ -18,32 +18,50 @@ import Trainees from './components/Trainees'
 import TraineeCreate from './components/TraineeCreate'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import AuthService from "./services/auth.service";
-import React, { useState, useEffect }from 'react'
+import { UserContext } from './components/UserContext'
+import React, { useState, useEffect, useContext, useMemo }from 'react'
 
 function App() {
+  const [user, setUser] = useState(null)
 
-  const [currentUser, setCurrentUser] = useState({
-
-  });
+// this prevents this providerValue changing unless value or setValue changes
+const value = useMemo(() => ({user, setUser}), [user, setUser])
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
+    async function fetchUser(){
+    const receivedUser = await AuthService.getCurrentUser();
+    if (receivedUser) {
+      setUser(receivedUser);
+      console.log("user from async function")
       console.log(user);
-    if (user) {
-      setCurrentUser(user);
-      console.log(currentUser);
     } else {
-      console.log("user not logged");
+      console.log("user not logged in");
     }
+    }
+    fetchUser();
   }, []);
 
+    useEffect(()=> {
+        console.log("user from other useEffect")
+        console.log(user)
+        setUser(user);
+    }, [user])
+  
   return (
     <Router>
     <div className="App">
-      <Switch>
+    <UserContext.Provider value={value}>
+        {user == null &&
+               <Switch>
+              <Route path="/login" exact component={Login}></Route>
+              <Route path='*' exact={true} component={Login} />
+              </Switch>
+        }
+        {user != null &&
+        <>
+       <Switch>
       <Route path="/" exact component={Dashboard}></Route>
       <Route path="/Tasks" component={Tasks}></Route>
-      <Route path="/Login" exact component={Login}></Route>
       <Route path="/patients" exact component={Patients}/>
       <Route path="/trainees" exact component={Trainees}/>
       <Route path="/trainees/create" exact component={TraineeCreate}/>
@@ -58,6 +76,9 @@ function App() {
       <Route path="/patients/:id/prescription/new" exact component={PrescriptionCreate}/>
       <Route path="/patients/:id/prescription/:id/edit" exact component={PrescriptionEdit}/>
       </Switch>
+      </>
+        }
+      </UserContext.Provider>
     </div>
     </Router>
   );
