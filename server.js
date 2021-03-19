@@ -71,6 +71,7 @@ const patients = require('./routes/api/patients');
 const auth = require('./routes/api/auth');
 const drugs = require('./routes/api/drugs');
 const trainees = require('./routes/api/trainees')
+const admin = require('./routes/api/admin')
 
 // Use Routes
 
@@ -78,6 +79,7 @@ app.use('/api/patients', patients);
 app.use('/api/drugs', drugs);
 app.use('/api/trainees', trainees)
 app.use('/api/auth', auth);
+app.use('/api/admin', admin)
 app.use(cors())
 
 // Connect to deployment port or localhost

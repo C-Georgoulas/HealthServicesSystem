@@ -44,9 +44,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "black",
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
       display: 'none',
+    },
+    button2: {
+      color: "red",
+      marginRight: theme.spacing(2),
     },
   },
   // necessary for content to be below app bar
@@ -137,7 +141,7 @@ function ResponsiveDrawer(props) {
           <Typography variant="h6" noWrap>
             HPMWS
           </Typography>
-          <Button color="inherit" onClick={logout}>LOGOUT</Button>
+          <Button color="inherit" className={classes.button2} onClick={logout}>LOGOUT</Button>
         </Toolbar>
       </AppBar>
       <Toolbar/>
