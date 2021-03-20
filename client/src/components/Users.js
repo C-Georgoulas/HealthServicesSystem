@@ -217,7 +217,9 @@ const [user, setUser] = React.useState({})
     role: "",
     department: ""
   }))
-  .then(setOpen(false));
+  .then(setOpen(false))
+  .then(props.history.go(0))
+  .then(props.history.go(0));
 }
 
 // delete request

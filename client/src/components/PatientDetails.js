@@ -488,7 +488,12 @@ const useStyles = makeStyles((theme) => ({
     <List className={classes.root} key={note._id}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt={note.username} src="/static/images/avatar/1.jpg" />
+          { note.author && note.author.name != undefined &&
+          <Avatar alt={note.author.name} src="/static/images/avatar/1.jpg" />
+          } 
+          { !note.author &&
+          <Avatar alt="" src="/static/images/avatar/1.jpg" />
+          } 
         </ListItemAvatar>
         <ListItemText
           primary={note.title}
@@ -500,7 +505,11 @@ const useStyles = makeStyles((theme) => ({
                 className={classes.inline}
                 color="textPrimary"
               >
-              {note.username}
+                {note.author && note.author.name != undefined &&
+                <>
+              {capitalizeFirstLetter(note.author.role) + " " + "(" + note.author.department +")"} {" " + note.author.name}
+              </>
+          }
               </Typography>
               {` — ${note.text}`}
             </React.Fragment>

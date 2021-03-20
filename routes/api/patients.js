@@ -6,7 +6,7 @@ const router = express.Router();
 const Patient = require('../../models/Patient');
 const Note = require('../../models/Note');
 const Prescription = require('../../models/Prescription');
-
+const User = require('../../models/User');
 
 // @ route GET api/patients
 // @desc Get all Patients
@@ -46,7 +46,11 @@ router.get('/prescriptions/:id', async (req, res) => {
 
 router.get('/:id', (req, res) => {
     Patient.findById(req.params.id)
-    .populate('notes')
+    .populate({path: 'notes', 
+    populate: {
+        path: 'author'
+    }
+})
     .populate('prescriptions')
     .then(patient => res.json(patient))
 });
@@ -123,6 +127,7 @@ router.delete('/:id', async (req, res) => {
 router.post('/:id/notes', async (req, res) => {
    const patient = await Patient.findById(req.params.id);
    const note = new Note(req.body.note);
+   note.author = req.user._id
    patient.notes.push(note);
    await note.save()
    await patient.save();
