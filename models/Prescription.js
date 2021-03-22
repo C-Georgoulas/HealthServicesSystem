@@ -18,9 +18,6 @@ const PrescriptionSchema = new Schema({
     doseCriteria: {
         type: String
     },
-    doctor: {
-        type: String
-    },
     diagnosis: {
         type: String
     },
@@ -33,7 +30,11 @@ const PrescriptionSchema = new Schema({
     },
     prescriptionExpirationDate: {
         type: Number,
-    }
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+}
 });
 
 module.exports = mongoose.model('Prescription', PrescriptionSchema);

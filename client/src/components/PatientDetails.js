@@ -407,7 +407,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell>{prescription.drug}</TableCell>
               <TableCell align="right">{capitalizeFirstLetter(prescription.class)}</TableCell>
               <TableCell align="right">{prescription.dose}</TableCell>
-              <TableCell align="right">{prescription.doctor}</TableCell>
+              { prescription.author && prescription.author.name != undefined &&
+              <TableCell align="right">{prescription.author.name}</TableCell>
+              }
               <TableCell align="center">{prescription.diagnosis}</TableCell>
               <TableCell align="center">
               <Tooltip title="Details">

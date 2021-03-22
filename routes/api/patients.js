@@ -25,6 +25,7 @@ router.get('/', (req, res) => {
 
 router.get('/prescriptions', (req, res) => {
     Prescription.find()
+    .populate('author')
     .then(prescriptions => res.json(prescriptions))
 });
 
@@ -34,6 +35,7 @@ router.get('/prescriptions', (req, res) => {
 
 router.get('/prescriptions/:id', async (req, res) => {
    Prescription.findById(req.params.id)
+    .populate('author')
     .then(prescription => res.json(prescription))
 })
 
@@ -51,7 +53,11 @@ router.get('/:id', (req, res) => {
         path: 'author'
     }
 })
-    .populate('prescriptions')
+    .populate({path: 'prescriptions', 
+    populate: {
+        path: 'author'
+    }
+})
     .then(patient => res.json(patient))
 });
 
@@ -176,6 +182,7 @@ router.get('/:id/notes/:noteId/edit', async (req, res) => {
 router.post('/:id/prescriptions', async (req, res) => {
     const patient = await Patient.findById(req.params.id);
     const prescription = new Prescription(req.body.prescription);
+    prescription.author = req.user._id
     patient.prescriptions.push(prescription);
     await prescription.save()
     await patient.save();
@@ -196,6 +203,7 @@ router.post('/:id/prescriptions', async (req, res) => {
 router.get('/:id/prescriptions/:prescriptionId/edit', async (req, res) => {
     const {prescriptionId} = req.params
     Prescription.findById(prescriptionId)
+    .populate('author')
     .then(prescription => res.json(prescription))
     // await Patient.findByIdAndUpdate(id, {$pull: {notes: noteId}});
     // await Note.findByIdAndRemove(noteId);

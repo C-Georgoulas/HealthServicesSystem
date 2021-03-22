@@ -250,16 +250,18 @@ return (
      />
     </Typography>
     <Divider />
+    { editPrescription.author && editPrescription.author.name != undefined &&
     <Typography variant="body2" component="p">
     <TextField 
      disabled
      InputLabelProps={{shrink: true}}
      id="standard-disabled" 
      label="DOCTOR"
-     value="Passport.js"
+     value={editPrescription.author.name}
      name="editPrescription[doctor]"
     />
     </Typography>
+        }
     <Divider />
    <FormControl className={classes.formControl}>
     <InputLabel htmlFor="grouped-select">Pharmaceutical Drugs</InputLabel>

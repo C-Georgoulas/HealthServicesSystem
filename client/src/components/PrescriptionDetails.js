@@ -165,9 +165,11 @@ const useStyles = makeStyles({
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           ISSUING DOCTOR
         </Typography>
+        { prescription.author && prescription.author.name != undefined &&
         <Typography variant="body2" component="p">
-          {prescription.doctor}
+          {prescription.author.name}
         </Typography>
+          }
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>
         Pharmaceutical Drug

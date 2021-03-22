@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useContext }from 'react'
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Nav from './Nav'
@@ -31,6 +31,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
 import SearchBar from 'material-ui-search-bar'
+import { UserContext } from './UserContext'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -105,6 +106,9 @@ const useStyles = makeStyles((theme) => ({
 
     ])  
 
+    const {user, setUser} = useContext(UserContext);
+
+
   // GET/Fetch all patients, listener for patients
 
     useEffect(() => {
@@ -163,7 +167,7 @@ const useStyles = makeStyles((theme) => ({
 });
   } else if (searching === "Doctors") {
     const filteredPatients = prescriptions.filter((prescription) => {
-      return prescription.doctor.toLowerCase().includes(searchedVal.toLowerCase());
+      return prescription.author.name.toLowerCase().includes(searchedVal.toLowerCase());
     });
 
     setPrescriptions((prevState) => {
@@ -274,7 +278,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell>{prescription.name}</TableCell>
               <TableCell align="right">{prescription.diagnosis}</TableCell>
               <TableCell align="right">{new Date(prescription.prescriptionDate).toDateString()}</TableCell>
-              <TableCell align="right">{prescription.doctor}</TableCell>
+              { prescription.author && prescription.author.name != undefined &&
+              <TableCell align="right">{prescription.author.name}</TableCell>
+              }
               <TableCell align="right">{prescription.drug}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">
@@ -311,7 +317,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell>{prescription.name}</TableCell>
               <TableCell align="right">{prescription.diagnosis}</TableCell>
               <TableCell align="right">{new Date(prescription.prescriptionDate).toDateString()}</TableCell>
-              <TableCell align="right">{prescription.doctor}</TableCell>
+              { prescription.author && prescription.author.name != undefined &&
+              <TableCell align="right">{prescription.author.name}</TableCell>
+              }
               <TableCell align="right">{prescription.drug}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">
@@ -328,7 +336,46 @@ const useStyles = makeStyles((theme) => ({
     </TableContainer>
     </TabPanel>
     <TabPanel value={value} index={2}>
-      my prescriptions here
+    <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Patient</strong></TableCell>
+            <TableCell align="right"><strong>Patient Diagnosis</strong></TableCell>
+            <TableCell align="right"><strong>Issuing Date</strong></TableCell>
+            <TableCell align="right"><strong>Issuing Doctor</strong></TableCell>
+            <TableCell align="right"><strong>Pharmaceutical Drug</strong></TableCell>
+            <TableCell align="center"><strong>Action</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {prescriptions.map((prescription) => (
+            <>
+            {prescription.author.name === user.name &&         
+        <Slide direction="up" in={prescriptions} mountOnEnter unmountOnExit>
+        <TableRow key={prescription._id}>
+              <TableCell>{prescription.name}</TableCell>
+              <TableCell align="right">{prescription.diagnosis}</TableCell>
+              <TableCell align="right">{new Date(prescription.prescriptionDate).toDateString()}</TableCell>
+              { prescription.author && prescription.author.name != undefined &&
+              <TableCell align="right">{prescription.author.name}</TableCell>
+              }
+              <TableCell align="right">{prescription.drug}</TableCell>
+              <TableCell align="center">
+                  <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
+                        </Tooltip> 
+              </TableCell>
+            </TableRow>
+            </Slide>
+            }
+            </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
     </TabPanel>
     <TabPanel value={value} index={3}>
     <TableContainer component={Paper} style={{overflow: "hidden"}}>
