@@ -361,8 +361,17 @@ const useStyles = makeStyles((theme) => ({
         <Typography className={classes.title} color="textSecondary" gutterBottom>
           SUPERVISING DOCTOR
         </Typography>
+        { patient.author && patient.author.name != undefined &&
         <Typography variant="body2" component="p">
-          {patient.supervisor}
+          {patient.author.name}
+        </Typography>
+        }
+        <Divider />
+        <Typography className={classes.title} color="textSecondary" gutterBottom>
+          ASSIGNED DEPARTMENT
+        </Typography>
+        <Typography variant="body2" component="p">
+          {patient.department}
         </Typography>
         <Divider />
       </CardContent>

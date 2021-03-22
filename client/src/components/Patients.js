@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useContext }from 'react'
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Nav from './Nav'
@@ -32,6 +32,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
+import { UserContext } from './UserContext'
 
 
 
@@ -106,6 +107,9 @@ const useStyles = makeStyles((theme) => ({
 
     ])  
 
+    const {user, setUser} = useContext(UserContext);
+
+    
   // GET/Fetch all patients, listener for patients
 
     useEffect(() => {
@@ -175,7 +179,7 @@ const useStyles = makeStyles((theme) => ({
 });
   } else if (searching === "Doctors") {
     const filteredPatients = patients.filter((patient) => {
-      return patient.supervisor.toLowerCase().includes(searchedVal.toLowerCase());
+      return patient.author.name.toLowerCase().includes(searchedVal.toLowerCase());
     });
 
     setPatients((prevState) => {
@@ -270,8 +274,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell align="right">{patient.age}</TableCell>
               <TableCell align="right">{patient.condition}</TableCell>
               <TableCell align="right">{patient.diagnosis}</TableCell>
-              <TableCell align="right">{patient.supervisor}</TableCell>
-              <TableCell align="right">{patient.status}</TableCell>
+              { patient.author && patient.author.name != undefined &&
+              <TableCell align="right">{patient.author.name}</TableCell>
+              }              <TableCell align="right">{patient.status}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">
                         <IconButton aria-label="details" component={Link} to={`/patients/${patient._id}`}>
@@ -317,8 +322,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell align="right">{patient.age}</TableCell>
               <TableCell align="right">{patient.condition}</TableCell>
               <TableCell align="right">{patient.diagnosis}</TableCell>
-              <TableCell align="right">{patient.supervisor}</TableCell>
-              <TableCell align="right">{patient.status}</TableCell>
+              { patient.author && patient.author.name != undefined &&
+              <TableCell align="right">{patient.author.name}</TableCell>
+              }              <TableCell align="right">{patient.status}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">
                         <IconButton aria-label="details" component={Link} to={`/patients/${patient._id}`}>
@@ -341,10 +347,100 @@ const useStyles = makeStyles((theme) => ({
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        hello from my patients only
+      <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Name</strong></TableCell>
+            <TableCell align="right"><strong>Age</strong></TableCell>
+            <TableCell align="right"><strong>Condition</strong></TableCell>
+            <TableCell align="right"><strong>Diagnosis</strong></TableCell>
+            <TableCell align="right"><strong>Supervising Doctor</strong></TableCell>
+            <TableCell align="right"><strong>Status</strong></TableCell>
+            <TableCell align="center"><strong>Action</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {patients.map((patient) => (
+                        <>
+            {patient.author.name === user.name &&         
+        <Slide direction="up" in={patients} mountOnEnter unmountOnExit>
+        <TableRow key={patient._id}>
+              <TableCell>{patient.fullName}</TableCell>
+              <TableCell align="right">{patient.age}</TableCell>
+              <TableCell align="right">{patient.condition}</TableCell>
+              <TableCell align="right">{patient.diagnosis}</TableCell>
+              { patient.author && patient.author.name != undefined &&
+              <TableCell align="right">{patient.author.name}</TableCell>
+              }              <TableCell align="right">{patient.status}</TableCell>
+              <TableCell align="center">
+                  <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/patients/${patient._id}`}>
+                            <PersonPinIcon />
+                         </IconButton>
+                        </Tooltip> 
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                         </Tooltip> 
+              </TableCell>
+            </TableRow>
+            </Slide>
+            }
+            </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        hello from department only patients
+      <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Name</strong></TableCell>
+            <TableCell align="right"><strong>Age</strong></TableCell>
+            <TableCell align="right"><strong>Condition</strong></TableCell>
+            <TableCell align="right"><strong>Diagnosis</strong></TableCell>
+            <TableCell align="right"><strong>Supervising Doctor</strong></TableCell>
+            <TableCell align="right"><strong>Status</strong></TableCell>
+            <TableCell align="center"><strong>Action</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {patients.map((patient) => (
+                        <>
+            {patient.department === user.department &&         
+        <Slide direction="up" in={patients} mountOnEnter unmountOnExit>
+        <TableRow key={patient._id}>
+              <TableCell>{patient.fullName}</TableCell>
+              <TableCell align="right">{patient.age}</TableCell>
+              <TableCell align="right">{patient.condition}</TableCell>
+              <TableCell align="right">{patient.diagnosis}</TableCell>
+              { patient.author && patient.author.name != undefined &&
+              <TableCell align="right">{patient.author.name}</TableCell>
+              }              <TableCell align="right">{patient.status}</TableCell>
+              <TableCell align="center">
+                  <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/patients/${patient._id}`}>
+                            <PersonPinIcon />
+                         </IconButton>
+                        </Tooltip> 
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                         </Tooltip> 
+              </TableCell>
+            </TableRow>
+            </Slide>
+            }
+            </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
       </TabPanel>
       </SwipeableViews>
       </Container>

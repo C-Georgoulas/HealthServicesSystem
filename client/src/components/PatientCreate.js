@@ -114,6 +114,27 @@ const conditions = [
   },
 ];
 
+// department dropdown options
+
+const [department, setDepartment] = React.useState();
+
+  const handleChangeDepartment = (event) => {
+    setDepartment(event.target.value);
+    setPatient({...patient, department: event.target.value});
+  };
+
+const departments = [
+  {
+    value: 'Pathology',
+  },
+  {
+    value: 'Psychology',
+  },
+  {
+    value: 'Surgery',
+  },
+];
+
 const [sex, setSex] = React.useState();
 
   const handleChangeSex = (event) => {
@@ -259,6 +280,26 @@ const form = useRef();
         <Divider />
         <Typography variant="body2" component="p">
         <TextValidator
+          id="standard-select-condition"
+          select
+          label="DEPARTMENT"
+          value={department}
+          name="patient[department]"
+          onChange={handleChangeDepartment}
+          helperText="Department that will handle the patient based on diagnosis"
+          validators={['required']}
+          errorMessages={['Please select the department of the patient!']}
+        >
+          {departments.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.value}
+            </MenuItem>
+          ))}
+        </TextValidator>
+        </Typography>
+        <Divider />
+        {/* <Typography variant="body2" component="p">
+        <TextValidator
         id="standard-basic" 
         label="SUPERVISOR"
         name="patient[supervisor]"
@@ -268,7 +309,7 @@ const form = useRef();
         onChange={e => setPatient({...patient, supervisor: e.target.value})} 
         />
         </Typography>
-        <Divider />                
+        <Divider />                 */}
       </CardContent>
       <CardActions>
       <Button type="submit" size="small" color="primary" variant="outlined">ADMIT</Button>

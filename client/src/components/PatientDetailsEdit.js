@@ -115,6 +115,27 @@ value: 'Unstable',
 },
 ];   
 
+// department dropdown options
+
+const [department, setDepartment] = React.useState();
+
+  const handleChangeDepartment = (event) => {
+    setDepartment(event.target.value);
+    setEditPatient({...editPatient, department: event.target.value});
+  };
+
+const departments = [
+  {
+    value: 'Pathology',
+  },
+  {
+    value: 'Psychology',
+  },
+  {
+    value: 'Surgery',
+  },
+];
+
 const [sex, setSex] = React.useState();
 
   const handleChangeSex = (event) => {
@@ -268,19 +289,42 @@ const renderValue = (value) => {
          />
         </Typography>
         <Divider />
+        { editPatient.author && editPatient.author.name != undefined &&
+        <>
         <Typography variant="body2" component="p">
-        <TextValidator 
+        <TextValidator
         InputLabelProps={{shrink: true}}
         id="standard-basic" 
-        label="SUPERVISOR"
-        value={editPatient.supervisor}
-        name="editPatient[supervisor]"
+        disabled
+        label="SUPERVISING DOCTOR"
+        value={editPatient.author.name}
         validators={['required']}
-        errorMessages={['Please add the supervising doctor of the patient!']}
-        onChange={e => setEditPatient({...editPatient, supervisor: e.target.value})} 
-        />
+        errorMessages={['Please add the diagnosis of the patient!']}
+         />
         </Typography>
-        <Divider />                
+        <Divider />
+        </>
+        }
+        <Typography variant="body2" component="p">
+        <TextValidator
+          id="standard-select-condition"
+          select
+          label="DEPARTMENT"
+          value={editPatient.department || ''}
+          name="editPatient[department]"
+          onChange={handleChangeDepartment}
+          helperText="Department that will handle the patient based on diagnosis"
+          validators={['required']}
+          errorMessages={['Please select the department of the patient!']}
+        >
+          {departments.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.value}
+            </MenuItem>
+          ))}
+        </TextValidator>
+        </Typography>
+        <Divider />             
       </CardContent>
       <CardActions>
       <Button type="submit" size="small" color="primary" variant="outlined">SAVE</Button>

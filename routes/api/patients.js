@@ -15,6 +15,7 @@ const User = require('../../models/User');
 // sort's use is to sort all patients in a descending manner by the creationdate
 router.get('/', (req, res) => {
     Patient.find()
+        .populate('author')
         .sort({date: -1})
         .then(patients => res.json(patients))
 });
@@ -48,6 +49,7 @@ router.get('/prescriptions/:id', async (req, res) => {
 
 router.get('/:id', (req, res) => {
     Patient.findById(req.params.id)
+    .populate('author')
     .populate({path: 'notes', 
     populate: {
         path: 'author'
@@ -74,11 +76,12 @@ router.post('/', (req, res) => {
         weight: req.body.weight,
         age: req.body.age,
         notes: req.body.notes,
+        department: req.body.department,
         condition: req.body.condition,
         admissionDate: req.body.admissionDate,
         upcomingSurgeries: req.body.upcomingSurgeries,
         prescriptions: req.body.prescriptions,
-        supervisor: req.body.supervisor,
+        author: req.user._id,
         diagnosis: req.body.diagnosis,
         status: req.body.status
 

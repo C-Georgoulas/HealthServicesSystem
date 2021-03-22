@@ -41,12 +41,16 @@ const PatientSchema = new Schema({
     status: {
         type: String
     },
+    department: {
+        type: String
+    },
     diagnosis: {
         type: String
     }, 
-    supervisor: {
-        type: String
-    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+},
     notes: [
         {
             type: mongoose.Schema.Types.ObjectId,
