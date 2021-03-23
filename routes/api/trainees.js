@@ -4,7 +4,7 @@ const router = express.Router();
 // Trainee Model
 
 const Trainee = require('../../models/Trainee');
-const Note = require('../../models/Grade');
+const Grade = require('../../models/Grade');
 
 // @ route GET api/trainees
 // @desc Get all Trainees
@@ -44,8 +44,13 @@ router.get('/grades/:id', async (req, res) => {
 
 router.get('/:id', (req, res) => {
     Trainee.findById(req.params.id)
-    .populate('grades')
-    .then(grade => res.json(grade))
+    .populate('author')
+    .populate({path: 'grades', 
+    populate: {
+        path: 'author'
+    }
+})
+    .then(trainee => res.json(trainee))
 });
 
 // @route POST api/trainees
@@ -61,7 +66,7 @@ router.post('/', (req, res) => {
         age: req.body.age,
         grades: req.body.grades,
         startDate: req.body.startDate,
-        supervisor: req.body.supervisor,
+        author: req.body.author,
         status: req.body.status,
         averageGrade: req.body.averageGrade
     })

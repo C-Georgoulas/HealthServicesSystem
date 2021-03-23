@@ -22,6 +22,13 @@ const TraineeSchema = new Schema({
     endDate: {
         type: Date
     },
+    department: {
+        type: String
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+        },
     grades: [
         {
             type: mongoose.Schema.Types.ObjectId,

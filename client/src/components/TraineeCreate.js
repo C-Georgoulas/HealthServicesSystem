@@ -29,15 +29,32 @@ import {
 // Dropdown
 import MenuItem from '@material-ui/core/MenuItem';
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator'
+import Select from '@material-ui/core/Select';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 
 
 export default function TraineeCreate(props) {
 
-// make a post request - DONE
-// make the prescriptions an array, watch colt steele bootcamp comments - DONE
-// make the surgeries an array, watch colt steele bootcamp comments - NOT DONE YET
-// add a field for prescriptions and notes - NOT DONE YET
+  const [users, setUsers] = useState([
+
+  ])  
+
+
+  // const [accessToken, setAccessToken] = useState(undefined);
+
+
+// GET/Fetch all users, listener for users
+
+useEffect(() => {
+  fetch('/api/admin/users')
+  .then(response => response.json())
+  .then(json => setUsers(json))
+
+}, [])
 
 // defining patient state and setting default value of patient status to Active after creation
 
@@ -45,7 +62,7 @@ const [trainee, setTrainee] = useState (
       {status: "Active"}
 )
 
- // Post request to add a patient
+ // Post request to add a trainee
 
  const onSubmit = (e) => {
    console.log('hello?')
@@ -138,6 +155,22 @@ const sexSelect = [
     value: 'Female',
   },
 ];
+
+const renderValue = (value) => {
+  return value;
+}
+
+const [author, setAuthor] = React.useState();
+
+// figure out a way to pass the user object ID into trainee.author 
+// handeClick = (user) right now returns the event and NOT the user
+
+const handleClick = (user) => {
+  console.log(user);
+    setAuthor(user.name);
+    setTrainee({...trainee, 
+      author: user});
+}
 
 const form = useRef();
 
@@ -241,18 +274,24 @@ const form = useRef();
         </MuiPickersUtilsProvider>
         </Typography>
         <Divider />
-        <Typography variant="body2" component="p">
         <TextValidator
-        id="standard-basic" 
-        label="ASSIGNED SUPERVISOR"
-        name="trainee[supervisor]"
-        value={trainee.supervisor}
-        validators={['required']}
-        errorMessages={['Please add the instructor of thee trainee!']}
-        onChange={e => setTrainee({...trainee, supervisor: e.target.value})} 
-        />
-        </Typography>
-        <Divider />                
+          id="standard-select-sex"
+          className={classes.sex}
+          select
+          label="INSTRUCTOR"
+          value={author}
+          name="trainee[author]"
+          onChange={handleClick}
+          validators={['required']}
+          errorMessages={['Please select the instructor of the trainee!']}
+        >
+          {users && users.length > 1 && users.map((user) => (
+
+            <MenuItem key={user._id} value={user}>
+              {user.name}
+            </MenuItem>
+          ))}
+          </TextValidator>
       </CardContent>
       <CardActions>
       <Button type="submit" size="small" color="primary" variant="outlined">CREATE</Button>
