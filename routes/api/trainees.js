@@ -13,6 +13,7 @@ const Grade = require('../../models/Grade');
 // sort's use is to sort all patients in a descending manner by the creationdate
 router.get('/', (req, res) => {
     Trainee.find()
+        .populate('author')
         .sort({date: -1})
         .then(trainees => res.json(trainees))
 });
@@ -59,6 +60,7 @@ router.get('/:id', (req, res) => {
 
 // Constructing an object to insert to the database
 router.post('/', (req, res) => {
+    console.log(req.body);
     const newTrainee = new Trainee({
         fullName: req.body.fullName,
         endDate: req.body.endDate,
@@ -68,6 +70,7 @@ router.post('/', (req, res) => {
         startDate: req.body.startDate,
         author: req.body.author,
         status: req.body.status,
+        department: req.body.department,
         averageGrade: req.body.averageGrade
     })
 

@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
   // GET/Fetch all trainees, listener for trainees
 
     useEffect(() => {
-        fetch('api/trainees')
+        fetch('/api/trainees')
         .then(response => response.json())
         .then(json => setTrainees(json))
 
@@ -170,7 +170,7 @@ const useStyles = makeStyles((theme) => ({
 });
   } else if (searching === "Assigned Supervisors") {
     const filteredTrainees = trainees.filter((trainee) => {
-      return trainee.supervisor.toLowerCase().includes(searchedVal.toLowerCase());
+      return trainee.author.name.toLowerCase().includes(searchedVal.toLowerCase());
     });
 
     setTrainees((prevState) => {
@@ -263,7 +263,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell align="right">
               {new Date(trainee.startDate).toDateString()}</TableCell>
               <TableCell align="right">{trainee.averageGrade}</TableCell>
-              <TableCell align="right">{trainee.supervisor}</TableCell>
+              { trainee.author && trainee.author.name != undefined &&
+              <TableCell align="right">{trainee.author.name}</TableCell>
+              }
               <TableCell align="right">{trainee.status}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">
@@ -308,7 +310,9 @@ const useStyles = makeStyles((theme) => ({
               <TableCell>{trainee.fullName}</TableCell>
               <TableCell align="right">{trainee.startDate}</TableCell>
               <TableCell align="right">{trainee.averageGrade}</TableCell>
-              <TableCell align="right">{trainee.supervisor}</TableCell>
+              { trainee.author && trainee.author.name != undefined &&
+              <TableCell align="right">{trainee.author.name}</TableCell>
+              }
               <TableCell align="right">{trainee.status}</TableCell>
               <TableCell align="center">
                   <Tooltip title="Details">

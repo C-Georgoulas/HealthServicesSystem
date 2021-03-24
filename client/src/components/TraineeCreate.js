@@ -66,6 +66,7 @@ const [trainee, setTrainee] = useState (
 
  const onSubmit = (e) => {
    console.log('hello?')
+   console.log(trainee);
   e.preventDefault()
   fetch(`/api/trainees`, {
     method: 'POST',
@@ -166,11 +167,37 @@ const [author, setAuthor] = React.useState();
 // handeClick = (user) right now returns the event and NOT the user
 
 const handleClick = (user) => {
-  console.log(user);
+  // console.log(user);
     setAuthor(user.name);
-    setTrainee({...trainee, 
-      author: user});
 }
+
+const handleClick2 = (user) => {
+  setTrainee({...trainee, 
+    author: user});
+}
+
+
+const [department, setDepartment] = React.useState();
+
+const [role, setRole] = React.useState();
+
+  const handleDepartmentChange = (event) => {
+    setDepartment(event.target.value);
+    setTrainee({...trainee, department: event.target.value});
+    // setEditUser({...editUser, role: event.target.value});
+  };
+
+const departments = [
+  {
+    value: 'Psychology',
+  },
+  {
+    value: 'Pathology',
+  },
+  {
+    value: 'Surgery',
+  },
+];
 
 const form = useRef();
 
@@ -279,19 +306,34 @@ const form = useRef();
           className={classes.sex}
           select
           label="INSTRUCTOR"
-          value={author}
-          name="trainee[author]"
+          value={trainee.author}
           onChange={handleClick}
           validators={['required']}
           errorMessages={['Please select the instructor of the trainee!']}
         >
           {users && users.length > 1 && users.map((user) => (
 
-            <MenuItem key={user._id} value={user}>
+            <MenuItem key={user._id} value={user} onClick={()=>handleClick2(user)}>
               {user.name}
             </MenuItem>
           ))}
           </TextValidator>
+          <TextValidator
+          className={classes.sex}
+          id="standard-select-condition"
+          select
+          label="Department"
+          value={department}
+          validators={['required']}
+          errorMessages={['Please add a department to the trainee!']}
+          onChange={handleDepartmentChange}
+        >
+          {departments.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.value}
+            </MenuItem>
+          ))}
+         </TextValidator>
       </CardContent>
       <CardActions>
       <Button type="submit" size="small" color="primary" variant="outlined">CREATE</Button>
