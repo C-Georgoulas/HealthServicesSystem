@@ -33,6 +33,7 @@ router.get('/grades', (req, res) => {
 
 router.get('/grades/:id', async (req, res) => {
    Grade.findById(req.params.id)
+    .populate('author')
     .then(grade => res.json(grade))
 })
 
@@ -103,6 +104,7 @@ router.delete('/:id', async (req, res) => {
 router.post('/:id/grades', async (req, res) => {
     const trainee = await Trainee.findById(req.params.id);
     const grade = new Grade(req.body.grade);
+    grade.author = req.user._id
     trainee.grades.push(grade);
     await grade.save()
     await trainee.save();
@@ -113,8 +115,8 @@ router.post('/:id/grades', async (req, res) => {
  // @desc Edit a specific grade of a specific trainee
 // @access Instructors
  
- router.put('/:id/notes/:gradeId', (req, res) => {
-     Note.findByIdAndUpdate(req.params.gradeId, req.body.editGrade, function(err, updatedGrade) {
+ router.put('/:id/grades/:gradeId', (req, res) => {
+     Grade.findByIdAndUpdate(req.params.gradeId, req.body.editGrade, function(err, updatedGrade) {
          if (err) {
              console.log(err)
          } else {
@@ -128,14 +130,14 @@ router.post('/:id/grades', async (req, res) => {
  // @access Administrator, grade owner
  
  // sending status 200 seems to have fixed the issue?
- router.delete('/:id/grade/:gradeId', async (req, res) => {
+ router.delete('/:id/grades/:gradeId', async (req, res) => {
      const {id, gradeId} = req.params
      await Trainee.findByIdAndUpdate(id, {$pull: {grades: gradeId}});
      await Grade.findByIdAndRemove(gradeId);
      res.status(200).send({});
  })
  
- router.get('/:id/notes/:gradeId/edit', async (req, res) => {
+ router.get('/:id/grades/:gradeId/edit', async (req, res) => {
      const {gradeId} = req.params
      Grade.findById(gradeId)
      .then(grade => res.json(grade));

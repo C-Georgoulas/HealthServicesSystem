@@ -69,11 +69,11 @@ export default function TraineeDetails({match}, props) {
 // declaring state for the specific patient
 const [trainee, setTrainee] = useState ({})
 
-// declaring state for the notes
-const [note, setNote] = useState({})
+// declaring state for the grades
+const [grade, setGrade] = useState({})
 
-// declaring temporary state for the edit note
-const [editNote, setEditNote] = useState({})
+// declaring temporary state for the edit grade
+const [editGrade, setEditGrade] = useState({})
 
 // ensure to add the "/" infront of api/patients, so end result is /api/patients so it doesnt get affected by router
 // GET/Fetch specific patient,findByID
@@ -99,51 +99,51 @@ const [open, setOpen] = React.useState(false);
   };
 
 // Edit Dialog 
-const [openEditNote, setOpenEditNote] = React.useState(false);
+const [openEditGrade, setOpenEditGrade] = React.useState(false);
 
 // id passes the selected note through the icon button modify into the editNote state
 
-const handleClickOpenEditNote = (id) => {
+const handleClickOpenEditGrade = (id) => {
   console.log("HERE IT IS")
   console.log(id)
-  setEditNote(id);
-  setOpenEditNote(true);
+  setEditGrade(id);
+  setOpenEditGrade(true);
 };
 
-const handleCloseEditNote = () => {
-  setOpenEditNote(false);
+const handleCloseEditGrade = () => {
+  setOpenEditGrade(false);
 };
 
 // Put request to edit the specific note of the patient
 
-const onEditedNoteSubmit = (e) => {
+const onEditedGradeSubmit = (e) => {
   e.preventDefault()
-  fetch(`/api/trainees/${match.params.id}/notes/${editNote._id}`, {
+  fetch(`/api/trainees/${match.params.id}/grades/${editGrade._id}`, {
     method: 'PUT',
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({editNote}),
+    body: JSON.stringify({editGrade}),
   })
   .then(res => res.json())
   // .then(json => setEditNote({
   //   title: "",
   //   text: ""
   // }))
-  .then(setOpenEditNote(false));
+  .then(setOpenEditGrade(false));
 }
 
  // Post request to add a note to patient
 
  // setNote sets the state of the notes so it the edited note appears
 
-  const onNoteSubmit = (e) => {
+  const onGradeSubmit = (e) => {
     e.preventDefault()
-    fetch(`/api/trainees/${match.params.id}/notes`, {
+    fetch(`/api/trainees/${match.params.id}/grades`, {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({note}),
+      body: JSON.stringify({grade: grade}),
     })
     .then(res => res.json())
-    .then(json => setNote({
+    .then(json => setGrade({
       title: "",
       text: ""
     }))
@@ -152,23 +152,14 @@ const onEditedNoteSubmit = (e) => {
 
   // Delete request to remove a note from a patient
 
-  const deleteNote = (noteID) => {
-    fetch(`/api/trainees/${trainee._id}/notes/${noteID}`, {
+  const deleteGrade = (gradeID) => {
+    fetch(`/api/trainees/${trainee._id}/grades/${gradeID}`, {
       method: 'DELETE',
     })
     .then(response => response.json())
 };
 
 //--------- EVERYTHING RELATED TO PRESCRIPTION FUNCTIONALITY
-
-  // Delete request to remove a prescription from a patient
-
-const deletePrescription = (prescriptionID) => {
-  fetch(`/api/trainees/${trainee._id}/prescriptions/${prescriptionID}`, {
-    method: 'DELETE',
-  })
-  .then(response => response.json())
-};
 
 const history = useHistory();
 
@@ -208,6 +199,18 @@ fetch(`/api/trainees/${trainee._id}`, {
 .then(data => {
   setTrainee(updatedTrainee)
 })
+}
+
+function arrayAverage(arr){
+  //Find the sum
+  var sum = 0;
+  for(var i in arr) {
+      sum += arr[i];
+  }
+  //Get the length of the array
+  var numbersCnt = arr.length;
+  //Return the average / mean.
+  return (sum / numbersCnt);
 }
 
 
@@ -369,8 +372,8 @@ const useStyles = makeStyles((theme) => ({
         <Divider />
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary" variant="outlined" onClick={handleClickOpen}>ADD A NOTE</Button>
-        <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${trainee._id}/prescription/new`}>ADD A PRESCRIPTION</Button>
+        <Button size="small" color="primary" variant="outlined" onClick={handleClickOpen}>ADD A GRADE REPORT</Button>
+        {/* <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${trainee._id}/prescription/new`}>ADD A PRESCRIPTION</Button> */}
         <Button size="small" color="primary" variant="outlined" component={Link} to=
                         {
                           {
@@ -387,119 +390,28 @@ const useStyles = makeStyles((theme) => ({
       </CardActions>
     </Card>
 <br></br>
-{/* PRESCRIPTIONS TABLE */}
-{/* <TableContainer component={Paper} style={{overflow: "hidden"}}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell><strong>Prescription</strong></TableCell>
-            <TableCell align="right"><strong>Class</strong></TableCell>
-            <TableCell align="right"><strong>Treatment Dose</strong></TableCell>
-            <TableCell align="right"><strong>Doctor</strong></TableCell>
-            <TableCell align="right"><strong>Diagnosis</strong></TableCell>
-            <TableCell align="center"><strong>Actions</strong></TableCell>
-          </TableRow>
-        </TableHead>
-        {trainee.prescriptions && trainee.prescriptions.length > 0 &&
-        <>
-        <TableBody>
-        {trainee.prescriptions && trainee.prescriptions.map((prescription) => (
-        <TableRow key={prescription._id}>
-              <TableCell>{prescription.drug}</TableCell>
-              <TableCell align="right">{capitalizeFirstLetter(prescription.class)}</TableCell>
-              <TableCell align="right">{prescription.dose}</TableCell>
-              { prescription.author && prescription.author.name != undefined &&
-              <TableCell align="right">{prescription.author.name}</TableCell>
-              }
-              <TableCell align="center">{prescription.diagnosis}</TableCell>
-              <TableCell align="center">
-              <Tooltip title="Details">
-                        <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
-                            <NoteAddIcon />
-                         </IconButton>
-                        </Tooltip> 
-                  <Tooltip title="Modify">
-                        <IconButton aria-label="modify" component={Link} to=
-                        {
-                          {
-                          pathname: `/patients/${trainee._id}/prescription/${prescription._id}/edit`,
-                          state: {passedPatientId: trainee._id}
-                        }
-                          }>
-                            <EditIcon />
-                         </IconButton>
-                        </Tooltip> 
-                        <Tooltip title="Delete">
-                          <IconButton aria-label="delete" onClick={()=>deletePrescription(prescription._id)}>
-                            <DeleteIcon />
-                          </IconButton>
-                         </Tooltip> 
-              </TableCell>
-            </TableRow>
-            ))}
-        </TableBody>
-        </>
-      }
-        {trainee.prescriptions && trainee.prescriptions.length == 0 &&
-         <TableBody>
-            <TableRow>
-              There's no prescriptions on {trainee.fullName}.
-            </TableRow>
-         </TableBody>
-          }
-      </Table>
-    </TableContainer> */}
-    {/* <br></br> */}
-    {/* <Card className={classes.root} variant="outlined">
-      <CardContent>
-      <Typography variant="h6" component="h2">
-         PATIENT SURGERIES
-      </Typography>
-      <Divider/>
-    <div className={classes.rootTab}>
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        className={classes.tabs}
-      >
-        <Tab label="Scheduled Surgeries" {...a11yProps(0)} />
-        <Tab label="Concluded Surgeries" {...a11yProps(1)} />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        Scheduled Surgery Here
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Concluded Surgery Here
-      </TabPanel>
-    </div>
-    </CardContent>
-    </Card> */}
-    {/* <br></br> */}
     {/* COMMENTS / NOTES BY OTHER DOCTORS/STAFF */}
-    {/* <Card className={classes.root} variant="outlined">
+    <Card className={classes.root} variant="outlined">
       <CardContent>
       <Typography variant="h6" component="h2">
-         PATIENT NOTES
+         TRAINEE GRADE REPORTS
       </Typography>
       <Divider/>
-      {trainee.notes &&  trainee.notes.length > 0 &&
+      {trainee.grades &&  trainee.grades.length > 0 &&
       <>
-    {trainee.notes && trainee.notes.map((note) => (
-    <List className={classes.root} key={note._id}>
+    {trainee.grades && trainee.grades.map((grade) => (
+    <List className={classes.root} key={grade._id}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          { note.author && note.author.name != undefined &&
-          <Avatar alt={note.author.name} src="/static/images/avatar/1.jpg" />
+          { grade.author && grade.author.name != undefined &&
+          <Avatar alt={grade.author.name} src="/static/images/avatar/1.jpg" />
           } 
-          { !note.author &&
+          { !grade.author &&
           <Avatar alt="" src="/static/images/avatar/1.jpg" />
           } 
         </ListItemAvatar>
         <ListItemText
-          primary={note.title}
+          primary={`${grade.title} — ${grade.mark}`}
           secondary={
             <React.Fragment>
               <Typography
@@ -508,24 +420,24 @@ const useStyles = makeStyles((theme) => ({
                 className={classes.inline}
                 color="textPrimary"
               >
-                {note.author && note.author.name != undefined &&
+                {grade.author && grade.author.name != undefined &&
                 <>
-              {capitalizeFirstLetter(note.author.role) + " " + "(" + note.author.department +")"} {" " + note.author.name}
+              {capitalizeFirstLetter(grade.author.role) + " " + "(" + grade.author.department +")"} {" " + grade.author.name}
               </>
           }
               </Typography>
-              {` — ${note.text}`}
+              {` — ${grade.text}`}
             </React.Fragment>
           }
         />
         <ListItemSecondaryAction className={classes.noteActionPos}>
         <Tooltip title="Modify">
-                        <IconButton aria-label="modify" size="small" onClick={() => handleClickOpenEditNote(note)}>
+                        <IconButton aria-label="modify" size="small" onClick={() => handleClickOpenEditGrade(grade)}>
                             <EditIcon />
                          </IconButton>
                         </Tooltip> 
                         <Tooltip title="Delete">
-                          <IconButton aria-label="delete" size="small" onClick={()=>deleteNote(note._id)}>
+                          <IconButton aria-label="delete" size="small" onClick={()=>deleteGrade(grade._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
@@ -536,48 +448,59 @@ const useStyles = makeStyles((theme) => ({
     ))}
     </>
   }
-      {trainee.notes &&  trainee.notes.length == 0 &&
+      {trainee.grades &&  trainee.grades.length == 0 &&
         <Typography>
-        There's no medical notes on {trainee.fullName} yet!
+        There's no grade reports on {trainee.fullName} yet!
      </Typography>
         }
     </CardContent>
-    </Card> */}
+    </Card>
 
 {/* ADD A NOTE DIALOG */}
 
-{/* <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
 <ValidatorForm
             ref={form}
-            onSubmit={onNoteSubmit}
+            onSubmit={onGradeSubmit}
             onError={errors => console.log(errors)}>
-        <DialogTitle id="form-dialog-title">NOTE</DialogTitle>
+        <DialogTitle id="form-dialog-title">GRADE REPORT</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To add a medical note to {trainee.fullName}, please fill out the form below.
+            To add a grade report to {trainee.fullName}, please fill out the form below.
           </DialogContentText>
           <TextValidator
             autoFocus
             margin="dense"
             id="title"
-            name="note[title]"
-            onChange={e => setNote({...note, title: e.target.value})}
-            value={note.title}
+            name="grade[title]"
+            onChange={e => setGrade({...grade, title: e.target.value})}
+            value={grade.title}
             validators={['required']}
-            errorMessages={['Please add a title to your note!']}
+            errorMessages={['Please add a title to your grade report!']}
             label="Title"
             type="text"
             fullWidth
           />
+          <TextValidator
+        margin="dense"
+        fullWidth
+        id="standard-basic" 
+        label="Grade" 
+        type="number"
+        name="grade[mark]"
+        onChange={e => setGrade({...grade, mark: e.target.value})}
+        value={grade.mark}
+        validators={['required']}
+        errorMessages={['Please add the grade of the trainee!']}
+        />
            <TextValidator
-            autoFocus
             margin="dense"
             id="description"
-            name="note[text]"
-            onChange={e => setNote({...note, text: e.target.value})}
-            value={note.text}
+            name="grade[text]"
+            onChange={e => setGrade({...grade, text: e.target.value})}
+            value={grade.text}
             validators={['required']}
-            errorMessages={['Please add text to your note!']}
+            errorMessages={['Please add text to your grade!']}
             label="Description"
             type="text"
             fullWidth
@@ -594,44 +517,54 @@ const useStyles = makeStyles((theme) => ({
             Add
           </Button>
         </DialogActions>
-        </ValidatorForm> */}
+        </ValidatorForm>
         {/* </form> */}
-      {/* </Dialog> */}
+      </Dialog>
 
       {/* EDIT NOTE */}
 
-      {/* <Dialog open={openEditNote} onClose={handleCloseEditNote} aria-labelledby="form-dialog-title">
+      <Dialog open={openEditGrade} onClose={handleCloseEditGrade} aria-labelledby="form-dialog-title">
       <ValidatorForm
             ref={form2}
-            onSubmit={onEditedNoteSubmit}
+            onSubmit={onEditedGradeSubmit}
             onError={errors => console.log(errors)}>
-        <DialogTitle id="form-dialog-title">EDIT NOTE</DialogTitle>
+        <DialogTitle id="form-dialog-title">EDIT GRADE REPORT</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To edit the medical note for {trainee.fullName}, please fill out the form below.
+            To edit the grade report for {trainee.fullName}, please fill out the form below.
           </DialogContentText>
           <TextValidator
-            autoFocus
             margin="dense"
-            value={editNote.title}
+            value={editGrade.title}
             id="title"
-            name="note[title]"
-            onChange={e => setEditNote({...editNote, title: e.target.value})}
+            name="grade[title]"
+            onChange={e => setEditGrade({...editGrade, title: e.target.value})}
             validators={['required']}
-            errorMessages={['Please add a title to your note!']}
+            errorMessages={['Please add a title to your grade!']}
             label="Title"
             type="text"
             fullWidth
           />
+          <TextValidator
+        margin="dense"
+        fullWidth
+        id="standard-basic" 
+        label="GRADE" 
+        type="number"
+        name="grade[mark]"
+        onChange={e => setEditGrade({...editGrade, mark: e.target.value})}
+        value={editGrade.mark}
+        validators={['required']}
+        errorMessages={['Please add the grade of the trainee!']}
+        />
            <TextValidator
-            autoFocus
             margin="dense"
             id="description"
-            name="note[text]"
-            value={editNote.text}
-            onChange={e => setEditNote({...editNote, text: e.target.value})}
+            name="grade[text]"
+            value={editGrade.text}
+            onChange={e => setEditGrade({...editGrade, text: e.target.value})}
             validators={['required']}
-            errorMessages={['Please add a text to your note!']}
+            errorMessages={['Please add a text to your grade!']}
             label="Description"
             type="text"
             fullWidth
@@ -641,7 +574,7 @@ const useStyles = makeStyles((theme) => ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEditNote} color="primary">
+          <Button onClick={handleCloseEditGrade} color="primary">
             Cancel
           </Button>
           <Button type="submit" color="primary">
@@ -649,7 +582,7 @@ const useStyles = makeStyles((theme) => ({
           </Button>
         </DialogActions>
           </ValidatorForm>
-      </Dialog> */}
+      </Dialog>
 </Container>
 </div>
     )
