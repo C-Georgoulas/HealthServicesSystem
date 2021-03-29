@@ -75,16 +75,20 @@ const [grade, setGrade] = useState({})
 // declaring temporary state for the edit grade
 const [editGrade, setEditGrade] = useState({})
 
+const [mark, setMark] = useState ([])
+
 // ensure to add the "/" infront of api/patients, so end result is /api/patients so it doesnt get affected by router
 // GET/Fetch specific patient,findByID
 // fetches for updates continuously, might have to fix it in the future
 
 useEffect(() => {
-    fetch(`/api/trainees/${match.params.id}`)
-    .then(response => response.json())
-    .then(json => setTrainee(json))
-
-}, [trainee])
+  fetch(`/api/trainees/${match.params.id}`)
+  .then(response => response.json())
+  .then(json => {
+    setTrainee(json);
+    setMark(json.grades.map(grade => grade.mark));
+  })
+}, [])
 
 //--------- EVERYTHING RELATED TO NOTES FUNCTIONALITY
 // Dialog 
@@ -344,7 +348,7 @@ const useStyles = makeStyles((theme) => ({
           AVERAGE GRADE
         </Typography>
         <Typography variant="body2" component="p">
-            {trainee.averageGrade}
+          {arrayAverage(mark)}
         </Typography>
         <Divider />
         <Typography className={classes.title} color="textSecondary" gutterBottom>
