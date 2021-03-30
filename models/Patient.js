@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 const Note = require('./Note')
 const Prescription = require('./Prescription')
+const Surgery = require('./Surgery')
 
 // Create Schema for patients
 
@@ -56,6 +57,12 @@ const PatientSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Note"
         }
+    ],
+    surgeries: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Surgery"
+        }
     ]
 
 
@@ -74,6 +81,11 @@ PatientSchema.post('findOneAndDelete', async (doc) => {
         await Prescription.deleteMany({
             _id: {
                 $in: doc.prescriptions
+            }
+        })
+        await Surgery.deleteMany({
+            _id: {
+                $in: doc.surgeries
             }
         })
     }

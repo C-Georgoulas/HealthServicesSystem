@@ -6,6 +6,7 @@ const router = express.Router();
 const Patient = require('../../models/Patient');
 const Note = require('../../models/Note');
 const Prescription = require('../../models/Prescription');
+const Surgery = require('../../models/Surgery');
 const User = require('../../models/User');
 
 // @ route GET api/patients
@@ -56,6 +57,11 @@ router.get('/:id', (req, res) => {
     }
 })
     .populate({path: 'prescriptions', 
+    populate: {
+        path: 'author'
+    }
+})
+.populate({path: 'surgeries', 
     populate: {
         path: 'author'
     }
@@ -227,6 +233,54 @@ router.put('/:id/prescriptions/:prescriptionId', (req, res) => {
         }
     })
 })
+
+// SURGERIES -----------
+
+// @route POST api/patients/:id/surgeries
+// @desc Add a surgery to the patient
+// @access Staff
+
+router.post('/:id/surgeries', async (req, res) => {
+    const patient = await Patient.findById(req.params.id);
+    const surgery = new Surgery(req.body.surgery);
+    // note.author = req.user._id
+    patient.surgeries.push(surgery);
+    await surgery.save()
+    await patient.save();
+    res.send(surgery);
+ })
+ 
+ // @route PUT api/patients/:id/surgeries/:surgeryId
+ // @desc Edit a specific surgery of a specific patient
+ // @access Staff
+ 
+ router.put('/:id/surgeries/:surgeryId', (req, res) => {
+     Surgery.findByIdAndUpdate(req.params.surgeryId, req.body.editSurgery, function(err, updatedSurgery) {
+         if (err) {
+             console.log(err)
+         } else {
+             res.status(200).send({});
+         }
+     })
+ })
+ 
+ // @route DELETE api/patients/:id/surgeries/:surgeryId
+ // @desc Delete a surgery
+ // @access Administrator, note owner
+ 
+ // sending status 200 seems to have fixed the issue?
+ router.delete('/:id/surgeries/:surgeryId', async (req, res) => {
+     const {id, surgeryId} = req.params
+     await Patient.findByIdAndUpdate(id, {$pull: {surgeries: surgeryId}});
+     await Surgery.findByIdAndRemove(surgeryId);
+     res.status(200).send({});
+ })
+ 
+ router.get('/:id/surgeries/:surgeryId/edit', async (req, res) => {
+     const {surgeryId} = req.params
+     Surgery.findById(surgeryId)
+     .then(surgery => res.json(surgery));
+ })
 
 
 

@@ -385,6 +385,7 @@ const useStyles = makeStyles((theme) => ({
                           state: {passedPatientId: patient._id}
                         }
                           }>MODIFY INFORMATION</Button>
+         <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${patient._id}/surgery/new`}>PLAN A SURGERY</Button>
         { patient.status === "Active" &&
         <Button size="small" color="primary" variant="outlined" onClick={onDeactivePatientSubmit}>DE-ACTIVATE PATIENT</Button>
         }
