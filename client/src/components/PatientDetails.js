@@ -9,6 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 // importing the button from material ui
 import Button from '@material-ui/core/Button';
+import NoteAdd from '@material-ui/icons/Comment';
 // ------------------------
 // styles for the components from material ui
 import { makeStyles } from '@material-ui/core/styles';
@@ -255,6 +256,28 @@ const handleChange = (event, newValue) => {
   setValue(newValue);
 };
 
+  // Delete request to remove a prescription from a patient
+
+  const deleteSurgery = (surgeryID) => {
+    fetch(`/api/patients/${patient._id}/surgeries/${surgeryID}`, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+  };
+
+  const dateSurgery = (surgeryDate) => {
+    let surgeryStartDate = new Date(surgeryDate)
+    // get current time
+    let currentDate = new Date()
+
+ // compare current date with expiration to determine if the prescription has expired
+    if (currentDate > surgeryStartDate) {
+      return "Concluded"
+    } else {
+      return "Scheduled"
+    }
+  }
+
 //---------
 
 const useStyles = makeStyles((theme) => ({
@@ -265,11 +288,17 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
       backgroundColor: theme.palette.background.paper,
       display: 'flex',
-      height: 224,
+      minWidth: 150,
+      maxHeight: 170,
+      overflow: 'auto',
     },
     tabs: {
       borderRight: `1px solid ${theme.palette.divider}`,
     },
+    // tabPanel1: {
+    //   backgroundColor: "red",
+    //   width: "700",
+    // },
     bullet: {
       display: 'inline-block',
       margin: '0 2px',
@@ -478,11 +507,129 @@ const useStyles = makeStyles((theme) => ({
         <Tab label="Concluded Surgeries" {...a11yProps(1)} />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Scheduled Surgery Here
+      <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Scheduled Date</strong></TableCell>
+            <TableCell align="right"><strong>Surgery Title</strong></TableCell>
+            <TableCell align="center"><strong>Actions</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        {patient.surgeries && patient.surgeries.length > 0 &&
+        <>
+        <TableBody>
+        {
+    patient.surgeries
+        .filter((surgery) => {
+            return dateSurgery(
+                surgery.startDate,
+            ) === 'Scheduled';
+        })
+        .map((surgery) => (
+              <TableRow key={surgery._id}>
+              <TableCell>{new Date(surgery.startDate).toDateString()}</TableCell>
+              <TableCell align="right">{surgery.title}</TableCell>
+              <TableCell align="right">
+              <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/surgeries/${surgery._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
+                        </Tooltip> 
+                  <Tooltip title="Modify">
+                        <IconButton aria-label="modify" component={Link} to=
+                        {
+                          {
+                          pathname: `/patients/${patient._id}/surgery/${surgery._id}/edit`,
+                          state: {passedPatientId: patient._id}
+                        }
+                          }>
+                            <EditIcon />
+                         </IconButton>
+                        </Tooltip> 
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="delete" onClick={()=>deleteSurgery(surgery._id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                         </Tooltip> 
+              </TableCell>
+            </TableRow>
+            ))}
+        </TableBody>
+        </>
+      }
+        {patient.surgeries && patient.surgeries.length == 0 &&
+         <TableBody>
+            <TableRow>
+              There's no scheduled surgeries for {patient.fullName}.
+            </TableRow>
+         </TableBody>
+          }
+      </Table>
+    </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Concluded Surgery Here
-      </TabPanel>
+      <TableContainer component={Paper} style={{overflow: "hidden"}}>
+      <Table className={classes.table} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Scheduled Date</strong></TableCell>
+            <TableCell align="right"><strong>Surgery Title</strong></TableCell>
+            <TableCell align="center"><strong>Actions</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        {patient.surgeries && patient.surgeries.length > 0 &&
+        <>
+        <TableBody>
+        {
+    patient.surgeries
+        .filter((surgery) => {
+            return dateSurgery(
+                surgery.startDate,
+            ) === 'Concluded';
+        })
+        .map((surgery) => (
+              <TableRow key={surgery._id}>
+              <TableCell>{new Date(surgery.startDate).toDateString()}</TableCell>
+              <TableCell align="right">{surgery.title}</TableCell>
+              <TableCell align="right">
+              <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/surgeries/${surgery._id}`}>
+                            <NoteAddIcon />
+                         </IconButton>
+                        </Tooltip> 
+                  <Tooltip title="Modify">
+                        <IconButton aria-label="modify" component={Link} to=
+                        {
+                          {
+                          pathname: `/patients/${patient._id}/surgery/${surgery._id}/edit`,
+                          state: {passedPatientId: patient._id}
+                        }
+                          }>
+                            <EditIcon />
+                         </IconButton>
+                        </Tooltip> 
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="delete" onClick={()=>deleteSurgery(surgery._id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                         </Tooltip> 
+              </TableCell>
+            </TableRow>
+            ))}
+        </TableBody>
+        </>
+      }
+        {patient.surgeries && patient.surgeries.length == 0 &&
+         <TableBody>
+            <TableRow>
+              There's no concluded surgeries for {patient.fullName}.
+            </TableRow>
+         </TableBody>
+          }
+      </Table>
+    </TableContainer>
+    </TabPanel>
     </div>
     </CardContent>
     </Card>

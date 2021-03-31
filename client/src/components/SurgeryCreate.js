@@ -246,7 +246,7 @@ const theme = useTheme();
         id="standard-basic" 
         label="SHORT TITLE ON AREA OF SURGERY OPERATION"
         name="surgery[title]"
-        value={surgery.title}
+        value={surgery.title || ''}
         className={classes.sex}
         onChange={e => setSurgery({...surgery, title: e.target.value})}
         validators={['required']}
@@ -258,7 +258,7 @@ const theme = useTheme();
         id="standard-basic" 
         label="SURGERY OPERATION DESCRIPTION"
         name="surgery[title]"
-        value={surgery.text}
+        value={surgery.text || ''}
         className={classes.sex}
         multiLine
         rows={4}
