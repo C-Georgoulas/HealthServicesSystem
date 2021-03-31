@@ -10,10 +10,11 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 // replacement for the classic <hr> from material ui
 import Divider from '@material-ui/core/Divider';
+import Input from '@material-ui/core/Input';
 // standard text from material ui
 import Typography from '@material-ui/core/Typography';
 // styles for the components from material ui
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme} from '@material-ui/core/styles';
 // input
 import TextField from '@material-ui/core/TextField';
 // button
@@ -73,8 +74,8 @@ const [surgery, setSurgery] = useState ({
 
 // styling
 
-const useStyles = makeStyles({
-        root: {
+const useStyles = makeStyles((theme) => ({
+  root: {
           minWidth: 150,
         },
         bullet: {
@@ -91,7 +92,19 @@ const useStyles = makeStyles({
         sex: {
           minWidth: 500,
         },
-      });
+      }));
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 
 const classes = useStyles();
 
@@ -109,15 +122,15 @@ const [author, setAuthor] = React.useState();
 // figure out a way to pass the user object ID into trainee.author 
 // handeClick = (user) right now returns the event and NOT the user
 
-const handleClick = (user) => {
-  // console.log(user);
-    setAuthor(user.name);
-}
+// const handleClick = (user) => {
+//   // console.log(user);
+//     setAuthor(user.name);
+// }
 
-const handleClick2 = (user) => {
-  setSurgery({...surgery, 
-    author: user});
-}
+// const handleClick2 = (user) => {
+//   setSurgery({...surgery, 
+//     author: user});
+// }
 
 // const location = useLocation();
 const history = useHistory();
@@ -135,7 +148,50 @@ const onSubmit = (e) => {
   history.goBack();
 }
 
+const [personName, setPersonName] = React.useState([]);
+
+const handleChange = (event) => {
+  setPersonName(event.target.value);
+  setSurgery({...surgery, author: event.target.value});
+  console.log(surgery.author);
+  // console.log(personName)
+  // personName.push(event.target.value)
+  // setSurgery({...surgery, author: personName})
+  // console.log(surgery.author);
+};
+
+
+function getStyles(user, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(user) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+
+// const handleChangeMultiple = (event) => {
+//   // const { options } = event.target;
+//   console.log(event.target)
+//   const value = [];
+//   for (let i = 0, l = users.length; i < l; i += 1) {
+//     if (users[i].selected) {
+//       value.push(users[i].value);
+//     }
+//   }
+//   setPersonName(value);
+//   console.log(value);
+// };
+
+// const handleClick2 = (user) => {
+//   setSurgery({...surgery, 
+//     author: user});
+// }
+
 const form = useRef();
+
+const theme = useTheme();
 
 
     return (
@@ -212,6 +268,29 @@ const form = useRef();
         />
         </Typography>
         <Divider />
+        <br></br>
+        <InputLabel id="demo-mutiple-name-label">SURGEONS</InputLabel>
+        <Select
+          id="standard-select-sex"
+          className={classes.sex}
+          select
+          label="SURGEONS"
+          value={personName || ''}
+          onChange={handleChange}
+          multiple
+          MenuProps={MenuProps}
+          input={<Input />}
+          validators={['required']}
+          errorMessages={['Please select the participant surgeons!']}
+        >
+          {users && users.length > 1 && users.map((user) => (
+
+            <MenuItem key={user._id} value={user} style={getStyles(user, personName, theme)}>
+              {user.name}
+            </MenuItem>
+          ))}
+          </Select>
+          <Divider />
       </CardContent>
       <CardActions>
       <Button type="submit" size="small" color="primary" variant="outlined">ADD</Button>
