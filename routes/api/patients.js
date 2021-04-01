@@ -41,6 +41,12 @@ router.get('/prescriptions/:id', async (req, res) => {
     .then(prescription => res.json(prescription))
 })
 
+router.get('/surgeries/:id', async (req, res) => {
+    Surgery.findById(req.params.id)
+     .populate('author')
+     .then(surgery => res.json(surgery))
+ })
+
 // put everything above this shitty /:id route because it bugs out for some reason
 // REMEMBER THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
