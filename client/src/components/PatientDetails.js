@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef }from 'react'
+import React, { useState, useEffect, useRef, useContext }from 'react'
 import Nav from './Nav'
 // importing the main container
 import Container from '@material-ui/core/Container';
@@ -60,12 +60,15 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import PropTypes from 'prop-types';
 import Box from '@material-ui/core/Box';
+import { UserContext } from './UserContext'
 
 
 
 export default function PatientDetails({match}, props) {
 
 //---------
+
+const {user, setUser} = useContext(UserContext);
 
 // declaring state for the specific patient
 const [patient, setPatient] = useState ({})
@@ -674,6 +677,7 @@ const useStyles = makeStyles((theme) => ({
             </React.Fragment>
           }
         />
+        { note.author._id === user._id &&
         <ListItemSecondaryAction className={classes.noteActionPos}>
         <Tooltip title="Modify">
                         <IconButton aria-label="modify" size="small" onClick={() => handleClickOpenEditNote(note)}>
@@ -686,6 +690,7 @@ const useStyles = makeStyles((theme) => ({
                           </IconButton>
                          </Tooltip> 
         </ListItemSecondaryAction>
+        }
       </ListItem>
       <Divider/>
     </List>

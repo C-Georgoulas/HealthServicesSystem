@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useContext }from 'react'
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Nav from './Nav'
@@ -34,6 +34,8 @@ import SearchBar from 'material-ui-search-bar'
 import Collapse from '@material-ui/core/Collapse';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import { UserContext } from './UserContext'
+
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -211,6 +213,9 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const {user, setUser} = useContext(UserContext);
+
+
     return (
       <div>
         <Nav/>
@@ -266,7 +271,9 @@ function capitalizeFirstLetter(string) {
             <TableCell align="right"><strong>Adult Dosage</strong></TableCell>
             <TableCell align="right"><strong>Pediatric Dosage</strong></TableCell>
             <TableCell align="right"><strong>Administration</strong></TableCell>
+            { user.role === "admin" &&
             <TableCell align="right"><strong>Actions</strong></TableCell>
+            }
           </TableRow>
         </TableHead>
         <TableBody>
@@ -283,6 +290,7 @@ function capitalizeFirstLetter(string) {
               <TableCell align="right">{drug.suggestedDoseAdult}</TableCell>
               <TableCell align="right">{drug.suggestedDosePediatric}</TableCell>
               <TableCell align="right">{drug.administered}</TableCell>
+              { user.role === "admin" &&
               <TableCell align="right">
               <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deleteDrug(drug._id)}>
@@ -290,6 +298,7 @@ function capitalizeFirstLetter(string) {
                           </IconButton>
                          </Tooltip> 
               </TableCell>
+              }
             </TableRow>
             <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

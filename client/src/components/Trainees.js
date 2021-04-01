@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useContext }from 'react'
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Nav from './Nav'
@@ -32,6 +32,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
+import { UserContext } from './UserContext'
 
 
 
@@ -194,7 +195,8 @@ const useStyles = makeStyles((theme) => ({
     // requestSearch(searched);
   };
 
-    
+  const {user, setUser} = useContext(UserContext);
+
     return (
       <div>
         <Nav/>
@@ -273,11 +275,13 @@ const useStyles = makeStyles((theme) => ({
                             <PersonPinIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" && 
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deleteTrainee(trainee._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                        }
               </TableCell>
             </TableRow>
             </Slide>
@@ -308,7 +312,8 @@ const useStyles = makeStyles((theme) => ({
         <Slide direction="up" in={trainees} mountOnEnter unmountOnExit>
         <TableRow key={trainee._id}>
               <TableCell>{trainee.fullName}</TableCell>
-              <TableCell align="right">{trainee.startDate}</TableCell>
+              <TableCell align="right">
+              {new Date(trainee.startDate).toDateString()}</TableCell>
               <TableCell align="right">{trainee.averageGrade}</TableCell>
               { trainee.author && trainee.author.name != undefined &&
               <TableCell align="right">{trainee.author.name}</TableCell>
@@ -320,11 +325,13 @@ const useStyles = makeStyles((theme) => ({
                             <PersonPinIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" && 
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deleteTrainee(trainee._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                        }
               </TableCell>
             </TableRow>
             </Slide>
@@ -336,8 +343,54 @@ const useStyles = makeStyles((theme) => ({
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        hello from my trainees only
-      </TabPanel>
+      <TableContainer className={classes.table} component={Paper} style={{overflow: "hidden"}}>
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell><strong>Name</strong></TableCell>
+            <TableCell align="right"><strong>Traineeship Start</strong></TableCell>
+            <TableCell align="right"><strong>Average Grade</strong></TableCell>
+            <TableCell align="right"><strong>Supervising Instructor</strong></TableCell>
+            <TableCell align="right"><strong>Status</strong></TableCell>
+            <TableCell align="center"><strong>Action</strong></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {trainees.map((trainee) => (
+                        <>
+            {trainee.author.name === user.name &&         
+        <Slide direction="up" in={trainees} mountOnEnter unmountOnExit>
+        <TableRow key={trainee._id}>
+              <TableCell>{trainee.fullName}</TableCell>
+              <TableCell align="right">
+              {new Date(trainee.startDate).toDateString()}</TableCell>
+              <TableCell align="right">{trainee.averageGrade}</TableCell>
+              { trainee.author && trainee.author.name != undefined &&
+              <TableCell align="right">{trainee.author.name}</TableCell>
+              }
+              <TableCell align="right">{trainee.status}</TableCell>
+              <TableCell align="center">
+                  <Tooltip title="Details">
+                        <IconButton aria-label="details" component={Link} to={`/trainees/${trainee._id}`}>
+                            <PersonPinIcon />
+                         </IconButton>
+                        </Tooltip> 
+                        { user.role === "admin" && 
+                        <Tooltip title="Delete">
+                          <IconButton aria-label="delete" onClick={()=>deleteTrainee(trainee._id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                         </Tooltip> 
+                        }
+              </TableCell>
+            </TableRow>
+            </Slide>
+            }
+            </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>      </TabPanel>
       </SwipeableViews>
       </Container>
       </div>

@@ -282,12 +282,14 @@ const useStyles = makeStyles((theme) => ({
                         <IconButton aria-label="details" component={Link} to={`/patients/${patient._id}`}>
                             <PersonPinIcon />
                          </IconButton>
-                        </Tooltip> 
+                        </Tooltip>
+                        { user.role === "admin" && 
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                        }
               </TableCell>
             </TableRow>
             </Slide>
@@ -331,11 +333,13 @@ const useStyles = makeStyles((theme) => ({
                             <PersonPinIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" && 
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                        }
               </TableCell>
             </TableRow>
             </Slide>
@@ -379,11 +383,13 @@ const useStyles = makeStyles((theme) => ({
                             <PersonPinIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" && 
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                        }
               </TableCell>
             </TableRow>
             </Slide>
@@ -427,11 +433,13 @@ const useStyles = makeStyles((theme) => ({
                             <PersonPinIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" && 
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deletePatient(patient._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                        }
               </TableCell>
             </TableRow>
             </Slide>
