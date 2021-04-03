@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect, useContext }from 'react'
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,6 +22,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 import Nav from './Nav'
+import { UserContext } from './UserContext'
 
 
 const drawerWidth = 240;
@@ -74,6 +75,7 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const {user, setUser} = useContext(UserContext);
 
 
   const drawer = (
@@ -85,9 +87,11 @@ function ResponsiveDrawer(props) {
           {/* // React routing is done through component={Link} to= designatedPath
           // In our case we loop through the array */}
           {/* make sure to add / infront of to= */}
+          { user.role != "trainee" &&
           <ListItem button key="Admit" component={Link} to="/patients/create">
             <ListItemText primary="Admit Patient" />
           </ListItem>
+          }
           <ListItem button key="Patients" component={Link} to="/patients">
             <ListItemText primary="Patients" />
           </ListItem>
@@ -102,13 +106,27 @@ function ResponsiveDrawer(props) {
           <ListItem button key="Pharmaceutical" component={Link} to="/drugs">
             <ListItemText primary="Medications" />
           </ListItem>
+          { user.role === "instructor" &&
           <ListItem button key="Trainees" component={Link} to="/trainees">
             <ListItemText primary="Trainees" />
           </ListItem>
+          }
+          { user.role === "admin" &&
+          <ListItem button key="Trainees" component={Link} to="/trainees">
+            <ListItemText primary="Trainees" />
+          </ListItem>
+          }
           <Divider />
+          { user.role === "admin" &&
           <ListItem button key="Administration" component={Link} to="/administration">
             <ListItemText primary="Administration" />
           </ListItem>
+          }
+          { user.role === "instructor" &&
+          <ListItem button key="Administration" component={Link} to="/administration">
+            <ListItemText primary="Administration" />
+          </ListItem>
+          }
         {/* ))} */}
       </List>
     </div>
