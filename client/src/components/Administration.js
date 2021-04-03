@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react'
+import React, { useState, useEffect, useContext }from 'react'
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import LockIcon from '@material-ui/icons/Lock';
@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import {Link} from 'react-router-dom';
 import Fade from '@material-ui/core/Fade';
 import Nav from './Nav';
+import { UserContext } from './UserContext'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,9 +51,12 @@ const useStyles = makeStyles((theme) => ({
 
 const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
+
+
 export default function Album() {
   const classes = useStyles();
 
+  const {user, setUser} = useContext(UserContext);
 
   return (
     <React.Fragment>
@@ -66,26 +70,37 @@ export default function Album() {
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
              Administration Control Panel
             </Typography>
+            { user.role === "admin" && 
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
                 Manage all system users and all pharmaceutical drugs
             </Typography>
+              }
+               { user.role != "admin" && 
+            <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                Manage trainees within the system
+            </Typography>
+              }
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
+              { user.role === "admin" && 
                 <Grid item>
                   <Button variant="contained" color="primary" component={Link} to="/users">
                     MANAGE SYSTEM USERS
                   </Button>
                 </Grid>
+              }
                 <Grid item>
                   <Button variant="contained" color="primary" component={Link} to="/trainees/create">
                     MANAGE TRAINEES
                   </Button>
                 </Grid>
+                { user.role === "admin" && 
                 <Grid item>
                   <Button variant="outlined" color="primary" component={Link} to="/drugs/create">
                     MANAGE PHARMACEUTICALS
                   </Button>
                 </Grid>
+                }
               </Grid>
             </div>
           </Container>
