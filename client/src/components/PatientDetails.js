@@ -409,7 +409,15 @@ const useStyles = makeStyles((theme) => ({
       </CardContent>
       <CardActions>
         <Button size="small" color="primary" variant="outlined" onClick={handleClickOpen}>ADD A NOTE</Button>
+        { user.role === "admin" &&
         <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${patient._id}/prescription/new`}>ADD A PRESCRIPTION</Button>
+        }
+        { user.role === "instructor" &&
+        <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${patient._id}/prescription/new`}>ADD A PRESCRIPTION</Button>
+        }
+        { user.role === "doctor" &&
+        <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${patient._id}/prescription/new`}>ADD A PRESCRIPTION</Button>
+        }
         <Button size="small" color="primary" variant="outlined" component={Link} to=
                         {
                           {
@@ -417,7 +425,12 @@ const useStyles = makeStyles((theme) => ({
                           state: {passedPatientId: patient._id}
                         }
                           }>MODIFY INFORMATION</Button>
+          { user.role === "admin" &&               
          <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${patient._id}/surgery/new`}>PLAN A SURGERY</Button>
+          }
+          { user.department === "Surgery" &&               
+         <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${patient._id}/surgery/new`}>PLAN A SURGERY</Button>
+          }
         { patient.status === "Active" &&
         <Button size="small" color="primary" variant="outlined" onClick={onDeactivePatientSubmit}>DE-ACTIVATE PATIENT</Button>
         }
@@ -458,7 +471,8 @@ const useStyles = makeStyles((theme) => ({
                         <IconButton aria-label="details" component={Link} to={`/prescriptions/${prescription._id}`}>
                             <NoteAddIcon />
                          </IconButton>
-                        </Tooltip> 
+                        </Tooltip>
+                    { user.role === "admin" && 
                   <Tooltip title="Modify">
                         <IconButton aria-label="modify" component={Link} to=
                         {
@@ -470,11 +484,27 @@ const useStyles = makeStyles((theme) => ({
                             <EditIcon />
                          </IconButton>
                         </Tooltip> 
+                      }
+                      { prescription.author._id === user._id && 
+                  <Tooltip title="Modify">
+                        <IconButton aria-label="modify" component={Link} to=
+                        {
+                          {
+                          pathname: `/patients/${patient._id}/prescription/${prescription._id}/edit`,
+                          state: {passedPatientId: patient._id}
+                        }
+                          }>
+                            <EditIcon />
+                         </IconButton>
+                        </Tooltip> 
+                      }
+                      { user.role === "admin" &&
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deletePrescription(prescription._id)}>
                             <DeleteIcon />
                           </IconButton>
                          </Tooltip> 
+                      }
               </TableCell>
             </TableRow>
             ))}
@@ -539,6 +569,7 @@ const useStyles = makeStyles((theme) => ({
                             <NoteAddIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" &&
                   <Tooltip title="Modify">
                         <IconButton aria-label="modify" component={Link} to=
                         {
@@ -550,11 +581,14 @@ const useStyles = makeStyles((theme) => ({
                             <EditIcon />
                          </IconButton>
                         </Tooltip> 
+                      }
+                      { user.role === "admin" &&
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deleteSurgery(surgery._id)}>
                             <DeleteIcon />
                           </IconButton>
-                         </Tooltip> 
+                         </Tooltip>
+                        } 
               </TableCell>
             </TableRow>
             ))}
@@ -601,6 +635,7 @@ const useStyles = makeStyles((theme) => ({
                             <NoteAddIcon />
                          </IconButton>
                         </Tooltip> 
+                        { user.role === "admin" &&
                   <Tooltip title="Modify">
                         <IconButton aria-label="modify" component={Link} to=
                         {
@@ -612,11 +647,14 @@ const useStyles = makeStyles((theme) => ({
                             <EditIcon />
                          </IconButton>
                         </Tooltip> 
+                      }
+                      { user.role === "admin" &&
                         <Tooltip title="Delete">
                           <IconButton aria-label="delete" onClick={()=>deleteSurgery(surgery._id)}>
                             <DeleteIcon />
                           </IconButton>
-                         </Tooltip> 
+                         </Tooltip>
+                        } 
               </TableCell>
             </TableRow>
             ))}
