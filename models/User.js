@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  notifications: [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notification"
+    }
+  ]
 })
 
 // Register Models on Schema

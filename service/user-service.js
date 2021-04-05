@@ -7,11 +7,11 @@ const HASH_SALT = 15
 
 const UserService = {
   getById: (id) => {
-    return UserModel.findById(id)
+    return UserModel.findById(id).populate('notifications')
   },
 
   getOneByField: (fieldName, fieldValue) => {
-    return UserModel.findOne({ [fieldName]: fieldValue })
+    return UserModel.findOne({ [fieldName]: fieldValue }).populate('notifications')
   },
 
   add: async ({ name, email, password, role, department }) => {

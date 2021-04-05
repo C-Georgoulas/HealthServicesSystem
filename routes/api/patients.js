@@ -8,6 +8,8 @@ const Note = require('../../models/Note');
 const Prescription = require('../../models/Prescription');
 const Surgery = require('../../models/Surgery');
 const User = require('../../models/User');
+const Notification = require('../../models/Notification');
+
 
 // @ route GET api/patients
 // @desc Get all Patients
@@ -147,11 +149,25 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/:id/notes', async (req, res) => {
    const patient = await Patient.findById(req.params.id);
+
+   // constructing notification
+   console.log(patient.author)
+   const user = await User.findById(patient.author)
+   const notification = new Notification({
+       title: "A new note has been added to your patient!",
+       details: patient._id
+   });
+   console.log(notification);
+   user.notifications.push(notification);
+
+   // constructing the note object to put in the patient
    const note = new Note(req.body.note);
    note.author = req.user._id
    patient.notes.push(note);
    await note.save()
    await patient.save();
+   await notification.save();
+   await user.save();
    res.send(note);
 })
 

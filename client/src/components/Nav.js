@@ -14,6 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import {useLocation, useHistory} from 'react-router';
 import AuthService from "../services/auth.service";
@@ -160,6 +162,13 @@ function ResponsiveDrawer(props) {
             HPMWS
           </Typography>
           <Button color="inherit" className={classes.button2} onClick={logout}>LOGOUT</Button>
+          { user.notifications && user.notifications.length > 0 &&
+          <IconButton aria-label="show 17 new notifications" color="inherit">
+              <Badge badgeContent={user.notifications.length} className={classes.button2} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          }
         </Toolbar>
       </AppBar>
       <Toolbar/>
