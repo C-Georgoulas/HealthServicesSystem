@@ -30,6 +30,16 @@ const userSchema = new mongoose.Schema({
   ]
 })
 
+userSchema.post('findOneAndDelete', async (doc) => {
+  if (doc) {
+      await Notification.deleteMany({
+          _id: {
+              $in: doc.notes
+          }
+      })
+  }
+})
+
 // Register Models on Schema
 mongoose.model('User', new mongoose.Schema(userSchema, { timestamps: true }))
 

@@ -155,7 +155,8 @@ router.post('/:id/notes', async (req, res) => {
    const user = await User.findById(patient.author)
    const notification = new Notification({
        title: "A new note has been added to your patient!",
-       details: patient._id
+       details: patient._id,
+       isNoteNotification: true
    });
    console.log(notification);
    user.notifications.push(notification);
@@ -216,7 +217,19 @@ router.post('/:id/prescriptions', async (req, res) => {
     prescription.author = req.user._id
     patient.prescriptions.push(prescription);
     await prescription.save()
+    // constructing notification
+   const user = await User.findById(patient.author)
+   const notification = new Notification({
+       title: "A new prescription has been added to your patient!",
+       details: prescription._id,
+       isPrescriptionNotification: true
+   });
+   console.log(notification);
+   user.notifications.push(notification);
+    await notification.save();
     await patient.save();
+    await user.save();
+
     res.send(prescription);
  })
 
@@ -265,7 +278,25 @@ router.put('/:id/prescriptions/:prescriptionId', (req, res) => {
 router.post('/:id/surgeries', async (req, res) => {
     const patient = await Patient.findById(req.params.id);
     const surgery = new Surgery(req.body.surgery);
-    // note.author = req.user._id
+// function needed here because surgery.author is an array instead of an object due to multiple users participating in a surgery
+// same functionality as prescriptions and notes, we find the user by taking the user ID of the surgery user participants
+// we call User.findById with the user ID that we receive from surgery.author array
+// the function repeats with the forEach method on line 298 for all users in the surgery.author (participant surgeons) array.
+    async function addNotification(author) {
+        const user = await User.findById(author)
+        const notification = new Notification({
+            title: "You have been added as a participant to a scheduled surgery.",
+            details: surgery._id,
+            isSurgeryNotification: true
+        })
+        user.notifications.push(notification)
+        await notification.save();
+        await user.save();
+        console.log(user.notifications)
+      }
+
+    surgery.author.forEach(addNotification)
+
     patient.surgeries.push(surgery);
     await surgery.save()
     await patient.save();

@@ -16,6 +16,18 @@ const NotificationSchema = new Schema({
     addedOnDate: {
         type: Date,
         default: Date.now
+    },
+    isNoteNotification: {
+        type: Boolean
+    },
+    isPrescriptionNotification: {
+        type: Boolean
+    },
+    isSurgeryNotification: {
+        type: Boolean
+    },
+    isTraineeNotification: {
+        type: Boolean
     }
 });
 

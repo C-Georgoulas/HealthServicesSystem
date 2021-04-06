@@ -2,8 +2,11 @@ import React, { useState, useEffect, useContext }from 'react'
 import Container from '@material-ui/core/Container';
 import Nav from './Nav'
 import { UserContext } from './UserContext'
+import Divider from '@material-ui/core/Divider';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
+import {Link} from 'react-router-dom';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -84,16 +87,6 @@ export default function Dashboard() {
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
           Welcome back! Please remember to check your tasks and notifications for any updates you may have missed.
-          {user.notifications &&  user.notifications.length > 0 &&
-      <>
-    {user.notifications && user.notifications.map((notification) => (
-      <>
-        <p>{notification.title}</p>
-        <p>{new Date(notification.addedOnDate).toDateString()}</p>
-        </>
-    ))}
-    </>
-    }
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -115,18 +108,54 @@ export default function Dashboard() {
           <Typography paragraph>Notifications:</Typography>
           <div className={classes.demo}>
             <List dense={dense}>
-            {user.notifications && user.notifications.map((notification) => (
-                <ListItem>
-                  <ListItemText
-                    primary={notification.details}
-                  />
+    {user.notifications &&  user.notifications.length > 0 &&
+      <>
+    {user.notifications && user.notifications.map((notification) => (
+      <>
+      { notification.isNoteNotification &&
+                <ListItem >
+                  <Button
+                  component={Link} 
+                  to={`/patients/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
+        }
+        { notification.isPrescriptionNotification &&
+                <ListItem >
+                  <Button
+                  component={Link} 
+                  to={`/prescriptions/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
+         { notification.isSurgeryNotification &&
+                <ListItem >
+                  <Button
+                  component={Link} 
+                  to={`/surgeries/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
+        <Divider/>
+      </>
             ))}
+                    </>
+          }
             </List>
           </div>
             
