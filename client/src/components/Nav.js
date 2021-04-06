@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import Box from '@material-ui/core/Box'
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
@@ -18,6 +19,8 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import {useLocation, useHistory} from 'react-router';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
 import AuthService from "../services/auth.service";
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -42,12 +45,12 @@ const useStyles = makeStyles((theme) => ({
   appBar: {
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
+      marginLeft: "drawerWidth",
     },
     backgroundColor: "black",
   },
   menuButton: {
-    marginLeft: theme.spacing(2),
+    marginLeft: "auto",
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
@@ -153,12 +156,47 @@ function ResponsiveDrawer(props) {
     history.push("/login")
   };
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selectedIndex, setSelectedIndex] = React.useState();
+
+  const handleClickListItem = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const [notification, setNotification] = React.useState({
+
+  })
+
+  const handleMenuItemClick = (notificationID, index) => {
+    setSelectedIndex(index);
+    setAnchorEl(null);
+    let updatedNotification = {
+      ...notification,
+      read: true,
+    }
+    console.log(notificationID)
+    fetch(`/api/admin/user/${user._id}/notifications/${notificationID}`, {
+      method: 'POST',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({editNotification: updatedNotification}),
+    })
+    .then(res => res.json())
+    .then(data => {
+      setNotification(updatedNotification)
+    })
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
 
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
+          <Box flexGrow={1}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -169,16 +207,66 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            HPMWS
+            {user.name}
           </Typography>
+          </Box>
           <Button color="inherit" className={classes.button2} onClick={logout}>LOGOUT</Button>
-          { notifications && notifications.length > 0 &&
-          <IconButton aria-label="show 17 new notifications" color="inherit">
+          <IconButton aria-label="show 17 new notifications" color="inherit" onClick={handleClickListItem}>
               <Badge badgeContent={notifications.length} className={classes.button2} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-          }
+      <Menu
+        id="lock-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <Divider/>
+        { notifications && notifications.length > 0 &&
+        <div>
+        {notifications.map((notification, index) => (
+          <div>
+            {notification.isNoteNotification &&
+          <MenuItem
+            component={Link}
+            to={`/patients/${notification.details}`}
+            key={notification._id}
+            selected={index === selectedIndex}
+            onClick={() => handleMenuItemClick(notification._id, index)}
+          >
+            {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
+          </MenuItem>
+            }
+            {notification.isSurgeryNotification &&
+          <MenuItem
+            component={Link}
+            to={`/surgeries/${notification.details}`}
+            key={notification._id}
+            selected={index === selectedIndex}
+            onClick={(event) => handleMenuItemClick(event, index)}
+          >
+            {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
+          </MenuItem>
+            }
+            {notification.isPrescriptionNotification &&
+          <MenuItem
+            component={Link}
+            to="/test"
+            to={`/prescriptions/${notification.details}`}
+            selected={index === selectedIndex}
+            onClick={(event) => handleMenuItemClick(event, index)}
+          >
+            {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
+          </MenuItem>
+            }
+          <Divider/>
+          </div>
+        ))}
+        </div>
+      }
+      </Menu>
         </Toolbar>
       </AppBar>
       <Toolbar/>

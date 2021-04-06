@@ -5,6 +5,7 @@ const AccessMiddleware = require('../../config/access')
 const User = require('../../models/User');
 const bcrypt = require('bcrypt')
 const UserService = require('../../service/user-service')
+const Notification = require('../../models/Notification');
 
 
 // sort's use is to sort all patients in a descending manner by the creationdate
@@ -13,6 +14,17 @@ router.get('/user/:id/notifications', (req, res) => {
         .populate('notifications')
         .then(user => res.json(user.notifications))
   });
+
+  router.put('/user/:id/notifications/:id', (req, res) => {
+    Notification.findByIdAndUpdate(req.params.notificationId, req.body.editNotification, function(err, updatedNotification) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.status(200).send({});
+        }
+    })
+})
+
 
 // @ route GET api/admin/users
 // @desc Get all Users
