@@ -7,6 +7,13 @@ const bcrypt = require('bcrypt')
 const UserService = require('../../service/user-service')
 
 
+// sort's use is to sort all patients in a descending manner by the creationdate
+router.get('/user/:id/notifications', (req, res) => {
+    User.findById(req.params.id)
+        .populate('notifications')
+        .then(user => res.json(user.notifications))
+  });
+
 // @ route GET api/admin/users
 // @desc Get all Users
 // access Staff

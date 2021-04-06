@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport')
 const AccessMiddleware = require('../../config/access')
-
+const User = require('../../models/User');
 
 const errorResponse = (res, error) => {
   res.status(400).json({ success: false, error })

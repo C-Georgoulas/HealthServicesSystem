@@ -79,6 +79,16 @@ function ResponsiveDrawer(props) {
 
   const {user, setUser} = useContext(UserContext);
 
+  const [notifications, setNotifications] = React.useState({
+
+  })
+
+  useEffect(() => {
+    fetch(`/api/admin/user/${user._id}/notifications`)
+    .then(response => response.json())
+    .then(json => setNotifications(json))
+}, [])
+
 
   const drawer = (
     <div>
@@ -162,9 +172,9 @@ function ResponsiveDrawer(props) {
             HPMWS
           </Typography>
           <Button color="inherit" className={classes.button2} onClick={logout}>LOGOUT</Button>
-          { user.notifications && user.notifications.length > 0 &&
+          { notifications && notifications.length > 0 &&
           <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={user.notifications.length} className={classes.button2} color="secondary">
+              <Badge badgeContent={notifications.length} className={classes.button2} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

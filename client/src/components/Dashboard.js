@@ -65,6 +65,16 @@ export default function Dashboard() {
     setExpanded(!expanded);
   };
 
+  const [notifications, setNotifications] = React.useState({
+
+  })
+
+  useEffect(() => {
+    fetch(`/api/admin/user/${user._id}/notifications`)
+    .then(response => response.json())
+    .then(json => setNotifications(json))
+}, [])
+
     return (
         <div>
         <Nav/>
@@ -108,12 +118,12 @@ export default function Dashboard() {
           <Typography paragraph>Notifications:</Typography>
           <div className={classes.demo}>
             <List dense={dense}>
-    {user.notifications &&  user.notifications.length > 0 &&
+    {notifications &&  notifications.length > 0 &&
       <>
-    {user.notifications && user.notifications.map((notification) => (
+    {notifications && notifications.map((notification) => (
       <>
       { notification.isNoteNotification &&
-                <ListItem >
+                <ListItem key={notification._id}>
                   <Button
                   component={Link} 
                   to={`/patients/${notification.details}`}
@@ -126,7 +136,7 @@ export default function Dashboard() {
                 </ListItem>
         }
         { notification.isPrescriptionNotification &&
-                <ListItem >
+                <ListItem key={notification._id}>
                   <Button
                   component={Link} 
                   to={`/prescriptions/${notification.details}`}
@@ -139,7 +149,7 @@ export default function Dashboard() {
                 </ListItem>
         }
          { notification.isSurgeryNotification &&
-                <ListItem >
+                <ListItem key={notification._id}>
                   <Button
                   component={Link} 
                   to={`/surgeries/${notification.details}`}
