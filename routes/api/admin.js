@@ -15,14 +15,10 @@ router.get('/user/:id/notifications', (req, res) => {
         .then(user => res.json(user.notifications))
   });
 
-  router.put('/user/:id/notifications/:id', (req, res) => {
-    Notification.findByIdAndUpdate(req.params.notificationId, req.body.editNotification, function(err, updatedNotification) {
-        if (err) {
-            console.log(err)
-        } else {
-            res.status(200).send({});
-        }
-    })
+  router.put('/notifications/:id', async (req, res) => {
+    const {id} = req.params;
+    await Notification.findByIdAndUpdate(id, {...req.body.editNotification});
+    res.status(200).send({});
 })
 
 

@@ -86,12 +86,54 @@ function ResponsiveDrawer(props) {
 
   })
 
+  const [activeNotificationsNumber, setActiveNotificationsNumber] = React.useState(0)
+
   useEffect(() => {
     fetch(`/api/admin/user/${user._id}/notifications`)
     .then(response => response.json())
     .then(json => setNotifications(json))
 }, [])
 
+useEffect(() => {
+  async function activeNotifications() {
+  let count = 0;
+  console.log(notifications.length)
+  if (notifications.length > 0) {
+  for (var x of notifications) {
+    if (x.read != true) {
+      console.log(x.read)
+      count++;
+      setActiveNotificationsNumber(count)
+    }
+  }
+  // console.log(count)
+  // console.log('heres the count')
+  // setActiveNotificationsNumber(count)
+  // console.log(activeNotificationsNumber)
+  console.log(activeNotificationsNumber)
+  }
+}
+  activeNotifications()
+}, [notifications])
+
+// const activeNotifications = () => {
+//   let count = 0;
+// for (var x of notifications) {
+//   if (x.read === false) {
+//     count++;
+//   }
+// }
+// console.log(count)
+// }
+
+const readNotification = (notificationStatus) => {
+  // compare current date with expiration to determine if the prescription has expired
+  if (notificationStatus === true) {
+    return "Read"
+  } else {
+    return "Not Read"
+  }
+}
 
   const drawer = (
     <div>
@@ -175,10 +217,10 @@ function ResponsiveDrawer(props) {
       read: true,
     }
     console.log(notificationID)
-    fetch(`/api/admin/user/${user._id}/notifications/${notificationID}`, {
-      method: 'POST',
+    fetch(`/api/admin/notifications/${notificationID}`, {
+      method: 'PUT',
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({editNotification: updatedNotification}),
+      body: JSON.stringify({editNotification: updatedNotification})
     })
     .then(res => res.json())
     .then(data => {
@@ -212,7 +254,7 @@ function ResponsiveDrawer(props) {
           </Box>
           <Button color="inherit" className={classes.button2} onClick={logout}>LOGOUT</Button>
           <IconButton aria-label="show 17 new notifications" color="inherit" onClick={handleClickListItem}>
-              <Badge badgeContent={notifications.length} className={classes.button2} color="secondary">
+              <Badge badgeContent={activeNotificationsNumber} className={classes.button2} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -226,7 +268,15 @@ function ResponsiveDrawer(props) {
         <Divider/>
         { notifications && notifications.length > 0 &&
         <div>
-        {notifications.map((notification, index) => (
+        {
+    notifications
+        .filter((notification, index) => {
+            return readNotification(
+                notification.read,
+            ) === 'Not Read';
+        })
+        .map((notification, index) => (
+
           <div>
             {notification.isNoteNotification &&
           <MenuItem
@@ -241,23 +291,23 @@ function ResponsiveDrawer(props) {
             }
             {notification.isSurgeryNotification &&
           <MenuItem
-            component={Link}
-            to={`/surgeries/${notification.details}`}
-            key={notification._id}
-            selected={index === selectedIndex}
-            onClick={(event) => handleMenuItemClick(event, index)}
-          >
+          component={Link}
+          to={`/surgeries/${notification.details}`}
+          key={notification._id}
+          selected={index === selectedIndex}
+          onClick={() => handleMenuItemClick(notification._id, index)}
+        >
             {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
           </MenuItem>
             }
             {notification.isPrescriptionNotification &&
           <MenuItem
-            component={Link}
-            to="/test"
-            to={`/prescriptions/${notification.details}`}
-            selected={index === selectedIndex}
-            onClick={(event) => handleMenuItemClick(event, index)}
-          >
+          component={Link}
+          to={`/prescriptions/${notification.details}`}
+          key={notification._id}
+          selected={index === selectedIndex}
+          onClick={() => handleMenuItemClick(notification._id, index)}
+        >
             {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
           </MenuItem>
             }

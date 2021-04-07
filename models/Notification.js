@@ -17,6 +17,9 @@ const NotificationSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    read: {
+        type: Boolean
+    },
     isNoteNotification: {
         type: Boolean
     },
