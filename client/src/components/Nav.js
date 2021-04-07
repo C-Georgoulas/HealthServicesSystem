@@ -7,6 +7,7 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -28,6 +29,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {Link} from 'react-router-dom';
 import Nav from './Nav'
 import { UserContext } from './UserContext'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 
 const drawerWidth = 240;
@@ -252,12 +254,15 @@ const readNotification = (notificationStatus) => {
             {user.name}
           </Typography>
           </Box>
-          <Button color="inherit" className={classes.button2} onClick={logout}>LOGOUT</Button>
           <IconButton aria-label="show 17 new notifications" color="inherit" onClick={handleClickListItem}>
               <Badge badgeContent={activeNotificationsNumber} className={classes.button2} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <IconButton color="inherit" component={Link} to="/">
+                <AccountCircleIcon />
+            </IconButton>
+      <Button color="inherit" startIcon={<ExitToAppIcon />} className={classes.button2} onClick={logout}>LOGOUT</Button>
       <Menu
         id="lock-menu"
         anchorEl={anchorEl}

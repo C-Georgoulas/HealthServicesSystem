@@ -75,6 +75,36 @@ export default function Dashboard() {
     .then(json => setNotifications(json))
 }, [])
 
+const readNotification = (notificationStatus) => {
+  // compare current date with expiration to determine if the prescription has expired
+  if (notificationStatus === true) {
+    return "Read"
+  } else {
+    return "Not Read"
+  }
+}
+
+const [notification, setNotification] = React.useState({
+
+})
+
+const handleMenuItemClick = (notificationID, index) => {
+  let updatedNotification = {
+    ...notification,
+    read: true,
+  }
+  console.log(notificationID)
+  fetch(`/api/admin/notifications/${notificationID}`, {
+    method: 'PUT',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({editNotification: updatedNotification})
+  })
+  .then(res => res.json())
+  .then(data => {
+    setNotification(updatedNotification)
+  })
+};
+
     return (
         <div>
         <Nav/>
@@ -115,13 +145,82 @@ export default function Dashboard() {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Notifications:</Typography>
+          <Typography paragraph>Unread Notifications:</Typography>
           <div className={classes.demo}>
             <List dense={dense}>
     {notifications &&  notifications.length > 0 &&
       <>
-    {notifications && notifications.map((notification) => (
+{ notifications
+        .filter((notification, index) => {
+            return readNotification(
+                notification.read,
+            ) === 'Not Read';
+        })
+        .map((notification, index) => (      <>
+      { notification.isNoteNotification &&
+                <ListItem key={notification._id}
+                onClick={() => handleMenuItemClick(notification._id, index)}
+                >
+                  <Button
+                  component={Link} 
+                  to={`/patients/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
+        { notification.isPrescriptionNotification &&
+          <ListItem key={notification._id}
+                onClick={() => handleMenuItemClick(notification._id, index)}
+                >
+                  <Button
+                  component={Link} 
+                  to={`/prescriptions/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
+         { notification.isSurgeryNotification &&
+                <ListItem key={notification._id}
+                onClick={() => handleMenuItemClick(notification._id, index)}
+                >
+                  <Button
+                  component={Link} 
+                  to={`/surgeries/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
+        <Divider/>
+      </>
+            ))}
+                    </>
+          }
+            </List>
+          </div>
+          <Typography paragraph>Read Notifications:</Typography>
+          <div className={classes.demo}>
+            <List dense={dense}>
+    {notifications &&  notifications.length > 0 &&
       <>
+{ notifications
+        .filter((notification, index) => {
+            return readNotification(
+                notification.read,
+            ) === 'Read';
+        })
+        .map((notification, index) => (      <>
       { notification.isNoteNotification &&
                 <ListItem key={notification._id}>
                   <Button
@@ -167,8 +266,7 @@ export default function Dashboard() {
                     </>
           }
             </List>
-          </div>
-            
+          </div>  
         </CardContent>
       </Collapse>
     </Card>
