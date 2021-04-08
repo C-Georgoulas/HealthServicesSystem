@@ -319,7 +319,7 @@ router.post('/:id/surgeries', async (req, res) => {
     async function addNotification(author) {
         const user = await User.findById(author)
         const notification = new Notification({
-            title: "There has been change in a surgery you are apart of!",
+            title: "There has been change in a surgery you are apart of.",
             details: updatedSurgery._id,
             isSurgeryNotification: true
         })
