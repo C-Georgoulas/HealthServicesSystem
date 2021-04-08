@@ -569,7 +569,7 @@ const useStyles = makeStyles((theme) => ({
                             <NoteAddIcon />
                          </IconButton>
                         </Tooltip> 
-                        { user.role === "admin" &&
+                        { user.department === "Surgery" &&
                   <Tooltip title="Modify">
                         <IconButton aria-label="modify" component={Link} to=
                         {
@@ -577,6 +577,19 @@ const useStyles = makeStyles((theme) => ({
                           pathname: `/patients/${patient._id}/surgery/${surgery._id}/edit`,
                           state: {passedPatientId: patient._id}
                         }
+                          }>
+                            <EditIcon />
+                         </IconButton>
+                        </Tooltip> 
+                      }
+                      { user.role === "admin" &&
+                  <Tooltip title="Modify">
+                        <IconButton aria-label="modify" component={Link} to=
+                        {
+                          {
+                            pathname: `/patients/${patient._id}/surgery/${surgery._id}/edit`,
+                            state: {passedPatientId: patient._id}
+                          }
                           }>
                             <EditIcon />
                          </IconButton>

@@ -15,6 +15,7 @@ import Medications from './components/Medications'
 import MedicationsCreate from './components/MedicationsCreate'
 import SurgeryCreate from './components/SurgeryCreate'
 import SurgeryDetails from './components/SurgeryDetails'
+import SurgeryEdit from './components/SurgeryEdit'
 import Administration from './components/Administration'
 import Trainees from './components/Trainees'
 import Users from './components/Users'
@@ -80,6 +81,7 @@ const value = useMemo(() => ({user, setUser}), [user, setUser])
       <Route path="/patients/:id" exact component={PatientDetails}/>
       <Route path="/patients/:id/edit" exact component={PatientDetailsEdit}/>
       <Route path="/patients/:id/surgery/new" exact component={SurgeryCreate}/>
+      <Route path="/patients/:id/surgery/:id/edit" exact component={SurgeryEdit}/>
       <Route path="/surgeries/:id" exact component={SurgeryDetails}/>
       <Route path="/patients/:id/prescription/new" exact component={PrescriptionCreate}/>
       <Route path="/patients/:id/prescription/:id/edit" exact component={PrescriptionEdit}/>

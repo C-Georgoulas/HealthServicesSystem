@@ -312,6 +312,24 @@ router.post('/:id/surgeries', async (req, res) => {
          if (err) {
              console.log(err)
          } else {
+ // function needed here because updatedSurgery.author is an array instead of an object due to multiple users participating in a surgery
+// same functionality as prescriptions and notes, we find the user by taking the user ID of the surgery user participants
+// we call User.findById with the user ID that we receive from surgery.author array
+// the function repeats with the forEach method on line 298 for all users in the updatedSurgery.author (participant surgeons) array.
+    async function addNotification(author) {
+        const user = await User.findById(author)
+        const notification = new Notification({
+            title: "There has been change in a surgery you are apart of!",
+            details: updatedSurgery._id,
+            isSurgeryNotification: true
+        })
+        user.notifications.push(notification)
+        await notification.save();
+        await user.save();
+      }
+
+    updatedSurgery.author.forEach(addNotification)
+
              res.status(200).send({});
          }
      })
