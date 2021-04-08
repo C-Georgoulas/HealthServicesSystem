@@ -94,7 +94,7 @@ const [selectedDate, setSelectedDate] = React.useState(new Date('2020-01-01T00:0
 
 const handleDateChange = (date) => {
 setSelectedDate(date);
-setEditSurgery({...editSurgery, admissionDate: date})
+setEditSurgery({...editSurgery, startDate: date})
 };
 
 // condition dropdown options
@@ -212,7 +212,7 @@ const renderValue = (value) => {
         fullWidth
         InputLabelProps={{shrink: true}}
         id="standard-basic" 
-        label="DIAGNOSIS"
+        label="SURGERY OPERATION DESCRIPTION"
         multiline
         value={editSurgery.text}
         name="editSurgery[text]"
