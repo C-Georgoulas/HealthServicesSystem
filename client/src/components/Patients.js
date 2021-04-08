@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import Grid from '@material-ui/core/Grid';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     table: {
-      width: "100%",
+      // width: "100%",
     },
     appBar: {
       backgroundColor: "black",
@@ -251,7 +252,8 @@ const useStyles = makeStyles((theme) => ({
       >
       <TabPanel value={value} index={0}>
       {/* overflow hides the scrollbar at the table on patient GET/POST/UPDATE/DELETE */}
-      <TableContainer className={classes.table} component={Paper} style={{overflow: "hidden"}}>
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -298,11 +300,12 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <TableContainer component={Paper} style={{overflow: "hidden"}}>
-      <Table className={classes.table} aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>      <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
@@ -348,11 +351,13 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <TableContainer component={Paper} style={{overflow: "hidden"}}>
-      <Table className={classes.table} aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>
+          <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
@@ -398,11 +403,12 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={3}>
-      <TableContainer component={Paper} style={{overflow: "hidden"}}>
-      <Table className={classes.table} aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>      <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
@@ -448,6 +454,7 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
       </TabPanel>
       </SwipeableViews>

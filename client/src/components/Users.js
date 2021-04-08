@@ -121,8 +121,8 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     table: {
-      minWidth: 750,
-      maxWdith: 750,
+      // minWidth: 750,
+      // maxWdith: 750,
     },
     addEmployeeButton: {
       backgroundColor: "black",
@@ -405,8 +405,8 @@ const form2 = useRef();
         onChangeIndex={handleChangeIndex}
       >
         {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
-        <TableContainer component={Paper} style={{overflow: "hidden"}}>
-    <Table className={classes.table} aria-label="simple table">
+        <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>    <Table className={classes.table} aria-label="simple table">
       <TableHead>
         <TableRow>
           <TableCell><strong>Name</strong></TableCell>
@@ -441,6 +441,7 @@ const form2 = useRef();
         ))}
       </TableBody>
     </Table>
+    </div>
   </TableContainer>
         {/* </TabPanel> */}
       </SwipeableViews>

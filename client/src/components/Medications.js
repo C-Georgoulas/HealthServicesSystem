@@ -227,10 +227,10 @@ const {user, setUser} = useContext(UserContext);
       </span>
       </div> */}
       <AppBar position="static" className={classes.appBar}>
-      <Tabs value={value} onChange={handleTabsChange} aria-label="simple tabs example">
+      {/* <Tabs value={value} onChange={handleTabsChange} aria-label="simple tabs example">
           <Tab label="All Medications" {...a11yProps(0)} />
           <Tab label="Department Medications" {...a11yProps(1)} />
-        </Tabs>
+        </Tabs> */}
       </AppBar>
       {/* <br></br>
       <div className={classes.searchContainer}>
@@ -261,8 +261,8 @@ const {user, setUser} = useContext(UserContext);
       >
       <TabPanel value={value} index={0}>
       {/* overflow hides the scrollbar at the table on patient GET/POST/UPDATE/DELETE */}
-      <TableContainer component={Paper} style={{overflow: "hidden"}}>
-      <Table className={classes.table} aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>      <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell />
@@ -315,11 +315,12 @@ const {user, setUser} = useContext(UserContext);
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
     </TabPanel>
-    <TabPanel value={value} index={1}>
+    {/* <TabPanel value={value} index={1}>
       my department drugs
-    </TabPanel>
+    </TabPanel> */}
       </SwipeableViews>
       </Container>
       </div>

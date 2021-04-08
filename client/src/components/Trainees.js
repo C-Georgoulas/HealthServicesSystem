@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     table: {
-      width: "100%",
+      // width: "100%",
     },
     appBar: {
       backgroundColor: "black",
@@ -243,8 +243,8 @@ const useStyles = makeStyles((theme) => ({
       >
       <TabPanel value={value} index={0}>
       {/* overflow hides the scrollbar at the table on patient GET/POST/UPDATE/DELETE */}
-      <TableContainer className={classes.table} component={Paper} style={{overflow: "hidden"}}>
-      <Table aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
@@ -290,11 +290,12 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <TableContainer className={classes.table} component={Paper} style={{overflow: "hidden"}}>
-      <Table aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
@@ -340,11 +341,12 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
       </TabPanel>
       <TabPanel value={value} index={2}>
-      <TableContainer className={classes.table} component={Paper} style={{overflow: "hidden"}}>
-      <Table aria-label="simple table">
+      <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
+        <div style={{width: 'auto', overflowX: 'scroll'}}>      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell><strong>Name</strong></TableCell>
@@ -390,6 +392,7 @@ const useStyles = makeStyles((theme) => ({
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>      </TabPanel>
       </SwipeableViews>
       </Container>
