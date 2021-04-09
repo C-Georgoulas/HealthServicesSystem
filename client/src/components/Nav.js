@@ -316,6 +316,17 @@ const readNotification = (notificationStatus) => {
             {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
           </MenuItem>
             }
+            {notification.isTraineeNotification &&
+          <MenuItem
+            component={Link}
+            to={`/trainees/${notification.details}`}
+            key={notification._id}
+            selected={index === selectedIndex}
+            onClick={() => handleMenuItemClick(notification._id, index)}
+          >
+            {`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}
+          </MenuItem>
+            }
           <Divider/>
           </div>
         ))}

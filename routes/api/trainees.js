@@ -5,6 +5,8 @@ const router = express.Router();
 
 const Trainee = require('../../models/Trainee');
 const Grade = require('../../models/Grade');
+const Notification = require('../../models/Notification');
+const User = require('../../models/User');
 
 // @ route GET api/trainees
 // @desc Get all Trainees
@@ -103,11 +105,24 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/:id/grades', async (req, res) => {
     const trainee = await Trainee.findById(req.params.id);
+    // constructing notification
+   console.log(trainee.author)
+   const user = await User.findById(trainee.author)
+   const notification = new Notification({
+       title: "A new grade report has been added to your trainee.",
+       details: trainee._id,
+       isTraineeNotification: true
+   });
+   console.log(notification);
+   user.notifications.push(notification);
+
     const grade = new Grade(req.body.grade);
     grade.author = req.user._id
     trainee.grades.push(grade);
     await grade.save()
     await trainee.save();
+    await notification.save();
+    await user.save();
     res.send(grade);
  })
  

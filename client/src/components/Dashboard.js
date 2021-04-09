@@ -187,6 +187,21 @@ const handleMenuItemClick = (notificationID, index) => {
                   </ListItemSecondaryAction>
                 </ListItem>
         }
+        { notification.isTraineeNotification &&
+          <ListItem key={notification._id}
+                onClick={() => handleMenuItemClick(notification._id, index)}
+                >
+                  <Button
+                  component={Link} 
+                  to={`/trainees/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
          { notification.isSurgeryNotification &&
                 <ListItem key={notification._id}
                 onClick={() => handleMenuItemClick(notification._id, index)}
@@ -239,6 +254,21 @@ const handleMenuItemClick = (notificationID, index) => {
                   <Button
                   component={Link} 
                   to={`/prescriptions/${notification.details}`}
+                  >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+        }
+        { notification.isTraineeNotification &&
+          <ListItem key={notification._id}
+                onClick={() => handleMenuItemClick(notification._id, index)}
+                >
+                  <Button
+                  component={Link} 
+                  to={`/trainees/${notification.details}`}
                   >{`${new Date(notification.addedOnDate).toDateString()} (${new Date(notification.addedOnDate).toLocaleTimeString()}) — ${notification.title}`}</Button>
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete">

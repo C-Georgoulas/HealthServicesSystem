@@ -21,6 +21,7 @@ import Trainees from './components/Trainees'
 import Users from './components/Users'
 import TraineeCreate from './components/TraineeCreate'
 import TraineeDetails from './components/TraineeDetails'
+import TraineeDetailsEdit from './components/TraineeDetailsEdit'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import AuthService from "./services/auth.service";
 import { UserContext } from './components/UserContext'
@@ -71,6 +72,7 @@ const value = useMemo(() => ({user, setUser}), [user, setUser])
       <Route path="/trainees" exact component={Trainees}/>
       <Route path="/trainees/create" exact component={TraineeCreate}/>
       <Route path="/trainees/:id" exact component={TraineeDetails}/>
+      <Route path="/trainees/:id/edit" exact component={TraineeDetailsEdit}/>
       <Route path="/users" exact component={Users}/>
       <Route path="/prescriptions" exact component={Prescriptions}/>
       <Route path="/drugs" exact component={Medications}/>
