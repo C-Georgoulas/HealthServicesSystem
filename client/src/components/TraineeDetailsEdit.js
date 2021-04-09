@@ -207,6 +207,15 @@ const departments = [
 
 const form = useRef();
 
+const roleChecker = (role) => {
+  if (role === "instructor") {
+    return "instructor"
+  } else {
+    return "Not instructor"
+  }
+}
+
+
 
     return (
       <div>
@@ -321,7 +330,15 @@ const form = useRef();
           validators={['required']}
           errorMessages={['Please select the instructor of the trainee!']}
         >
-          {users && users.length > 1 && users.map((user) => (
+          {users && users.length > 1 && 
+
+          users
+          .filter((user) => {
+              return roleChecker(
+                  user.role,
+              ) === 'instructor';
+          })
+          .map((user) => (
 
             <MenuItem key={user._id} value={user} onClick={()=>handleClick2(user)}>
               {user.name}

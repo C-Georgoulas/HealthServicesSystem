@@ -158,6 +158,41 @@ const renderValue = (value) => {
 
   const form = useRef();
 
+  const [users, setUsers] = useState([
+
+  ])  
+
+  // GET/Fetch all users, listener for users
+
+useEffect(() => {
+  fetch('/api/admin/users')
+  .then(response => response.json())
+  .then(json => setUsers(json))
+
+}, [])
+
+  const [author, setAuthor] = React.useState();
+
+// figure out a way to pass the user object ID into trainee.author 
+// handeClick = (user) right now returns the event and NOT the user
+
+const handleClick = (user) => {
+  // console.log(user);
+    setAuthor(user.name);
+}
+
+const handleClick2 = (user) => {
+  setEditPatient({...editPatient, 
+    author: user});
+}
+
+  const roleChecker = (role) => {
+    if (role === "doctor") {
+      return "doctor"
+    } else {
+      return "Not doctor"
+    }
+  }
 
     return (
       <div>
@@ -289,21 +324,34 @@ const renderValue = (value) => {
          />
         </Typography>
         <Divider />
+        <InputLabel className={classes.sex} id="demo-simple-select-label">SUPERVISING DOCTOR</InputLabel>
         { editPatient.author && editPatient.author.name != undefined &&
-        <>
-        <Typography variant="body2" component="p">
-        <TextValidator
-        InputLabelProps={{shrink: true}}
-        id="standard-basic" 
-        disabled
-        label="SUPERVISING DOCTOR"
-        value={editPatient.author.name}
-        validators={['required']}
-        errorMessages={['Please add the diagnosis of the patient!']}
-         />
-        </Typography>
-        <Divider />
-        </>
+        <Select
+          id="standard-select-sex"
+          className={classes.sex}
+          select
+          label="SUPERVISING DOCTOR"
+          value={editPatient.author.name}
+          renderValue={ () => renderValue(editPatient.author.name)}
+          onChange={handleClick}
+          validators={['required']}
+          errorMessages={['Please select the supervising doctor!']}
+        >
+          {users && users.length > 1 && 
+
+          users
+          .filter((user) => {
+              return roleChecker(
+                  user.role,
+              ) === 'doctor';
+          })
+          .map((user) => (
+
+            <MenuItem key={user._id} value={user} onClick={()=>handleClick2(user)}>
+              {user.name}
+            </MenuItem>
+          ))}
+          </Select>
         }
         <Typography variant="body2" component="p">
         <TextValidator

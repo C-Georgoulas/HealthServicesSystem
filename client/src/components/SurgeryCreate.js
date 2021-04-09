@@ -193,6 +193,14 @@ const form = useRef();
 
 const theme = useTheme();
 
+const departmentChecker = (department) => {
+  if (department === "Surgery") {
+    return "surgeon"
+  } else {
+    return "Not surgeon"
+  }
+}
+
 
     return (
         <div>
@@ -283,7 +291,15 @@ const theme = useTheme();
           validators={['required']}
           errorMessages={['Please select the participant surgeons!']}
         >
-          {users && users.length > 1 && users.map((user) => (
+          {users && users.length > 1 &&
+
+          users
+          .filter((user) => {
+              return departmentChecker(
+                  user.department,
+              ) === 'surgeon';
+          })
+          .map((user) => (
 
             <MenuItem key={user._id} value={user} style={getStyles(user, personName, theme)}>
               {user.name}
