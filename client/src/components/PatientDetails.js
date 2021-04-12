@@ -407,6 +407,7 @@ const useStyles = makeStyles((theme) => ({
         </Typography>
         <Divider />
       </CardContent>
+      <div style={{width: 'auto', overflowX: 'scroll'}}>
       <CardActions>
         <Button size="small" color="primary" variant="outlined" onClick={handleClickOpen}>ADD A NOTE</Button>
         { user.role === "admin" &&
@@ -438,6 +439,7 @@ const useStyles = makeStyles((theme) => ({
         <Button size="small" color="primary" variant="outlined" onClick={onActivatePatientSubmit}>ACTIVATE PATIENT</Button>
         }
       </CardActions>
+      </div>
     </Card>
 <br></br>
 {/* PRESCRIPTIONS TABLE */}

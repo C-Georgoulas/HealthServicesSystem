@@ -378,6 +378,7 @@ const useStyles = makeStyles((theme) => ({
         </Typography>
         <Divider />
       </CardContent>
+      <div style={{width: 'auto', overflowX: 'scroll'}}>
       <CardActions>
         <Button size="small" color="primary" variant="outlined" onClick={handleClickOpen}>ADD A GRADE REPORT</Button>
         {/* <Button size="small" color="primary" variant="outlined" component={Link} to={`/patients/${trainee._id}/prescription/new`}>ADD A PRESCRIPTION</Button> */}
@@ -395,6 +396,7 @@ const useStyles = makeStyles((theme) => ({
         <Button size="small" color="primary" variant="outlined" onClick={onActivateTraineeSubmit}>ACTIVATE TRAINEE</Button>
         }
       </CardActions>
+      </div>
     </Card>
 <br></br>
     {/* COMMENTS / NOTES BY OTHER DOCTORS/STAFF */}

@@ -253,56 +253,45 @@ const deleteUser = (userID) => {
 
 
 // declaring temporary state for the edit user
-// const [editUser, setEditUser] = useState({})
+const [editUser, setEditUser] = useState({})
 
 
 // Edit Dialog 
-// const [openEditUser, setOpenEditUser] = React.useState(false);
+const [openEditUser, setOpenEditUser] = React.useState(false);
 
 // id passes the selected user through the icon button modify into the editUser state
 
-// const handleClickOpenEditUser = (id) => {
-//   console.log("User to edit object below:")
-//   console.log(id)
-//   setEditUser(id);
-//   setOpenEditUser(true);
-// };
+const handleClickOpenEditUser = (id) => {
+  console.log("User to edit object below:")
+  console.log(id)
+  setEditUser(id);
+  setOpenEditUser(true);
+};
 
-// const handleCloseEditUser = () => {
-//   setOpenEditUser(false);
-// };
+const handleCloseEditUser = () => {
+  setOpenEditUser(false);
+};
 
 // Put request to edit the specific user of the patient
 
-// const onEditedUserSubmit = (e) => {
-//   e.preventDefault()
-//   const userReceived = AuthService.getCurrentUser();
-//   console.log("attempting to send")
-//   console.log(editUser);
-//   setUser(editUser)
-//   console.log(user);
-//   fetch(`http://localhost:8080/admin/users/${editUser.id}/edit`, {
-//     method: 'PUT',
-//     headers: new Headers({
-//       'Authorization': 'Bearer ' + userReceived.accessToken,
-//       "Content-Type": "application/json", 
-//     }), 
-//     body: JSON.stringify(editUser),
-//   })
-//   .then(res => res.json())
-//   .then(json => setUsers(json.editUser))
-//   .then(json => setEditUser({
-//     fullname: "",
-//     address: "",
-//     email: "",
-//     username: "",
-//     password: "",
-//     crn: "",
-//     role: "",
-//     birthday: ""
-//   }))
-//   .then(setOpenEditUser(false))
-// }
+const onEditedUserSubmit = (e) => {
+  e.preventDefault();
+  console.log("attempting to send")
+  console.log(editUser);
+  fetch(`/api/admin/users/${editUser._id}/edit`, {
+    method: 'PUT',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({editUser}),
+  })
+  .then(res => res.json())
+  .then(json => setEditUser({
+    name: "",
+    email: "",
+    department: "",
+    role: "",
+  }))
+  .then(setOpenEditUser(false))
+}
 
 
 // date picker
@@ -322,6 +311,12 @@ const [role, setRole] = React.useState();
   const handleRoleChange = (event) => {
     setRole(event.target.value);
     setUser({...user, role: event.target.value});
+    // setEditUser({...editUser, role: event.target.value});
+  };
+
+  const handleRoleChangeEditUser = (event) => {
+    // setRole(event.target.value);
+    setEditUser({...editUser, role: event.target.value});
     // setEditUser({...editUser, role: event.target.value});
   };
 
@@ -350,6 +345,12 @@ const [department, setDepartment] = React.useState();
   const handleDepartmentChange = (event) => {
     setDepartment(event.target.value);
     setUser({...user, department: event.target.value});
+    // setEditUser({...editUser, role: event.target.value});
+  };
+
+  const handleDepartmentChangeEditUser = (event) => {
+    // setDepartment(event.target.value);
+    setEditUser({...editUser, department: event.target.value});
     // setEditUser({...editUser, role: event.target.value});
   };
 
@@ -406,7 +407,8 @@ const form2 = useRef();
       >
         {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
         <TableContainer className={classes.table} component={Paper} style={{overflowY: "hidden"}}>
-        <div style={{width: 'auto', overflowX: 'scroll'}}>    <Table className={classes.table} aria-label="simple table">
+        <div style={{width: 'auto', overflowX: 'scroll'}}>
+        <Table className={classes.table} aria-label="simple table">
       <TableHead>
         <TableRow>
           <TableCell><strong>Name</strong></TableCell>
@@ -426,9 +428,9 @@ const form2 = useRef();
             <TableCell>{user.role}</TableCell>
             <TableCell align="center">
             <Tooltip title="Modify">
-                        {/* <IconButton aria-label="modify" size="small" onClick={() => handleClickOpenEditUser(user)}> */}
+                        <IconButton aria-label="modify" size="small" onClick={() => handleClickOpenEditUser(user)}>
                             <EditIcon />
-                         {/* </IconButton> */}
+                         </IconButton>
                         </Tooltip> 
                       <Tooltip title="Delete">
                         <IconButton aria-label="delete" onClick={()=>deleteUser(user._id)}>
@@ -543,136 +545,98 @@ const form2 = useRef();
         </ValidatorForm>
       </Dialog>
       {/* EDIT USER DIALOG */}
-      {/* <Dialog open={openEditUser} onClose={handleCloseEditUser} aria-labelledby="form-dialog-title">
+{/* <Dialog open={openEditUser} onClose={handleCloseEditUser} aria-labelledby="form-dialog-title">
 <ValidatorForm
             ref={form2}
             onSubmit={onEditedUserSubmit}
             onError={errors => console.log(errors)}>
-          <DialogTitle id="form-dialog-title">Edit User</DialogTitle>
+          <DialogTitle id="form-dialog-title">Edit User</DialogTitle> */}
+          <Dialog open={openEditUser} onClose={handleCloseEditUser} aria-labelledby="form-dialog-title">
+<ValidatorForm
+            ref={form2}
+            onSubmit={onEditedUserSubmit}
+            onError={errors => console.log(errors)}>
+        <DialogTitle id="form-dialog-title">USER MODIFICATION</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Currently editing the details of {editUser.username}
+            Please change any fields to edit {editUser.name}
           </DialogContentText>
-          <TextValidator
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            type="text"
-            value={editUser.fullname}
-            label="Full name"
-            name="user[fullname]"
-            onChange={e => setEditUser({...editUser, fullname: e.target.value})}
-            value={editUser.fullname}
-            validators={['required']}
-            errorMessages={['Please add a full name to the user!']}
-            autoFocus
-          />
-          <TextValidator
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            type="text"
-            value={editUser.address}
-            label="Address"
-            name="user[address]"
-            onChange={e => setEditUser({...editUser, address: e.target.value})}
-            value={editUser.address}
-            validators={['required']}
-            errorMessages={['Please add an address to the user!']}
-            autoFocus
-          />
           <TextValidator
             variant="outlined"
             margin="normal"
             fullWidth
             id="email"
             label="Email Address"
-            name="user[email]"
+            name="editUser[email]"
             autoComplete="email"
-            value={editUser.email}
             autoFocus
             onChange={e => setEditUser({...editUser, email: e.target.value})}
             value={editUser.email}
             validators={['required']}
             errorMessages={['Please add an e-mail address to the user!']}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            value={editUser.crn}
-            type="number"
-            label="Civil Registration Number"
-            name="user[crn]"
-            onChange={e => setEditUser({...editUser, crn: e.target.value})}
-            value={editUser.crn}
-            validators={['required']}
-            errorMessages={['Please add a civil registration number to the user!']}
-            autoFocus
-          />
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardDatePicker
-          disableToolbar
-          variant="inline"
-          format="MM/dd/yyyy"
-          margin="normal"
-          id="date-picker-inline"
-          label="Date of Birth"
-          value={selectedDate}
-          name="user[birthday]"
-          fullWidth
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-        </MuiPickersUtilsProvider>
-        <TextValidator
-            variant="outlined"
-            margin="normal"
-            fullWidth
-            type="text"
-            label="Username"
-            value={editUser.username}
-            name="user[username]"
-            onChange={e => setEditUser({...editUser, username: e.target.value})}
-            value={editUser.username}
-            validators={['required']}
-            errorMessages={['Please add a username to the user!']}
-            autoFocus
-          />
-          <TextValidator
+            />
+   {/* <TextValidator
             variant="outlined"
             margin="normal"
             fullWidth
             type="password"
             label="Password"
             name="user[password]"
-            value={editUser.password}
-            onChange={e => setEditUser({...editUser, password: e.target.value})}
-            value={editUser.password}
+            onChange={e => setUser({...user, password: e.target.value})}
+            value={user.password}
             validators={['required']}
-            errorMessages={['Please add a password!']}
+            errorMessages={['Please add a password to the user!']}
             autoFocus
-          />
-          <p></p>
-          <TextField
-          disabled
+          /> */}
+          <TextValidator
           variant="outlined"
           id="standard-select-condition"
           select
           fullWidth
-          label="User System Role"
-          value={editUser.role}
-          name="user[role]"
-          onChange={handleRoleChange}
+          label="System Role"
+          value={editUser.role || ''}
+          name="editUser[role]"
+          validators={['required']}
+          errorMessages={['Please add a system role to the user!']}
+          onChange={handleRoleChangeEditUser}
         >
-          {conditions.map((option) => (
+          {roles.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.value}
             </MenuItem>
           ))}
-        </TextField>
+        </TextValidator>
+        <TextValidator
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            type="text"
+            label="Full name"
+            name="editUser[name]"
+            onChange={e => setEditUser({...editUser, name: e.target.value})}
+            value={editUser.name}
+            validators={['required']}
+            errorMessages={['Please add a name to the user!']}
+            autoFocus
+          />
+           <TextValidator
+          variant="outlined"
+          id="standard-select-condition"
+          select
+          fullWidth
+          label="Department"
+          value={editUser.department}
+          name="editUser[department]"
+          validators={['required']}
+          errorMessages={['Please add a department to the user!']}
+          onChange={handleDepartmentChangeEditUser}
+        >
+          {departments.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.value}
+            </MenuItem>
+          ))}
+         </TextValidator> 
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseEditUser} color="primary">
@@ -683,7 +647,8 @@ const form2 = useRef();
           </Button>
         </DialogActions>
         </ValidatorForm>
-      </Dialog> */}
+      </Dialog>
+  
         </Container>
         </div>
         </div>

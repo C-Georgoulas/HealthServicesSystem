@@ -122,7 +122,7 @@ const handleMenuItemClick = (notificationID, index) => {
           </IconButton>
         }
         title={user.name}
-        subheader={user.department}
+        subheader={user.role != "admin" ? user.department : null}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">

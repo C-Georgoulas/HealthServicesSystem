@@ -52,6 +52,20 @@ router.post('/users/create', async (req, res) => {
       })
 });
 
+// @route PUT api/admin/users/:id/edit
+// @desc Edit A User
+// @access Admin
+
+router.put('/users/:id/edit', async (req, res) => {
+    const {id} = req.params;
+    await User.findByIdAndUpdate(id, {...req.body.editUser});
+    res.status(200).send({});
+    console.log(req.body.editUser)
+    // UserService.add(newUser).then((result) => {
+    //     console.log(newUser)
+    //   })
+});
+
 router.delete('/users/:id', async (req, res) => {
     // Patient.findById(req.params.id)
     // .then(patient => patient.remove().then(() => res.json({success: true})))
