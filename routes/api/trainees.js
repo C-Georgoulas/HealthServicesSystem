@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const AccessMiddleware = require('../../config/access')
+
+
 // Trainee Model
 
 const Trainee = require('../../models/Trainee');
@@ -13,7 +16,7 @@ const User = require('../../models/User');
 // access Instructors
 
 // sort's use is to sort all patients in a descending manner by the creationdate
-router.get('/', (req, res) => {
+router.get('/',AccessMiddleware.hasInstructorAccess, (req, res) => {
     Trainee.find()
         .populate('author')
         .sort({date: -1})
@@ -24,7 +27,7 @@ router.get('/', (req, res) => {
 // @desc Get all Grades that have been submitted into the system.
 // access Instructors
 
-router.get('/grades', (req, res) => {
+router.get('/grades',AccessMiddleware.hasInstructorAccess, (req, res) => {
     Grade.find()
     .then(grades => res.json(grades))
 });
@@ -33,7 +36,7 @@ router.get('/grades', (req, res) => {
 // @desc Get a specific grade that has been added to the system.
 // access Instructors
 
-router.get('/grades/:id', async (req, res) => {
+router.get('/grades/:id',AccessMiddleware.hasInstructorAccess, async (req, res) => {
    Grade.findById(req.params.id)
     .populate('author')
     .then(grade => res.json(grade))
@@ -46,7 +49,7 @@ router.get('/grades/:id', async (req, res) => {
 // @desc Get specific trainee
 // access Instructors
 
-router.get('/:id', (req, res) => {
+router.get('/:id',AccessMiddleware.hasInstructorAccess, (req, res) => {
     Trainee.findById(req.params.id)
     .populate('author')
     .populate({path: 'grades', 
@@ -62,7 +65,7 @@ router.get('/:id', (req, res) => {
 // @access Instructors
 
 // Constructing an object to insert to the database
-router.post('/', (req, res) => {
+router.post('/',AccessMiddleware.hasInstructorAccess, (req, res) => {
     console.log(req.body);
     const newTrainee = new Trainee({
         fullName: req.body.fullName,
@@ -84,14 +87,14 @@ router.post('/', (req, res) => {
 // @desc Edit A Trainee
 // @access Instructors
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',AccessMiddleware.hasInstructorAccess, async (req, res) => {
     const {id} = req.params;
     await Trainee.findByIdAndUpdate(id, {...req.body.editTrainee});
     res.status(200).send({});
 })
 
 // Deleting object from the database based on ID
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',AccessMiddleware.hasInstructorAccess, async (req, res) => {
     await Trainee.findByIdAndDelete(req.params.id)
     res.status(200).send({});
 
@@ -103,7 +106,7 @@ router.delete('/:id', async (req, res) => {
 // @desc Add a note to trainee
 // @access Instructors
 
-router.post('/:id/grades', async (req, res) => {
+router.post('/:id/grades',AccessMiddleware.hasInstructorAccess, async (req, res) => {
     const trainee = await Trainee.findById(req.params.id);
     // constructing notification
    console.log(trainee.author)
@@ -130,7 +133,7 @@ router.post('/:id/grades', async (req, res) => {
  // @desc Edit a specific grade of a specific trainee
 // @access Instructors
  
- router.put('/:id/grades/:gradeId', (req, res) => {
+ router.put('/:id/grades/:gradeId',AccessMiddleware.hasInstructorAccess, (req, res) => {
      Grade.findByIdAndUpdate(req.params.gradeId, req.body.editGrade, function(err, updatedGrade) {
          if (err) {
              console.log(err)
@@ -145,14 +148,14 @@ router.post('/:id/grades', async (req, res) => {
  // @access Administrator, grade owner
  
  // sending status 200 seems to have fixed the issue?
- router.delete('/:id/grades/:gradeId', async (req, res) => {
+ router.delete('/:id/grades/:gradeId',AccessMiddleware.hasInstructorAccess, async (req, res) => {
      const {id, gradeId} = req.params
      await Trainee.findByIdAndUpdate(id, {$pull: {grades: gradeId}});
      await Grade.findByIdAndRemove(gradeId);
      res.status(200).send({});
  })
  
- router.get('/:id/grades/:gradeId/edit', async (req, res) => {
+ router.get('/:id/grades/:gradeId/edit',AccessMiddleware.hasInstructorAccess, async (req, res) => {
      const {gradeId} = req.params
      Grade.findById(gradeId)
      .then(grade => res.json(grade));

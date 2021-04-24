@@ -22,6 +22,22 @@ const AccessMiddleware = {
 
     next()
   },
+
+  hasInstructorAccess: (req, res, next) => {
+    console.log("instructor/admin middleware")
+    console.log(req.user.role)
+    const authorizedRoles = [
+      ROLES.ADMIN, 
+      ROLES.INSTRUCTOR,
+  ]
+    if (!req.isAuthenticated() || !authorizedRoles.includes(req.user.role)) {
+      req.session.redirectTo = req.originalUrl
+      return res.status(401).json({ success: false, error: 'unauthorized' })
+    }
+
+    next()
+  },
+
 }
 
 module.exports = AccessMiddleware
