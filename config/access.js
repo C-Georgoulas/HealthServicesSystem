@@ -3,7 +3,8 @@ const ROLES = require('.././client/src/common/roles')
 /** Access middleware to ensure user is allowed to access certain routes */
 const AccessMiddleware = {
   hasAccess: (req, res, next) => {
-    console.log(req.user)
+    // console.log(req.user)
+    // console.log(req.user.role);
     console.log("middleware above")
     if (!req.isAuthenticated()) {
       req.session.redirectTo = req.originalUrl

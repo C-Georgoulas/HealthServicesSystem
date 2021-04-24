@@ -10,13 +10,14 @@ const Surgery = require('../../models/Surgery');
 const User = require('../../models/User');
 const Notification = require('../../models/Notification');
 
+const AccessMiddleware = require('../../config/access')
 
 // @ route GET api/patients
 // @desc Get all Patients
 // access Staff
 
 // sort's use is to sort all patients in a descending manner by the creationdate
-router.get('/', (req, res) => {
+router.get('/', AccessMiddleware.hasAccess, (req, res) => {
     Patient.find()
         .populate('author')
         .sort({date: -1})
@@ -27,7 +28,7 @@ router.get('/', (req, res) => {
 // @desc Get all Prescriptions that have been made in the system, collects all of them from all patients
 // access Doctors?
 
-router.get('/prescriptions', (req, res) => {
+router.get('/prescriptions', AccessMiddleware.hasAccess, (req, res) => {
     Prescription.find()
     .populate('author')
     .then(prescriptions => res.json(prescriptions))
@@ -37,13 +38,13 @@ router.get('/prescriptions', (req, res) => {
 // @desc Get a specific Prescriptions that have been made in the system, collects all of them from all patients
 // access Doctors?
 
-router.get('/prescriptions/:id', async (req, res) => {
+router.get('/prescriptions/:id', AccessMiddleware.hasAccess, async (req, res) => {
    Prescription.findById(req.params.id)
     .populate('author')
     .then(prescription => res.json(prescription))
 })
 
-router.get('/surgeries/:id', async (req, res) => {
+router.get('/surgeries/:id', AccessMiddleware.hasAccess, async (req, res) => {
     Surgery.findById(req.params.id)
      .populate('author')
      .then(surgery => res.json(surgery))
@@ -56,7 +57,7 @@ router.get('/surgeries/:id', async (req, res) => {
 // @desc Get specific patient
 // @access Staff
 
-router.get('/:id', (req, res) => {
+router.get('/:id', AccessMiddleware.hasAccess, (req, res) => {
     Patient.findById(req.params.id)
     .populate('author')
     .populate({path: 'notes', 
