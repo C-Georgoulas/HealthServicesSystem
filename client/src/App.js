@@ -2,6 +2,7 @@ import './App.css';
 import Nav from './components/Nav'
 import Tasks from './components/Tasks'
 import Login from './components/Login'
+import ErrorScreen from './components/ErrorScreen'
 import Patients from './components/Patients'
 import Dashboard from './components/Dashboard'
 import PatientDetails from './components/PatientDetails'
@@ -67,26 +68,81 @@ const value = useMemo(() => ({user, setUser}), [user, setUser])
         <>
        <Switch>
       <Route path="/" exact component={Dashboard}></Route>
-      <Route path="/Tasks" component={Tasks}></Route>
       <Route path="/patients" exact component={Patients}/>
+      { user.role === "admin" &&
       <Route path="/trainees" exact component={Trainees}/>
+      }
+      { user.role === "instructor" &&
+      <Route path="/trainees" exact component={Trainees}/>
+      }
+      { user.role === "admin" &&
       <Route path="/trainees/create" exact component={TraineeCreate}/>
+    }
+    { user.role === "instructor" &&
+      <Route path="/trainees/create" exact component={TraineeCreate}/>
+    }
+      { user.role === "admin" &&
       <Route path="/trainees/:id" exact component={TraineeDetails}/>
+    }
+    { user.role === "instructor" &&
+      <Route path="/trainees/:id" exact component={TraineeDetails}/>
+    }
+      { user.role === "admin" &&
       <Route path="/trainees/:id/edit" exact component={TraineeDetailsEdit}/>
+      }
+      { user.role === "instructor" &&
+      <Route path="/trainees/:id/edit" exact component={TraineeDetailsEdit}/>
+      }
+      { user.role === "admin" &&
       <Route path="/users" exact component={Users}/>
+      }
       <Route path="/prescriptions" exact component={Prescriptions}/>
       <Route path="/drugs" exact component={Medications}/>
+      { user.role === "admin" &&
       <Route path="/drugs/create" exact component={MedicationsCreate}/>
+    }
+      { user.role === "admin" &&
       <Route path="/administration" exact component={Administration}/>
+    }
+    { user.role === "instructor" &&
+      <Route path="/administration" exact component={Administration}/>
+    }
       <Route path="/prescriptions/:id" exact component={PrescriptionDetails}/>
       <Route path="/patients/create" exact component={PatientCreate}/>
       <Route path="/patients/:id" exact component={PatientDetails}/>
       <Route path="/patients/:id/edit" exact component={PatientDetailsEdit}/>
+      { user.department === "Surgery" &&
       <Route path="/patients/:id/surgery/new" exact component={SurgeryCreate}/>
+      }
+      { user.role === "admin" &&
+      <Route path="/patients/:id/surgery/new" exact component={SurgeryCreate}/>
+      }
+      { user.department === "Surgery" &&
       <Route path="/patients/:id/surgery/:id/edit" exact component={SurgeryEdit}/>
+      }
+      { user.role === "admin" &&
+      <Route path="/patients/:id/surgery/:id/edit" exact component={SurgeryEdit}/>
+      }
       <Route path="/surgeries/:id" exact component={SurgeryDetails}/>
+      { user.role === "admin" &&
       <Route path="/patients/:id/prescription/new" exact component={PrescriptionCreate}/>
+      }
+      { user.role === "instructor" &&
+      <Route path="/patients/:id/prescription/new" exact component={PrescriptionCreate}/>
+      }
+       { user.role === "doctor" &&
+      <Route path="/patients/:id/prescription/new" exact component={PrescriptionCreate}/>
+      }
+      { user.role === "admin" &&
       <Route path="/patients/:id/prescription/:id/edit" exact component={PrescriptionEdit}/>
+      }
+      { user.role === "instructor" &&
+      <Route path="/patients/:id/prescription/:id/edit" exact component={PrescriptionEdit}/>
+      }
+      { user.role === "doctor" &&
+      <Route path="/patients/:id/prescription/:id/edit" exact component={PrescriptionEdit}/>
+      }
+      <Route path='*' exact={true} component={ErrorScreen} />
       </Switch>
       </>
         }
