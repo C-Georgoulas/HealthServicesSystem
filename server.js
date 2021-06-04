@@ -87,8 +87,9 @@ app.use(cors())
 
 if (process.env.NODE_ENV === "production") {
   // Set a static folder
-  app.use(express.static('client/build'));
-  app.get('*', (req,res) => {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  console.log("hello")
+    app.get('*', (req,res) => {
     // directing the build to load the index.html file, should be loaded unless it hits the API.
     res.sendFile(path.join(_dirname, 'client', 'build', 'index.html'))
   });
