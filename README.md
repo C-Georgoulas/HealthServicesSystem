@@ -1,5 +1,10 @@
 # Health Services System
 
+Access the application on [Heroku](https://clinicservicesystem.herokuapp.com// "Heroku") and login with the following credentials for full access:
+
+Username: admin@gmail.com
+Password: 123
+
 This application was made with the MERN stack, as well as using passport.js for authentication and various roles. This was made for my bachelor's thesis within Harokopio University of Athens, Computer Science & Telematics. 
 
 Here are a list of features below:
