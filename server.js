@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const passport = require('passport')
+const path = require('path')
 
 // passport
 
@@ -81,6 +82,18 @@ app.use('/api/trainees', trainees)
 app.use('/api/auth', auth);
 app.use('/api/admin', admin)
 app.use(cors())
+
+// Serve static assets if in production
+
+if (process.env.NODE_ENV === "production") {
+  // Set a static folder
+  app.use(express.static('client/build'));
+  app.get('*', (req,res) => {
+    // directing the build to load the index.html file, should be loaded unless it hits the API.
+    res.sendFile(path.resolve(_dirname, 'client', 'build', 'index.html'))
+  });
+
+}
 
 // Connect to deployment port or localhost
 
