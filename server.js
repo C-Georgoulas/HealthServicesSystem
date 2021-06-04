@@ -90,7 +90,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static('client/build'));
   app.get('*', (req,res) => {
     // directing the build to load the index.html file, should be loaded unless it hits the API.
-    res.sendFile(path.resolve(_dirname, 'client', 'build', 'index.html'))
+    res.sendFile(path.join(_dirname, 'client', 'build', 'index.html'))
   });
 
 }
