@@ -83,11 +83,15 @@ app.use('/api/auth', auth);
 app.use('/api/admin', admin)
 app.use(cors())
 
+// Connect to deployment port or localhost
+
+const port = process.env.PORT || 5000;
+
 // Serve static assets if in production
 
 if (process.env.NODE_ENV === "production") {
   // Set a static folder
-  app.use(express.static(path.join(__dirname, '../client/build')));
+  app.use(express.static(path.join(__dirname, 'client', 'build')));
   console.log("hello")
     app.get('*', (req,res) => {
     // directing the build to load the index.html file, should be loaded unless it hits the API.
@@ -95,10 +99,6 @@ if (process.env.NODE_ENV === "production") {
   });
 
 }
-
-// Connect to deployment port or localhost
-
-const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
