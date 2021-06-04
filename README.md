@@ -1,6 +1,6 @@
 # Health Services System
 
-Access the application on [Heroku](https://clinicservicesystem.herokuapp.com// "Heroku") and login with the following credentials for full access:
+Access the application on [Heroku](https://clinicservicesystem.herokuapp.com/ "Heroku") and login with the following credentials for full access:
 
 Username: admin@gmail.com
 Password: 123
