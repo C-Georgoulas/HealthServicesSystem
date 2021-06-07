@@ -6,7 +6,7 @@ const AccessMiddleware = require("../../config/access");
 const Drug = require("../../models/Drug");
 
 // Constructing an object to insert to the database
-router.post("/", AccessMiddleware.hasAdminAccess, (req, res) => {
+router.post("/", AccessMiddleware.hasAdminAccess, async (req, res) => {
   console.log(req.body.name);
   const newDrug = new Drug({
     name: req.body.name,
@@ -20,11 +20,13 @@ router.post("/", AccessMiddleware.hasAdminAccess, (req, res) => {
   console.log(newDrug);
   console.log("hello");
 
-  newDrug.save().then((drug) => res.json(drug));
+  const drug = await newDrug.save()
+  res.json(drug);
 });
 
-router.get("/", AccessMiddleware.hasAccess, (req, res) => {
-  Drug.find().then((drugs) => res.json(drugs));
+router.get("/", AccessMiddleware.hasAccess, async (req, res) => {
+  const drugs = await Drug.find()
+  res.json(drugs);
 });
 
 // Deleting object from the database based on ID

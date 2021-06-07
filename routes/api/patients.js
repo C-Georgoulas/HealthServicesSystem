@@ -17,21 +17,18 @@ const AccessMiddleware = require("../../config/access");
 // access Staff
 
 // sort's use is to sort all patients in a descending manner by the creationdate
-router.get("/", AccessMiddleware.hasAccess, (req, res) => {
-  Patient.find()
-    .populate("author")
-    .sort({ date: -1 })
-    .then((patients) => res.json(patients));
+router.get("/", AccessMiddleware.hasAccess, async (req, res) => {
+  const patients = await Patient.find().populate("author").sort({ date: -1 })
+    res.json(patients);
 });
 
 // @ route GET api/patients/prescriptions
 // @desc Get all Prescriptions that have been made in the system, collects all of them from all patients
 // access Doctors?
 
-router.get("/prescriptions", AccessMiddleware.hasAccess, (req, res) => {
-  Prescription.find()
-    .populate("author")
-    .then((prescriptions) => res.json(prescriptions));
+router.get("/prescriptions", AccessMiddleware.hasAccess, async (req, res) => {
+  const prescriptions = await Prescription.find().populate("author")
+    res.json(prescriptions);
 });
 
 // @ route GET api/patients/prescriptions/:id
@@ -42,16 +39,14 @@ router.get(
   "/prescriptions/:id",
   AccessMiddleware.hasAccess,
   async (req, res) => {
-    Prescription.findById(req.params.id)
-      .populate("author")
-      .then((prescription) => res.json(prescription));
+    const prescription = await Prescription.findById(req.params.id).populate("author")
+      res.json(prescription);
   }
 );
 
 router.get("/surgeries/:id", AccessMiddleware.hasAccess, async (req, res) => {
-  Surgery.findById(req.params.id)
-    .populate("author")
-    .then((surgery) => res.json(surgery));
+  const surgery = await Surgery.findById(req.params.id).populate("author")
+    res.json(surgery);
 });
 
 // put everything above this shitty /:id route because it bugs out for some reason
@@ -61,8 +56,8 @@ router.get("/surgeries/:id", AccessMiddleware.hasAccess, async (req, res) => {
 // @desc Get specific patient
 // @access Staff
 
-router.get("/:id", AccessMiddleware.hasAccess, (req, res) => {
-  Patient.findById(req.params.id)
+router.get("/:id", AccessMiddleware.hasAccess, async (req, res) => {
+  const patient = await Patient.findById(req.params.id)
     .populate("author")
     .populate({
       path: "notes",
@@ -82,7 +77,7 @@ router.get("/:id", AccessMiddleware.hasAccess, (req, res) => {
         path: "author",
       },
     })
-    .then((patient) => res.json(patient));
+    res.json(patient);
 });
 
 // @route POST api/patients
@@ -90,7 +85,7 @@ router.get("/:id", AccessMiddleware.hasAccess, (req, res) => {
 // @access Staff
 
 // Constructing an object to insert to the database
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const newPatient = new Patient({
     fullName: req.body.fullName,
     exitDate: req.body.exitDate,
@@ -107,8 +102,8 @@ router.post("/", (req, res) => {
     diagnosis: req.body.diagnosis,
     status: req.body.status,
   });
-
-  newPatient.save().then((patient) => res.json(patient));
+  const patient = await newPatient.save()
+  res.json(patient);
 });
 
 // @route PUT api/patients
@@ -208,7 +203,8 @@ router.delete("/:id/notes/:noteId", async (req, res) => {
 
 router.get("/:id/notes/:noteId/edit", async (req, res) => {
   const { noteId } = req.params;
-  Note.findById(noteId).then((note) => res.json(note));
+  const note = await Note.findById(noteId)
+  res.json(note);
 });
 
 // PRESCRIPTIONS ------
@@ -254,9 +250,8 @@ router.delete("/:id/prescriptions/:prescriptionId", async (req, res) => {
 
 router.get("/:id/prescriptions/:prescriptionId/edit", async (req, res) => {
   const { prescriptionId } = req.params;
-  Prescription.findById(prescriptionId)
-    .populate("author")
-    .then((prescription) => res.json(prescription));
+  const prescription = await Prescription.findById(prescriptionId).populate("author")
+  res.json(prescription);
   // await Patient.findByIdAndUpdate(id, {$pull: {notes: noteId}});
   // await Note.findByIdAndRemove(noteId);
   // res.status(200).send({});
@@ -365,7 +360,8 @@ router.delete("/:id/surgeries/:surgeryId", async (req, res) => {
 
 router.get("/:id/surgeries/:surgeryId/edit", async (req, res) => {
   const { surgeryId } = req.params;
-  Surgery.findById(surgeryId).then((surgery) => res.json(surgery));
+  const surgery = await Surgery.findById(surgeryId)
+  res.json(surgery);
 });
 
 module.exports = router;

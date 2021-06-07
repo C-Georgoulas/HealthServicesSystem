@@ -15,19 +15,20 @@ const User = require("../../models/User");
 // access Instructors
 
 // sort's use is to sort all patients in a descending manner by the creationdate
-router.get("/", AccessMiddleware.hasInstructorAccess, (req, res) => {
-  Trainee.find()
-    .populate("author")
-    .sort({ date: -1 })
-    .then((trainees) => res.json(trainees));
+router.get("/", AccessMiddleware.hasInstructorAccess, async (req, res) => {
+  const trainees = await Trainee.find()
+  .populate("author")
+  .sort({ date: -1 })  
+  res.json(trainees)
 });
 
 // @ route GET api/patients/grades
 // @desc Get all Grades that have been submitted into the system.
 // access Instructors
 
-router.get("/grades", AccessMiddleware.hasInstructorAccess, (req, res) => {
-  Grade.find().then((grades) => res.json(grades));
+router.get("/grades", AccessMiddleware.hasInstructorAccess, async (req, res) => {
+  const grades = await Grade.find()
+  res.json(grades);
 });
 
 // @ route GET api/patients/prescriptions/:id
@@ -38,9 +39,9 @@ router.get(
   "/grades/:id",
   AccessMiddleware.hasInstructorAccess,
   async (req, res) => {
-    Grade.findById(req.params.id)
+   const grade = await Grade.findById(req.params.id)
       .populate("author")
-      .then((grade) => res.json(grade));
+   res.json(grade);
   }
 );
 
@@ -51,8 +52,8 @@ router.get(
 // @desc Get specific trainee
 // access Instructors
 
-router.get("/:id", AccessMiddleware.hasInstructorAccess, (req, res) => {
-  Trainee.findById(req.params.id)
+router.get("/:id", AccessMiddleware.hasInstructorAccess, async (req, res) => {
+  const trainee = await Trainee.findById(req.params.id)
     .populate("author")
     .populate({
       path: "grades",
@@ -60,7 +61,7 @@ router.get("/:id", AccessMiddleware.hasInstructorAccess, (req, res) => {
         path: "author",
       },
     })
-    .then((trainee) => res.json(trainee));
+   res.json(trainee);
 });
 
 // @route POST api/trainees
@@ -68,7 +69,7 @@ router.get("/:id", AccessMiddleware.hasInstructorAccess, (req, res) => {
 // @access Instructors
 
 // Constructing an object to insert to the database
-router.post("/", AccessMiddleware.hasInstructorAccess, (req, res) => {
+router.post("/", AccessMiddleware.hasInstructorAccess, async (req, res) => {
   console.log(req.body);
   const newTrainee = new Trainee({
     fullName: req.body.fullName,
@@ -82,8 +83,8 @@ router.post("/", AccessMiddleware.hasInstructorAccess, (req, res) => {
     department: req.body.department,
     averageGrade: req.body.averageGrade,
   });
-
-  newTrainee.save().then((trainee) => res.json(trainee));
+  const trainee = await newTrainee.save()
+  res.json(trainee);
 });
 
 // @route PUT api/trainees
@@ -182,7 +183,8 @@ router.get(
   AccessMiddleware.hasInstructorAccess,
   async (req, res) => {
     const { gradeId } = req.params;
-    Grade.findById(gradeId).then((grade) => res.json(grade));
+    const grade = Grade.findById(gradeId)
+    res.json(grade);
   }
 );
 

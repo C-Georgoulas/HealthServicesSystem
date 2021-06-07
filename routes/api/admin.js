@@ -7,11 +7,9 @@ const bcrypt = require("bcrypt");
 const UserService = require("../../service/user-service");
 const Notification = require("../../models/Notification");
 
-// sort's use is to sort all patients in a descending manner by the creationdate
-router.get("/user/:id/notifications", (req, res) => {
-  User.findById(req.params.id)
-    .populate("notifications")
-    .then((user) => res.json(user.notifications));
+router.get("/user/:id/notifications", async (req, res) => {
+  const user = await User.findById(req.params.id).populate("notifications")
+   res.json(user.notifications);
 });
 
 router.put("/notifications/:id", async (req, res) => {
@@ -25,10 +23,9 @@ router.put("/notifications/:id", async (req, res) => {
 // access Staff
 
 // sort's use is to sort all patients in a descending manner by the creationdate
-router.get("/users", (req, res) => {
-  User.find()
-    .sort({ date: -1 })
-    .then((users) => res.json(users));
+router.get("/users", async (req, res) => {
+  const users = await User.find().sort({ date: -1 })
+   res.json(users);
 });
 
 // @route POST api/admin/create
@@ -58,9 +55,6 @@ router.put("/users/:id/edit", async (req, res) => {
   await User.findByIdAndUpdate(id, { ...req.body.editUser });
   res.status(200).send({});
   console.log(req.body.editUser);
-  // UserService.add(newUser).then((result) => {
-  //     console.log(newUser)
-  //   })
 });
 
 router.delete("/users/:id", async (req, res) => {
