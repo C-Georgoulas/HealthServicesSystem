@@ -8,8 +8,8 @@ const UserService = require("../../service/user-service");
 const Notification = require("../../models/Notification");
 
 router.get("/user/:id/notifications", async (req, res) => {
-  const user = await User.findById(req.params.id).populate("notifications")
-   res.json(user.notifications);
+  const user = await User.findById(req.params.id).populate("notifications");
+  res.json(user.notifications);
 });
 
 router.put("/notifications/:id", async (req, res) => {
@@ -24,8 +24,8 @@ router.put("/notifications/:id", async (req, res) => {
 
 // sort's use is to sort all patients in a descending manner by the creationdate
 router.get("/users", async (req, res) => {
-  const users = await User.find().sort({ date: -1 })
-   res.json(users);
+  const users = await User.find().sort({ date: -1 });
+  res.json(users);
 });
 
 // @route POST api/admin/create

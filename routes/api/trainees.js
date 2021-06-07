@@ -16,20 +16,22 @@ const User = require("../../models/User");
 
 // sort's use is to sort all patients in a descending manner by the creationdate
 router.get("/", AccessMiddleware.hasInstructorAccess, async (req, res) => {
-  const trainees = await Trainee.find()
-  .populate("author")
-  .sort({ date: -1 })  
-  res.json(trainees)
+  const trainees = await Trainee.find().populate("author").sort({ date: -1 });
+  res.json(trainees);
 });
 
 // @ route GET api/patients/grades
 // @desc Get all Grades that have been submitted into the system.
 // access Instructors
 
-router.get("/grades", AccessMiddleware.hasInstructorAccess, async (req, res) => {
-  const grades = await Grade.find()
-  res.json(grades);
-});
+router.get(
+  "/grades",
+  AccessMiddleware.hasInstructorAccess,
+  async (req, res) => {
+    const grades = await Grade.find();
+    res.json(grades);
+  }
+);
 
 // @ route GET api/patients/prescriptions/:id
 // @desc Get a specific grade that has been added to the system.
@@ -39,9 +41,8 @@ router.get(
   "/grades/:id",
   AccessMiddleware.hasInstructorAccess,
   async (req, res) => {
-   const grade = await Grade.findById(req.params.id)
-      .populate("author")
-   res.json(grade);
+    const grade = await Grade.findById(req.params.id).populate("author");
+    res.json(grade);
   }
 );
 
@@ -60,8 +61,8 @@ router.get("/:id", AccessMiddleware.hasInstructorAccess, async (req, res) => {
       populate: {
         path: "author",
       },
-    })
-   res.json(trainee);
+    });
+  res.json(trainee);
 });
 
 // @route POST api/trainees
@@ -83,7 +84,7 @@ router.post("/", AccessMiddleware.hasInstructorAccess, async (req, res) => {
     department: req.body.department,
     averageGrade: req.body.averageGrade,
   });
-  const trainee = await newTrainee.save()
+  const trainee = await newTrainee.save();
   res.json(trainee);
 });
 
@@ -183,7 +184,7 @@ router.get(
   AccessMiddleware.hasInstructorAccess,
   async (req, res) => {
     const { gradeId } = req.params;
-    const grade = Grade.findById(gradeId)
+    const grade = Grade.findById(gradeId);
     res.json(grade);
   }
 );

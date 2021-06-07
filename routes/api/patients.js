@@ -18,8 +18,8 @@ const AccessMiddleware = require("../../config/access");
 
 // sort's use is to sort all patients in a descending manner by the creationdate
 router.get("/", AccessMiddleware.hasAccess, async (req, res) => {
-  const patients = await Patient.find().populate("author").sort({ date: -1 })
-    res.json(patients);
+  const patients = await Patient.find().populate("author").sort({ date: -1 });
+  res.json(patients);
 });
 
 // @ route GET api/patients/prescriptions
@@ -27,8 +27,8 @@ router.get("/", AccessMiddleware.hasAccess, async (req, res) => {
 // access Doctors?
 
 router.get("/prescriptions", AccessMiddleware.hasAccess, async (req, res) => {
-  const prescriptions = await Prescription.find().populate("author")
-    res.json(prescriptions);
+  const prescriptions = await Prescription.find().populate("author");
+  res.json(prescriptions);
 });
 
 // @ route GET api/patients/prescriptions/:id
@@ -39,14 +39,16 @@ router.get(
   "/prescriptions/:id",
   AccessMiddleware.hasAccess,
   async (req, res) => {
-    const prescription = await Prescription.findById(req.params.id).populate("author")
-      res.json(prescription);
+    const prescription = await Prescription.findById(req.params.id).populate(
+      "author"
+    );
+    res.json(prescription);
   }
 );
 
 router.get("/surgeries/:id", AccessMiddleware.hasAccess, async (req, res) => {
-  const surgery = await Surgery.findById(req.params.id).populate("author")
-    res.json(surgery);
+  const surgery = await Surgery.findById(req.params.id).populate("author");
+  res.json(surgery);
 });
 
 // put everything above this shitty /:id route because it bugs out for some reason
@@ -76,8 +78,8 @@ router.get("/:id", AccessMiddleware.hasAccess, async (req, res) => {
       populate: {
         path: "author",
       },
-    })
-    res.json(patient);
+    });
+  res.json(patient);
 });
 
 // @route POST api/patients
@@ -102,7 +104,7 @@ router.post("/", async (req, res) => {
     diagnosis: req.body.diagnosis,
     status: req.body.status,
   });
-  const patient = await newPatient.save()
+  const patient = await newPatient.save();
   res.json(patient);
 });
 
@@ -189,7 +191,7 @@ router.delete("/:id/notes/:noteId", async (req, res) => {
 
 router.get("/:id/notes/:noteId/edit", async (req, res) => {
   const { noteId } = req.params;
-  const note = await Note.findById(noteId)
+  const note = await Note.findById(noteId);
   res.json(note);
 });
 
@@ -236,7 +238,9 @@ router.delete("/:id/prescriptions/:prescriptionId", async (req, res) => {
 
 router.get("/:id/prescriptions/:prescriptionId/edit", async (req, res) => {
   const { prescriptionId } = req.params;
-  const prescription = await Prescription.findById(prescriptionId).populate("author")
+  const prescription = await Prescription.findById(prescriptionId).populate(
+    "author"
+  );
   res.json(prescription);
 });
 
@@ -343,7 +347,7 @@ router.delete("/:id/surgeries/:surgeryId", async (req, res) => {
 
 router.get("/:id/surgeries/:surgeryId/edit", async (req, res) => {
   const { surgeryId } = req.params;
-  const surgery = await Surgery.findById(surgeryId)
+  const surgery = await Surgery.findById(surgeryId);
   res.json(surgery);
 });
 

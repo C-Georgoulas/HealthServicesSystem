@@ -20,12 +20,12 @@ router.post("/", AccessMiddleware.hasAdminAccess, async (req, res) => {
   console.log(newDrug);
   console.log("hello");
 
-  const drug = await newDrug.save()
+  const drug = await newDrug.save();
   res.json(drug);
 });
 
 router.get("/", AccessMiddleware.hasAccess, async (req, res) => {
-  const drugs = await Drug.find()
+  const drugs = await Drug.find();
   res.json(drugs);
 });
 

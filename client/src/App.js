@@ -143,14 +143,14 @@ function App() {
                   />
                 )}
                 <Route path="/surgeries/:id" exact component={SurgeryDetails} />
-                {(user.role != "nurse" && user.role != "trainee") && (
+                {user.role != "nurse" && user.role != "trainee" && (
                   <Route
                     path="/patients/:id/prescription/new"
                     exact
                     component={PrescriptionCreate}
                   />
                 )}
-                {(user.role != "nurse" && user.role != "trainee") && (
+                {user.role != "nurse" && user.role != "trainee" && (
                   <Route
                     path="/patients/:id/prescription/:id/edit"
                     exact
