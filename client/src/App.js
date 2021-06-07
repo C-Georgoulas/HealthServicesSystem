@@ -69,48 +69,24 @@ function App() {
               <Switch>
                 <Route path="/" exact component={Dashboard}></Route>
                 <Route path="/patients" exact component={Patients} />
-                {user.role === "admin" && (
+                {(user.role === "admin" || user.role === "instructor") && (
                   <Route path="/trainees" exact component={Trainees} />
                 )}
-                {user.role === "instructor" && (
-                  <Route path="/trainees" exact component={Trainees} />
-                )}
-                {user.role === "admin" && (
+                {(user.role === "admin" || user.role === "instructor") && (
                   <Route
                     path="/trainees/create"
                     exact
                     component={TraineeCreate}
                   />
                 )}
-                {user.role === "instructor" && (
-                  <Route
-                    path="/trainees/create"
-                    exact
-                    component={TraineeCreate}
-                  />
-                )}
-                {user.role === "admin" && (
+                {(user.role === "admin" || user.role === "instructor") && (
                   <Route
                     path="/trainees/:id"
                     exact
                     component={TraineeDetails}
                   />
                 )}
-                {user.role === "instructor" && (
-                  <Route
-                    path="/trainees/:id"
-                    exact
-                    component={TraineeDetails}
-                  />
-                )}
-                {user.role === "admin" && (
-                  <Route
-                    path="/trainees/:id/edit"
-                    exact
-                    component={TraineeDetailsEdit}
-                  />
-                )}
-                {user.role === "instructor" && (
+                {(user.role === "admin" || user.role === "instructor") && (
                   <Route
                     path="/trainees/:id/edit"
                     exact
@@ -129,14 +105,7 @@ function App() {
                     component={MedicationsCreate}
                   />
                 )}
-                {user.role === "admin" && (
-                  <Route
-                    path="/administration"
-                    exact
-                    component={Administration}
-                  />
-                )}
-                {user.role === "instructor" && (
+                {(user.role === "admin" || user.role === "instructor") && (
                   <Route
                     path="/administration"
                     exact
@@ -159,28 +128,14 @@ function App() {
                   exact
                   component={PatientDetailsEdit}
                 />
-                {user.department === "Surgery" && (
+                {(user.department === "Surgery" || user.role === "admin") && (
                   <Route
                     path="/patients/:id/surgery/new"
                     exact
                     component={SurgeryCreate}
                   />
                 )}
-                {user.role === "admin" && (
-                  <Route
-                    path="/patients/:id/surgery/new"
-                    exact
-                    component={SurgeryCreate}
-                  />
-                )}
-                {user.department === "Surgery" && (
-                  <Route
-                    path="/patients/:id/surgery/:id/edit"
-                    exact
-                    component={SurgeryEdit}
-                  />
-                )}
-                {user.role === "admin" && (
+                {(user.department === "Surgery" || user.role === "admin") && (
                   <Route
                     path="/patients/:id/surgery/:id/edit"
                     exact
@@ -188,42 +143,14 @@ function App() {
                   />
                 )}
                 <Route path="/surgeries/:id" exact component={SurgeryDetails} />
-                {user.role === "admin" && (
+                {(user.role != "nurse" && user.role != "trainee") && (
                   <Route
                     path="/patients/:id/prescription/new"
                     exact
                     component={PrescriptionCreate}
                   />
                 )}
-                {user.role === "instructor" && (
-                  <Route
-                    path="/patients/:id/prescription/new"
-                    exact
-                    component={PrescriptionCreate}
-                  />
-                )}
-                {user.role === "doctor" && (
-                  <Route
-                    path="/patients/:id/prescription/new"
-                    exact
-                    component={PrescriptionCreate}
-                  />
-                )}
-                {user.role === "admin" && (
-                  <Route
-                    path="/patients/:id/prescription/:id/edit"
-                    exact
-                    component={PrescriptionEdit}
-                  />
-                )}
-                {user.role === "instructor" && (
-                  <Route
-                    path="/patients/:id/prescription/:id/edit"
-                    exact
-                    component={PrescriptionEdit}
-                  />
-                )}
-                {user.role === "doctor" && (
+                {(user.role != "nurse" && user.role != "trainee") && (
                   <Route
                     path="/patients/:id/prescription/:id/edit"
                     exact
