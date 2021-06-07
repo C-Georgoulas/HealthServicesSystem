@@ -116,26 +116,12 @@ router.put("/:id", async (req, res) => {
   res.status(200).send({});
 });
 
-// @route PUT api/patients
-// @desc Edit A Patient
-// @access Staff
-
-// router.put('/:id/status', async (req, res) => {
-//     const {id} = req.params;
-//     await Patient.findByIdAndUpdate(id, {...req.body.editPatient.status});
-//     console.log(req.body.editPatient.status)
-//     res.status(200).send({});
-// })
-
 // @route DELETE api/patients
 // @desc Delete A Patient
 // @access Staff
 
 // Deleting object from the database based on ID
 router.delete("/:id", async (req, res) => {
-  // Patient.findById(req.params.id)
-  // .then(patient => patient.remove().then(() => res.json({success: true})))
-  // .catch(err => res.status(404).json({success: false}));
   await Patient.findByIdAndDelete(req.params.id);
   res.status(200).send({});
 });
@@ -252,9 +238,6 @@ router.get("/:id/prescriptions/:prescriptionId/edit", async (req, res) => {
   const { prescriptionId } = req.params;
   const prescription = await Prescription.findById(prescriptionId).populate("author")
   res.json(prescription);
-  // await Patient.findByIdAndUpdate(id, {$pull: {notes: noteId}});
-  // await Note.findByIdAndRemove(noteId);
-  // res.status(200).send({});
 });
 
 // @route PUT api/patients/:id/prescriptions/:prescriptionId
