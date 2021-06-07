@@ -1,29 +1,28 @@
-import React, { useState, useEffect }from 'react'
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React, { useState, useEffect } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 import AuthService from "../services/auth.service";
-
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
+      {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-      Charalampos Georgoulas
-      </Link>{' '}
+        Charalampos Georgoulas
+      </Link>{" "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -31,16 +30,16 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "black",
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -49,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   error: {
     color: "red",
-  }
+  },
 }));
 
 export default function SignIn(props) {
@@ -58,45 +57,40 @@ export default function SignIn(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   const handleLogin = (e) => {
     e.preventDefault();
 
     AuthService.login(email, password).then(
-        () => {
-          props.history.push("/");
-          window.location.reload();
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+      () => {
+        props.history.push("/");
+        window.location.reload();
+      },
+      (error) => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
 
-          setMessage("Invalid login credentials! Please try again.");
-        }
-      );
-        };
+        setMessage("Invalid login credentials! Please try again.");
+      }
+    );
+  };
 
-        // const [currentUser, setCurrentUser] = useState({
-        // })
+  // const [currentUser, setCurrentUser] = useState({
+  // })
 
-        // useEffect(() => {
-        //   const user = AuthService.getCurrentUser();      
-        //   if (user) {
-        //     setCurrentUser(user);
-        //   }
-        //   if (currentUser.role != undefined) {
-        //     props.history.push("/dashboard");
-        //   }
+  // useEffect(() => {
+  //   const user = AuthService.getCurrentUser();
+  //   if (user) {
+  //     setCurrentUser(user);
+  //   }
+  //   if (currentUser.role != undefined) {
+  //     props.history.push("/dashboard");
+  //   }
 
-        // }, []);
-      
-
-
-
+  // }, []);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -109,7 +103,7 @@ export default function SignIn(props) {
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleLogin}>
-        <TextField
+          <TextField
             variant="outlined"
             margin="normal"
             required
@@ -117,7 +111,7 @@ export default function SignIn(props) {
             type="text"
             label="Username"
             name="email"
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             autoFocus
           />
           <TextField
@@ -128,7 +122,7 @@ export default function SignIn(props) {
             type="password"
             label="Password"
             name="password"
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             autoFocus
           />
           <Button

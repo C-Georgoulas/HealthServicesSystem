@@ -1,10 +1,10 @@
 const ROLES = {
-  USER: 'user',
-  NURSE: 'nurse',
-  DOCTOR: 'doctor',
-  TRAINEE: 'trainee',
-  INSTRUCTOR: 'instructor',
-  ADMIN: 'admin',
-}
+  USER: "user",
+  NURSE: "nurse",
+  DOCTOR: "doctor",
+  TRAINEE: "trainee",
+  INSTRUCTOR: "instructor",
+  ADMIN: "admin",
+};
 
-module.exports = ROLES
+module.exports = ROLES;

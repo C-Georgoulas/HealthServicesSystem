@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 // Define Schemas
 const userSchema = new mongoose.Schema({
@@ -24,23 +24,23 @@ const userSchema = new mongoose.Schema({
   },
   notifications: [
     {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Notification"
-    }
-  ]
-})
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Notification",
+    },
+  ],
+});
 
-userSchema.post('findOneAndDelete', async (doc) => {
+userSchema.post("findOneAndDelete", async (doc) => {
   if (doc) {
-      await Notification.deleteMany({
-          _id: {
-              $in: doc.notes
-          }
-      })
+    await Notification.deleteMany({
+      _id: {
+        $in: doc.notes,
+      },
+    });
   }
-})
+});
 
 // Register Models on Schema
-mongoose.model('User', new mongoose.Schema(userSchema, { timestamps: true }))
+mongoose.model("User", new mongoose.Schema(userSchema, { timestamps: true }));
 
-module.exports = User = mongoose.model('user', userSchema);
+module.exports = User = mongoose.model("user", userSchema);

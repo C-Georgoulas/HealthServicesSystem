@@ -42,6 +42,7 @@
     "use-state-if-mounted": "^1.0.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "prettier": "2.3.1"
   }
 }

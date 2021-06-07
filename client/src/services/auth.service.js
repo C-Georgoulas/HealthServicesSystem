@@ -18,8 +18,8 @@ const login = (email, password) => {
     })
     .then((response) => {
       console.log(response.data);
-        console.log("local storage item");
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+      console.log("local storage item");
+      localStorage.setItem("user", JSON.stringify(response.data.user));
       // console.log(response.data)
       // console.log("ella")
 

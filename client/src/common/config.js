@@ -1,3 +1,3 @@
 module.exports = {
-  COOKIE_NAME: 'HPMWS',
-}
+  COOKIE_NAME: "HPMWS",
+};
