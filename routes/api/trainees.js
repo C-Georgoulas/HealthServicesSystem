@@ -46,8 +46,6 @@ router.get(
   }
 );
 
-// put everything above this shitty /:id route because it bugs out for some reason
-// REMEMBER THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // @ route GET api/trainees/:id
 // @desc Get specific trainee

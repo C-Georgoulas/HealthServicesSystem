@@ -51,8 +51,6 @@ router.get("/surgeries/:id", AccessMiddleware.hasAccess, async (req, res) => {
   res.json(surgery);
 });
 
-// put everything above this shitty /:id route because it bugs out for some reason
-// REMEMBER THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // @ route GET api/patients/:id
 // @desc Get specific patient
